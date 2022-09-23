@@ -1,6 +1,6 @@
 from typeguard import typechecked
 
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
+from exasol_bucketfs_util_python.bucketfs_config import BucketFSConfig
 
 
 class BucketConfig:

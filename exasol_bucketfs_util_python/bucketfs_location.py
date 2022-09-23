@@ -1,12 +1,12 @@
 from typing import Any, Tuple, IO, Iterable, Union, Optional
 from pathlib import PurePosixPath, Path
 from urllib.parse import ParseResult
-from exasol_bucketfs_utils_python import download, upload, list_files, \
+from exasol_bucketfs_util_python import download, upload, list_files, \
     delete, bucketfs_utils
-from exasol_bucketfs_utils_python import load_file_from_local_fs as from_BFS
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python import load_file_from_local_fs as from_BFS
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
 
-from exasol_bucketfs_utils_python.abstract_bucketfs_location import \
+from exasol_bucketfs_util_python.abstract_bucketfs_location import \
     AbstractBucketFSLocation
 
 

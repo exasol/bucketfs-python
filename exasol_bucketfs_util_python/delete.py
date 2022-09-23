@@ -1,7 +1,7 @@
 import requests
-from exasol_bucketfs_utils_python import bucketfs_utils
-from exasol_bucketfs_utils_python.bucketfs_utils import generate_bucket_http_url
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python import bucketfs_utils
+from exasol_bucketfs_util_python.bucketfs_utils import generate_bucket_http_url
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
 
 
 def delete_file_in_bucketfs(

@@ -3,9 +3,9 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 import joblib
 import requests
-from exasol_bucketfs_utils_python import bucketfs_utils
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_utils import generate_bucket_http_url
+from exasol_bucketfs_util_python import bucketfs_utils
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python.bucketfs_utils import generate_bucket_http_url
 
 
 def download_from_bucketfs_to_file(bucket_config: BucketConfig,

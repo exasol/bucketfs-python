@@ -1,12 +1,12 @@
 import urllib.parse
 from pathlib import PurePosixPath
 from typing import Optional
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import \
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python.bucketfs_config import BucketFSConfig
+from exasol_bucketfs_util_python.bucketfs_connection_config import \
     BucketFSConnectionConfig
-from exasol_bucketfs_utils_python.bucketfs_location import BucketFSLocation
-from exasol_bucketfs_utils_python.localfs_mock_bucketfs_location import \
+from exasol_bucketfs_util_python.bucketfs_location import BucketFSLocation
+from exasol_bucketfs_util_python.localfs_mock_bucketfs_location import \
     LocalFSMockBucketFSLocation
 
 

@@ -1,9 +1,9 @@
 # BucketFSLocation example
 from pathlib import PurePosixPath
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_location import BucketFSLocation
-from exasol_bucketfs_utils_python.bucketfs_connection_config import BucketFSConnectionConfig
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python.bucketfs_config import BucketFSConfig
+from exasol_bucketfs_util_python.bucketfs_location import BucketFSLocation
+from exasol_bucketfs_util_python.bucketfs_connection_config import BucketFSConnectionConfig
 
 bucket = BucketFSLocation(
     bucket_config=BucketConfig(
@@ -33,7 +33,7 @@ assert content == download
 # BucketFSFactory mock example
 from pathlib import PurePosixPath
 from tempfile import TemporaryDirectory
-from exasol_bucketfs_utils_python.bucketfs_factory import BucketFSFactory
+from exasol_bucketfs_util_python.bucketfs_factory import BucketFSFactory
 
 with TemporaryDirectory() as path:
     url = f"file://{path}/bucket"
@@ -50,7 +50,7 @@ with TemporaryDirectory() as path:
 
 # BucketFSFactory BucketFSLocation example
 from pathlib import PurePosixPath
-from exasol_bucketfs_utils_python.bucketfs_factory import BucketFSFactory
+from exasol_bucketfs_util_python.bucketfs_factory import BucketFSFactory
 
 bucket = BucketFSFactory().create_bucketfs_location(
     url="http://localhost:6583/bucket/path_in_bucket;bucketfsname",

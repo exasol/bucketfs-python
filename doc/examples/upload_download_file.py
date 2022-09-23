@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from exasol_bucketfs_utils_python import upload, download
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import BucketFSConnectionConfig
+from exasol_bucketfs_util_python import upload, download
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python.bucketfs_config import BucketFSConfig
+from exasol_bucketfs_util_python.bucketfs_connection_config import BucketFSConnectionConfig
 
 connection_config = BucketFSConnectionConfig(
     host="localhost", port=6666,

@@ -1,6 +1,6 @@
 from typing import Union
 from typeguard import typechecked
-from exasol_bucketfs_utils_python.bucketfs_connection_config import \
+from exasol_bucketfs_util_python.bucketfs_connection_config import \
     BucketFSConnectionConfig
 
 

@@ -5,7 +5,8 @@ on:
     types: [published]
 jobs:
 
-  publish-release-documentation:
+  publish-documentation:
+    name: Publish Documentation
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest

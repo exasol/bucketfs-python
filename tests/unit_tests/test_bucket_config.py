@@ -1,8 +1,8 @@
 import pytest
 
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import BucketFSConnectionConfig
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python.bucketfs_config import BucketFSConfig
+from exasol_bucketfs_util_python.bucketfs_connection_config import BucketFSConnectionConfig
 
 
 def create_test_bucketfs_config():

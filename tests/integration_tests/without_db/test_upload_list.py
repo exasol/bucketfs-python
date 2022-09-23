@@ -1,6 +1,6 @@
 import unittest
 import pytest
-from exasol_bucketfs_utils_python import list_files
+from exasol_bucketfs_util_python import list_files
 
 
 @pytest.mark.parametrize(

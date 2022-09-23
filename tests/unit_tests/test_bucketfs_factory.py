@@ -1,7 +1,7 @@
 from pathlib import PurePosixPath
 from tempfile import TemporaryDirectory
 
-from exasol_bucketfs_utils_python.bucketfs_factory import BucketFSFactory
+from exasol_bucketfs_util_python.bucketfs_factory import BucketFSFactory
 
 
 def test_create_localfs_mock_bucketfs_location():

@@ -2,7 +2,7 @@
 import pytest
 
 from exasol_udf_mock_python.connection import Connection
-from exasol_bucketfs_utils_python.bucketfs_factory import BucketFSFactory
+from exasol_bucketfs_util_python.bucketfs_factory import BucketFSFactory
 
 
 @pytest.fixture(scope="session")

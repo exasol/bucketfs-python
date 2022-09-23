@@ -3,8 +3,8 @@ from pathlib import PurePosixPath, Path
 from typing import Any
 import joblib
 
-from exasol_bucketfs_utils_python import bucketfs_utils
-from exasol_bucketfs_utils_python.abstract_bucketfs_location import \
+from exasol_bucketfs_util_python import bucketfs_utils
+from exasol_bucketfs_util_python.abstract_bucketfs_location import \
     AbstractBucketFSLocation
 
 

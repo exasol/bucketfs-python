@@ -1,6 +1,6 @@
 import requests
 
-from exasol_bucketfs_utils_python.github_release_file_bucketfs_uploader import GithubReleaseFileBucketFSUploader
+from exasol_bucketfs_util_python.github_release_file_bucketfs_uploader import GithubReleaseFileBucketFSUploader
 
 
 def test_uploading_github_release_to_bucketfs():

@@ -3,8 +3,8 @@ from pathlib import PurePosixPath
 from typing import Union
 from requests.auth import HTTPBasicAuth
 from typeguard import typechecked
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
+from exasol_bucketfs_util_python.bucket_config import BucketConfig
+from exasol_bucketfs_util_python.bucketfs_config import BucketFSConfig
 
 ARCHIVE_EXTENSIONS = [".tar.gz", ".tgz", ".zip", ".tar"]
 
