@@ -23,5 +23,8 @@ jobs:
         with:
           poetry-version: 1.2.0
 
+      - name: Poetry install
+        run: poetry install
+
       - name: Check Version(s)
         run: poetry run nox -s version-check
