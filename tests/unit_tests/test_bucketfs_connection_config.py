@@ -1,6 +1,6 @@
 import pytest
 
-from exasol_bucketfs_util_python.bucketfs_connection_config import BucketFSConnectionConfig
+from exasol_bucketfs_utils_python.bucketfs_connection_config import BucketFSConnectionConfig
 
 
 def test_bucketfs_connection_config_with_read_user():

@@ -5,9 +5,9 @@ import pytest
 from tempfile import NamedTemporaryFile
 import requests
 
-from exasol_bucketfs_util_python.bucketfs_utils import generate_bucket_http_url, create_auth_object
-from exasol_bucketfs_util_python.bucket_config import BucketConfig, BucketFSConfig
-from exasol_bucketfs_util_python import upload
+from exasol_bucketfs_utils_python.bucketfs_utils import generate_bucket_http_url, create_auth_object
+from exasol_bucketfs_utils_python.bucket_config import BucketConfig, BucketFSConfig
+from exasol_bucketfs_utils_python import upload
 
 
 @pytest.mark.usefixtures("upload_language_container",

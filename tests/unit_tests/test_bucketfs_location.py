@@ -1,10 +1,10 @@
 import pytest
 from pathlib import PurePosixPath, Path
-from exasol_bucketfs_util_python.bucket_config import BucketConfig
-from exasol_bucketfs_util_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_util_python.bucketfs_connection_config import \
+from exasol_bucketfs_utils_python.bucket_config import BucketConfig
+from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
+from exasol_bucketfs_utils_python.bucketfs_connection_config import \
     BucketFSConnectionConfig
-from exasol_bucketfs_util_python.bucketfs_location import BucketFSLocation
+from exasol_bucketfs_utils_python.bucketfs_location import BucketFSLocation
 from tests.integration_tests.with_db.test_load_fs_file_from_udf import \
     delete_testfile_from_bucketfs
 

@@ -2,7 +2,7 @@ import tempfile
 from tempfile import TemporaryDirectory, NamedTemporaryFile
 from pathlib import Path, PurePosixPath
 import pytest
-from exasol_bucketfs_util_python.localfs_mock_bucketfs_location import \
+from exasol_bucketfs_utils_python.localfs_mock_bucketfs_location import \
     LocalFSMockBucketFSLocation
 
 

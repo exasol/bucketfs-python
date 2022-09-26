@@ -1,5 +1,5 @@
-from exasol_bucketfs_util_python.bucket_config import BucketConfig
-from exasol_bucketfs_util_python.bucketfs_utils import generate_bucket_udf_path
+from exasol_bucketfs_utils_python.bucket_config import BucketConfig
+from exasol_bucketfs_utils_python.bucketfs_utils import generate_bucket_udf_path
 from typing import Any, IO
 from pathlib import Path
 from tempfile import NamedTemporaryFile
