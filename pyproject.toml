@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "bucketfs-python"
+name = "exasol-bucketfs"
 packages  = [
     {include = "exasol_bucketfs_util_python"}
 ]
