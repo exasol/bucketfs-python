@@ -1,0 +1,27 @@
+name: Project & Workspace Checks
+
+on: pull_request
+
+jobs:
+  version-check:
+    name: Version Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SCM Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.2.0
+
+      - name: Check Version(s)
+        run: poetry run nox -s version-check
