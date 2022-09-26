@@ -1,11 +1,13 @@
 name: Tests
 
 on:
-  pull_request:
   push:
     branches-ignore:
-      - main
-      - github-pages/*
+      - 'main'
+      - "github-pages/*"
+  pull_request:
+    branches-ignore:
+      - 'main'
 
 jobs:
   integration_tests:
