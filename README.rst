@@ -1,8 +1,6 @@
-#####################
-BucketFS Utils Python
-#####################
+Bucketfs Python
+###############
 
-********
 Overview
 ********
 
