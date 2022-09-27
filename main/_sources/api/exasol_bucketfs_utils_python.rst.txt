@@ -42,4 +42,5 @@
    exasol_bucketfs_utils_python.localfs_mock_bucketfs_location
    exasol_bucketfs_utils_python.release_link_extractor
    exasol_bucketfs_utils_python.upload
+   exasol_bucketfs_utils_python.version
 
