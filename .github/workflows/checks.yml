@@ -1,15 +1,19 @@
-name: Check if versions are consistent
+name: Project & Workspace Checks
 
 on: pull_request
 
 jobs:
-  check-version-numbers:
+  version-check:
+    name: Version Check
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: SCM Checkout
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Setup Python 3.8
+
+      - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
@@ -19,5 +23,8 @@ jobs:
         with:
           poetry-version: 1.2.0
 
-      - name: Check Release
-        run: ./scripts/build/check_release.sh
+      - name: Poetry install
+        run: poetry install
+
+      - name: Check Version(s)
+        run: poetry run nox -s version-check

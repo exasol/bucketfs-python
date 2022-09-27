@@ -1,4 +1,4 @@
-name: Generate release documentation
+name: Publish Documentation
 
 on:
   release:
@@ -6,29 +6,31 @@ on:
 jobs:
 
   publish-release-documentation:
+    runs-on: ubuntu-latest
+    environment: publish
     strategy:
       fail-fast: false
-    runs-on: ubuntu-latest
-
-    environment: publish
 
     steps:
-    - name: Checkout
+    - name: SCM Checkout
       uses: actions/checkout@v2
-    - name: Install python
+
+    - name: Install Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: Install poetry
+
+    - name: Install Poetry
       uses: abatilo/actions-poetry@v2.1.4
       with:
         poetry-version: 1.2.0
-    - name: Poetry install
+
+    - name: Poetry Install
       run: poetry install
-    - name: Deploy release documentation to github-pages branch
+
+    - name: Publish Documentation
       run: |
         git config --local user.email "opensource@exasol.com"
         git config --local user.name "GitHub Action"
         git fetch
         poetry run python -m nox -s push-pages-release
-

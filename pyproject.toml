@@ -1,5 +1,8 @@
 [tool.poetry]
-name = "exasol-bucketfs-utils-python"
+name = "exasol-bucketfs"
+packages  = [
+    {include = "exasol_bucketfs_utils_python"}
+]
 version = "0.4.0"
 description = "BucketFS utilities for the Python programming language"
 
@@ -7,13 +10,14 @@ license = "MIT"
 
 authors = [
     "Torsten Kilias <torsten.kilias@exasol.com>",
+    "Nicola Coretti <nicola.coretti@exasol.com>",
     "Anastasiia Sergienko <anastasiia.sergienko@exasol.com>"
 ]
 
 readme = 'README.rst'
 
-repository = "https://github.com/exasol/bucketfs-utils-python"
-homepage = "https://github.com/exasol/bucketfs-utils-python"
+repository = "https://github.com/exasol/bucketfs-python"
+homepage = "https://github.com/exasol/bucketfs-python"
 
 keywords = ['exasol', 'bucketfs']
 

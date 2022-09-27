@@ -1,8 +1,6 @@
-#####################
-BucketFS Utils Python
-#####################
+Bucketfs Python
+###############
 
-********
 Overview
 ********
 
@@ -15,7 +13,8 @@ In a Nutshell
 Prerequisites
 -------------
 
-- Python 3.8+
+- `Python <https://www.python.org/>`_ >= 3.8
+- `Poetry <https://python-poetry.org/>`_ >= 1.2
 
 Installation
 -------------
