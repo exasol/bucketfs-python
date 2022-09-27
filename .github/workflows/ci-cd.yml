@@ -1,0 +1,80 @@
+name: CI/CD
+
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+
+  check-tag-version-job:
+    name: Check Tag Version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SCM Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      # check pushed tag versions matches pyproject.toml + changelog
+      # python scripts/version_check.py --release-tag ${{ github.ref_name }}
+      - name: Check Tag Version
+        run: echo "TBD> check version tag"
+
+  ci-job:
+    name: Checks
+    needs: [ check-tag-version-job ]
+    uses: ./.github/workflows/checks.yml
+
+  docs-job:
+    name: Publish Documentation
+    needs: [ ci-job ]
+    uses: ./.github/workflows/docs.yml
+
+  cd-job:
+    name: Continues Delivery
+    needs: [ ci-job ]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: SCM Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.2.0
+
+      - name: Poetry Install
+        run: poetry install
+
+      - name: Build Artifacts
+        run: poetry build
+
+      - name: PyPi Release
+        env:
+          POETRY_HTTP_BASIC_PYPI_USERNAME: "__token__"
+          POETRY_HTTP_BASIC_PYPI_PASSWORD: "${{ secrets.pypi_token }}"
+        run: poetry publish
+
+      - name: GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/*"
+          bodyFile: "doc/changes/changes_${{ github.rev_name }}.md"
+          token: ${{ secrets.GH_TOKEN }}
+
+  # TBD: send release notifications e.g. via slack
+  # notify:
+  #   name: Send Notifications
+  #   needs: [ cd-job ]
+  #   runs-on: ubuntu-latest
