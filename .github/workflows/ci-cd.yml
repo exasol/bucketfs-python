@@ -20,10 +20,14 @@ jobs:
         with:
           python-version: 3.8
 
-      # check pushed tag versions matches pyproject.toml + changelog
-      # python scripts/version_check.py --release-tag ${{ github.ref_name }}
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.2.0
+
       - name: Check Tag Version
-        run: echo "TBD> check version tag"
+        # make sure the pushed/created tag matched the project version
+        run: "[[ `poetry version --short` == ${{ github.ref_name }} ]]"
 
   ci-job:
     name: Checks
@@ -63,18 +67,15 @@ jobs:
       - name: PyPi Release
         env:
           POETRY_HTTP_BASIC_PYPI_USERNAME: "__token__"
-          POETRY_HTTP_BASIC_PYPI_PASSWORD: "${{ secrets.pypi_token }}"
+          POETRY_HTTP_BASIC_PYPI_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
         run: poetry publish
 
       - name: GitHub Release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "dist/*"
-          bodyFile: "doc/changes/changes_${{ github.rev_name }}.md"
-          token: ${{ secrets.GH_TOKEN }}
-
-  # TBD: send release notifications e.g. via slack
-  # notify:
-  #   name: Send Notifications
-  #   needs: [ cd-job ]
-  #   runs-on: ubuntu-latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+        run: >
+          gh release create ${{ github.rev_name }}
+          --title ${{ github.rev_name }}
+          --notes-file doc/changes/changes_${{ github.rev_name }}.md
+          dist/*
+              
