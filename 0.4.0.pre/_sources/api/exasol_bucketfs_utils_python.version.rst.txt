@@ -1,0 +1,23 @@
+exasol\_bucketfs\_utils\_python.version
+=======================================
+
+.. automodule:: exasol_bucketfs_utils_python.version
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
