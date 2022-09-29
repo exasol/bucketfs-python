@@ -34,7 +34,7 @@ For further details see: `.github/workflows/ci-cd.yml`.
 What to do if the release failed?
 ---------------------------------
 
-The Release failed during pre-release checks
+The release failed during pre-release checks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Delete the local tag
