@@ -60,7 +60,7 @@ One of the release steps failed (Partial Release)
 
 .. note:: Example
 
-    **Scenario**: The publishing the release on github was successfully but during the pypi release the upload got interrupted.
+    **Scenario**: Publishing of the release on Github was successfull but during the PyPi release, the upload step got interrupted.
 
     **Solution**: Manually push the package to PYPI
 
