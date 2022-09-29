@@ -15,7 +15,7 @@ Prerequisites
 
 Triggering the Release
 ----------------------
-In order to trigger a release a new tag must be pushed to github.
+In order to trigger a release a new tag must be pushed to Github.
 For further details see: `.github/workflows/ci-cd.yml`.
 
 
