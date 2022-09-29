@@ -6,7 +6,6 @@ jobs:
 
   documenation-job:
     runs-on: ubuntu-latest
-    environment: publish
 
     steps:
       - name: SCM Checkout
