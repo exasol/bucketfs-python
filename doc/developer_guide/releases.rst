@@ -25,7 +25,7 @@ For further details see: `.github/workflows/ci-cd.yml`.
 
         git tag x.y.z
 
-#. Push the tag to github
+#. Push the tag to Github
 
     .. code-block:: shell
 
