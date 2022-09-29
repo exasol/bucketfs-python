@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - "github-pages/*"
+      - "main"
   pull_request:
     branches-ignore:
       - 'main'
@@ -13,8 +14,3 @@ jobs:
   ci-job:
     name: Checks
     uses: ./.github/workflows/checks.yml
-
-  publish-docs:
-    name: Publish Documentation
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/docs.yml

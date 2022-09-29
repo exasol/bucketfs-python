@@ -72,10 +72,10 @@ jobs:
 
       - name: GitHub Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >
-          gh release create ${{ github.rev_name }}
-          --title ${{ github.rev_name }}
-          --notes-file doc/changes/changes_${{ github.rev_name }}.md
+          gh release create ${GITHUB_REF_NAME}
+          --title ${GITHUB_REF_NAME}
+          --notes-file doc/changes/changes_${GITHUB_REF_NAME}.md
           dist/*
               
