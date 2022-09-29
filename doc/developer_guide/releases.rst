@@ -62,5 +62,5 @@ One of the release steps failed (Partial Release)
 
     **Scenario**: Publishing of the release on Github was successfull but during the PyPi release, the upload step got interrupted.
 
-    **Solution**: Manually push the package to PYPI
+    **Solution**: Manually push the package to PyPi
 
