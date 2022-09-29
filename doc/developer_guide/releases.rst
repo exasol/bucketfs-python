@@ -55,7 +55,7 @@ The Release failed during pre-release checks
 
 One of the release steps failed (Partial Release)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#. Check the github action/workflow to see which steps failed
+#. Check the Github action/workflow to see which steps failed
 #. Finish/Redo the failed release steps manually
 
 .. note:: Example
