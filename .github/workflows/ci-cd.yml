@@ -34,11 +34,6 @@ jobs:
     needs: [ check-tag-version-job ]
     uses: ./.github/workflows/checks.yml
 
-  docs-job:
-    name: Publish Documentation
-    needs: [ ci-job ]
-    uses: ./.github/workflows/docs.yml
-
   cd-job:
     name: Continues Delivery
     needs: [ ci-job ]

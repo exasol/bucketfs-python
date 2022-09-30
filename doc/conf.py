@@ -12,16 +12,15 @@
 #
 import os
 import sys
+
 # sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../'))
-
 
 # -- Project information -----------------------------------------------------
 
 project = 'Exasol BucketFS Utils Python'
 copyright = '2021, Exasol'
 author = 'Exasol'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -34,6 +33,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
     'myst_parser',
+    "sphinx_multiversion",
     'sphinx.ext.autosectionlabel',
 ]
 
@@ -55,6 +55,9 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.build-docu']
 
+# configure multiverse whitelist
+smv_tag_whitelist = r'^.*$'                   # Include all tags
+smv_branch_whitelist = r'main'                # Include main
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -67,3 +70,15 @@ html_theme = 'furo'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+html_sidebars = {
+    '**': [
+        "versioning.html",
+        "sidebar/scroll-start.html",
+        "sidebar/brand.html",
+        "sidebar/search.html",
+        "sidebar/navigation.html",
+        "sidebar/ethical-ads.html",
+        "sidebar/scroll-end.html",
+    ]
+}

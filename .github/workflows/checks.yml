@@ -54,7 +54,7 @@ jobs:
       run: poetry install
 
     - name: Build Documentation
-      run: poetry run nox -s build-html-doc
+      run: poetry run nox -s build-doc
 
   tests-job:
     name: Tests (Python-${{ matrix.python-version }})
