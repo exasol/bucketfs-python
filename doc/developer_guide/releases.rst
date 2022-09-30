@@ -15,7 +15,7 @@ Prerequisites
 
 Triggering the Release
 ----------------------
-In order to trigger a release a new tag must be pushed to github.
+In order to trigger a release a new tag must be pushed to Github.
 For further details see: `.github/workflows/ci-cd.yml`.
 
 
@@ -25,7 +25,7 @@ For further details see: `.github/workflows/ci-cd.yml`.
 
         git tag x.y.z
 
-#. Push the tag to github
+#. Push the tag to Github
 
     .. code-block:: shell
 
@@ -34,7 +34,7 @@ For further details see: `.github/workflows/ci-cd.yml`.
 What to do if the release failed?
 ---------------------------------
 
-The Release failed during pre-release checks
+The release failed during pre-release checks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Delete the local tag
@@ -55,12 +55,12 @@ The Release failed during pre-release checks
 
 One of the release steps failed (Partial Release)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#. Check the github action/workflow to see which steps failed
-#. Finish/Redo the failed release steps manually
+#. Check the Github action/workflow to see which steps failed
+#. Finish or redo the failed release steps manually
 
 .. note:: Example
 
-    **Scenario**: The publishing the release on github was successfully but during the pypi release the upload got interrupted.
+    **Scenario**: Publishing of the release on Github was successfull but during the PyPi release, the upload step got interrupted.
 
-    **Solution**: Manually push the package to PYPI
+    **Solution**: Manually push the package to PyPi
 
