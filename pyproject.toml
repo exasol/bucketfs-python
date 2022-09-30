@@ -35,12 +35,13 @@ sphinx-multiversion = "^0.2.4"
 pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
 Sphinx = "^4.5"
+furo = "^2022.9.29"
 myst-parser = "^0.17.0"
 pyexasol = "^0.24.0"
 dill = "^0.3.4"
 exasol-udf-mock-python = { git = "https://github.com/exasol/udf-mock-python.git", branch = "main" }
-#exasol-sphinx-github-pages-generator = { git = "https://github.com/exasol/sphinx-github-pages-generator.git", branch = "main"}
 gitpython = ">=2.1.0"
 toml = ">=0.10.2"
 nox = "^2022.1.7"
+sphinx-multiversion = "^0.2.4"
 
