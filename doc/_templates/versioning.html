@@ -1,14 +1,12 @@
 {% if versions %}
-<h3>{{ _('Branches') }}</h3>
+<h3>{{ _('Versions') }}</h3>
 <ul>
-  {%- for item in versions.branches %}
+  {%- for item in versions | reverse %}
+  {%- if item.name == "main" %}
+  <li><a href="{{ item.url }}">latest</a></li>
+  {%- else %}
   <li><a href="{{ item.url }}">{{ item.name }}</a></li>
-  {%- endfor %}
-</ul>
-<h3>{{ _('Tags') }}</h3>
-<ul>
-  {%- for item in versions.tags | reverse %}
-  <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+  {%- endif %}
   {%- endfor %}
 </ul>
 {% endif %}

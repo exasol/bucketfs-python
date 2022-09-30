@@ -73,12 +73,11 @@ html_static_path = ['_static']
 
 html_sidebars = {
     '**': [
-        "versioning.html",
         "sidebar/scroll-start.html",
         "sidebar/brand.html",
         "sidebar/search.html",
         "sidebar/navigation.html",
-        "sidebar/ethical-ads.html",
+        "versioning.html",
         "sidebar/scroll-end.html",
     ]
 }
