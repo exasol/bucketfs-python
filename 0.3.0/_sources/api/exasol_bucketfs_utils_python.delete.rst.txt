@@ -1,0 +1,29 @@
+exasol\_bucketfs\_utils\_python.delete
+======================================
+
+.. automodule:: exasol_bucketfs_utils_python.delete
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      delete_file_in_bucketfs
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

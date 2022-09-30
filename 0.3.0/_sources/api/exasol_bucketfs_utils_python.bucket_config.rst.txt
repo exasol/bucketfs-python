@@ -1,0 +1,29 @@
+exasol\_bucketfs\_utils\_python.bucket\_config
+==============================================
+
+.. automodule:: exasol_bucketfs_utils_python.bucket_config
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BucketConfig
+   
+   
+
+   
+   
+   
+
+
+

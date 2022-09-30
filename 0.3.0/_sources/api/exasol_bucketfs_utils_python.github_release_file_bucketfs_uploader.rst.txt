@@ -1,0 +1,29 @@
+exasol\_bucketfs\_utils\_python.github\_release\_file\_bucketfs\_uploader
+=========================================================================
+
+.. automodule:: exasol_bucketfs_utils_python.github_release_file_bucketfs_uploader
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GithubReleaseFileBucketFSUploader
+   
+   
+
+   
+   
+   
+
+
+

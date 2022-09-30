@@ -1,0 +1,29 @@
+exasol\_bucketfs\_utils\_python.bucketfs\_location
+==================================================
+
+.. automodule:: exasol_bucketfs_utils_python.bucketfs_location
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BucketFSLocation
+   
+   
+
+   
+   
+   
+
+
+

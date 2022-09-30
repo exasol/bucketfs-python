@@ -1,0 +1,35 @@
+exasol\_bucketfs\_utils\_python.bucketfs\_utils
+===============================================
+
+.. automodule:: exasol_bucketfs_utils_python.bucketfs_utils
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      correct_path_in_bucket_for_archives
+      create_auth_object
+      generate_bucket_http_url
+      generate_bucket_udf_path
+      generate_bucketfs_http_url
+      generate_bucketfs_udf_path
+      make_path_relative
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

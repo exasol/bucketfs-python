@@ -1,0 +1,32 @@
+exasol\_bucketfs\_utils\_python.download
+========================================
+
+.. automodule:: exasol_bucketfs_utils_python.download
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      download_from_bucketfs_to_file
+      download_from_bucketfs_to_fileobj
+      download_from_bucketfs_to_string
+      download_object_from_bucketfs_via_joblib
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
