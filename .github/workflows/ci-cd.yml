@@ -23,7 +23,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: 1.2.0
+          poetry-version: 1.1.13
 
       - name: Check Tag Version
         # make sure the pushed/created tag matched the project version
@@ -51,7 +51,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: 1.2.0
+          poetry-version: 1.1.13
 
       - name: Poetry Install
         run: poetry install
