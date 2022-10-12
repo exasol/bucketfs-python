@@ -16,7 +16,7 @@ def list_buckets(
 
     The following mapping will be applied for determining the final url: {base_url}:{port}/{path}
 
-    :param base_url: path of the bucketfs service e.g. http://127.0.0.1.
+    :param base_url: URL of the bucketfs service e.g. http://127.0.0.1.
     :param path: if the service root is hidden behind a sub-path, the default should work in most cases.
     :param username: to authenticate against the bucketfs service.
     :param password: to authenticate against the bucketfs service.
