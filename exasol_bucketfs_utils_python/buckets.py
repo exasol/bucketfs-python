@@ -8,14 +8,15 @@ def list_buckets(
     path: str = "",
     port: int = 2580,
 ) -> Iterator[str]:
-    f"""
+    """
     List all buckets for a specific bucketfs service.
 
     The following mapping will be applied for determining the final url: {base_url}:{port}/{path}
 
     :param base_url: URL of the bucketfs service e.g. http://127.0.0.1.
     :param path: if the service root is hidden behind a sub-path, the default "" should work in most cases.
-    :param port: the bucketfs service is listening on.
+    :param port: the bucketfs service is listening on (default: 2580). 
+                 In case of error make sure the correct port is used.
     
     :raises BucketFsError:
     
