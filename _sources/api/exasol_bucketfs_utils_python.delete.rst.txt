@@ -1,0 +1,7 @@
+exasol\_bucketfs\_utils\_python.delete module
+=============================================
+
+.. automodule:: exasol_bucketfs_utils_python.delete
+   :members:
+   :undoc-members:
+   :show-inheritance:

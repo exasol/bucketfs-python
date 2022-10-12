@@ -2,12 +2,10 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="User Guide" href="user_guide/user_guide.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.09.15"/>
-        <title>Exasol BucketFS Utils Python documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.09.15"/><title>Python Module Index - Exasol BucketFS Utils Python documentation</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -123,7 +121,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">Exasol BucketFS Utils Python  documentation</div></a>
+      <a href="index.html"><div class="brand">Exasol BucketFS Utils Python  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -134,7 +132,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -143,7 +141,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
   <span class="sidebar-brand-text">Exasol BucketFS Utils Python  documentation</span>
@@ -227,96 +225,141 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="bucketfs-python">
-<h1>Bucketfs Python<a class="headerlink" href="#bucketfs-python" title="Permalink to this headline">#</a></h1>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h2>
-<p>This project provides a python library for accessing the Exasol BucketFS system.
-It provides functions to upload and download files to and from the BucketFS.</p>
-<section id="in-a-nutshell">
-<h3>In a Nutshell<a class="headerlink" href="#in-a-nutshell" title="Permalink to this headline">#</a></h3>
-<section id="prerequisites">
-<h4>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">#</a></h4>
-<ul class="simple">
-<li><p><a class="reference external" href="https://www.python.org/">Python</a> &gt;= 3.8</p></li>
-<li><p><a class="reference external" href="https://python-poetry.org/">Poetry</a> &gt;= 1.2</p></li>
-</ul>
+          
+<section class="domainindex-section">
+  <h1>Python Module Index</h1>
+  <div class="domainindex-jumpbox"><a href="#cap-e"><strong>e</strong></a></div>
 </section>
-<section id="installation">
-<h4>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h4>
-<p>Install the package from Github via <cite>pip</cite>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">exasol</span><span class="o">/</span><span class="n">bucketfs</span><span class="o">-</span><span class="n">utils</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">git</span><span class="o">@</span><span class="p">{</span><span class="n">tag</span> <span class="n">name</span><span class="p">}</span><span class="c1">#egg=exasol-bucketfs-utils-python</span>
-</pre></div>
-</div>
-<p>Or install the wheel directly via:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">exasol</span><span class="o">/</span><span class="n">bucketfs</span><span class="o">-</span><span class="n">utils</span><span class="o">-</span><span class="n">python</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="p">{</span><span class="n">tag</span> <span class="n">name</span><span class="p">}</span><span class="o">/</span><span class="n">exasol_bucketfs_utils_python</span><span class="o">-</span><span class="p">{</span><span class="n">tag</span> <span class="n">name</span><span class="p">}</span><span class="o">-</span><span class="n">py3</span><span class="o">-</span><span class="n">none</span><span class="o">-</span><span class="nb">any</span><span class="o">.</span><span class="n">whl</span>
-</pre></div>
-</div>
-</section>
-<section id="documentation">
-<h4>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">#</a></h4>
-<p><a class="reference external" href="https://exasol.github.io/bucketfs-utils-python/main">Documentation for the current main branch</a> is hosted on the Github Pages of this project.
-<a class="reference external" href="https://exasol.github.io/bucketfs-utils-python">Here</a>  is a list of documentations for previous releases.</p>
-</section>
-</section>
-<section id="features">
-<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Download or upload files from/to the Exasol BucketFS</p></li>
-<li><p>Supported sources and targets for the uploads and downloads:</p>
-<ul>
-<li><p>Files on the local Filesystem</p></li>
-<li><p>Python file objects</p></li>
-<li><p>Python Strings</p></li>
-<li><p>Python objects ((De-)Serialization with <a class="reference external" href="https://joblib.readthedocs.io/en/latest/persistence.html">Joblib</a>)</p></li>
-</ul>
-</li>
-<li><p>Loading an artefact from a public Github Release into the BucketFS</p></li>
-</ul>
-</section>
-</section>
-<section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="user_guide/user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide/developer_guide.html">Developer Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changes/changelog.html">Changes</a></li>
-</ul>
-</div>
-<section id="indices-and-tables">
-<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</section>
-</section>
-</section>
+<table class="domainindex-table">
+  <tr class="pcap">
+    <td></td><td>&#160;</td><td></td>
+  </tr>
+  <tr class="cap" id="cap-e">
+    <td></td><td><strong>e</strong></td><td></td>
+  </tr>
+  <tr>
+    <td><img src="_static/minus.png" class="toggler"
+              id="toggle-1" style="display: none" alt="-" /></td>
+    <td>
+        <a href="api/exasol_bucketfs_utils_python.html#module-exasol_bucketfs_utils_python"><code class="xref">exasol_bucketfs_utils_python</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.abstract_bucketfs_location.html#module-exasol_bucketfs_utils_python.abstract_bucketfs_location"><code class="xref">exasol_bucketfs_utils_python.abstract_bucketfs_location</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.bucket_config.html#module-exasol_bucketfs_utils_python.bucket_config"><code class="xref">exasol_bucketfs_utils_python.bucket_config</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.bucketfs_config.html#module-exasol_bucketfs_utils_python.bucketfs_config"><code class="xref">exasol_bucketfs_utils_python.bucketfs_config</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.bucketfs_connection_config.html#module-exasol_bucketfs_utils_python.bucketfs_connection_config"><code class="xref">exasol_bucketfs_utils_python.bucketfs_connection_config</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.bucketfs_factory.html#module-exasol_bucketfs_utils_python.bucketfs_factory"><code class="xref">exasol_bucketfs_utils_python.bucketfs_factory</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.bucketfs_location.html#module-exasol_bucketfs_utils_python.bucketfs_location"><code class="xref">exasol_bucketfs_utils_python.bucketfs_location</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.bucketfs_utils.html#module-exasol_bucketfs_utils_python.bucketfs_utils"><code class="xref">exasol_bucketfs_utils_python.bucketfs_utils</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.buckets.html#module-exasol_bucketfs_utils_python.buckets"><code class="xref">exasol_bucketfs_utils_python.buckets</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.delete.html#module-exasol_bucketfs_utils_python.delete"><code class="xref">exasol_bucketfs_utils_python.delete</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.download.html#module-exasol_bucketfs_utils_python.download"><code class="xref">exasol_bucketfs_utils_python.download</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.github_release_file_bucketfs_uploader.html#module-exasol_bucketfs_utils_python.github_release_file_bucketfs_uploader"><code class="xref">exasol_bucketfs_utils_python.github_release_file_bucketfs_uploader</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.list_files.html#module-exasol_bucketfs_utils_python.list_files"><code class="xref">exasol_bucketfs_utils_python.list_files</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.load_file_from_local_fs.html#module-exasol_bucketfs_utils_python.load_file_from_local_fs"><code class="xref">exasol_bucketfs_utils_python.load_file_from_local_fs</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.localfs_mock_bucketfs_location.html#module-exasol_bucketfs_utils_python.localfs_mock_bucketfs_location"><code class="xref">exasol_bucketfs_utils_python.localfs_mock_bucketfs_location</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.release_link_extractor.html#module-exasol_bucketfs_utils_python.release_link_extractor"><code class="xref">exasol_bucketfs_utils_python.release_link_extractor</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.upload.html#module-exasol_bucketfs_utils_python.upload"><code class="xref">exasol_bucketfs_utils_python.upload</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="api/exasol_bucketfs_utils_python.version.html#module-exasol_bucketfs_utils_python.version"><code class="xref">exasol_bucketfs_utils_python.version</code></a></td><td>
+    <em></em></td>
+  </tr>
+</table>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="user_guide/user_guide.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">User Guide</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
+          
           
         </div>
         <div class="bottom-of-page">
@@ -338,40 +381,8 @@ It provides functions to upload and download files to and from the BucketFS.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Bucketfs Python</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a><ul>
-<li><a class="reference internal" href="#in-a-nutshell">In a Nutshell</a><ul>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#documentation">Documentation</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#features">Features</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#table-of-contents">Table of Contents</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

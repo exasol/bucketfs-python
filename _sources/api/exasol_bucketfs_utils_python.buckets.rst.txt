@@ -1,0 +1,7 @@
+exasol\_bucketfs\_utils\_python.buckets module
+==============================================
+
+.. automodule:: exasol_bucketfs_utils_python.buckets
+   :members:
+   :undoc-members:
+   :show-inheritance:
