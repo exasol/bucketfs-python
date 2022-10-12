@@ -1,8 +1,6 @@
 API Reference
 -------------
 
-.. autosummary::
-   :toctree: api
-   :recursive:
+.. toctree::
 
-   exasol_bucketfs_utils_python
+    api/exasol_bucketfs_utils_python
