@@ -4,7 +4,7 @@
 TDB
 
 ## Features / Enhancements
-- Add support for listing all accessible buckets of a bucketfs service
+- #4 Added support for listing all accessible buckets of a bucketfs service
 
 ## Bug Fixes
 
