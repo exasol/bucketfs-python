@@ -1,7 +1,7 @@
 from exasol_bucketfs_utils_python import BucketFsError
 import requests
 from requests.auth import HTTPBasicAuth
-from typing import Generator
+from typing import Iterator
 
 
 def list_buckets(
@@ -9,8 +9,8 @@ def list_buckets(
     path: str = "",
     username: str = None,
     password: str = None,
-    port: int = 6666,
-) -> Generator[str, None, None]:
+    port: int = 2580,
+) -> Iterator[str]:
     f"""
     List all buckets for a specific bucketfs service.
 

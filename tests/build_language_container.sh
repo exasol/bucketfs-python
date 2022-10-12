@@ -4,8 +4,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 pushd  "$SCRIPT_DIR" &> /dev/null
-trap 'rm "dist"/*' EXIT
-rm "dist"/* || true
+if [ -d "dist"]; then
+  trap 'rm "dist"/*' EXIT
+  rm "dist"/* || true
+fi
 poetry build
 
 
