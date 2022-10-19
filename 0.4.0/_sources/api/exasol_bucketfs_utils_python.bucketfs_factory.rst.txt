@@ -1,0 +1,29 @@
+exasol\_bucketfs\_utils\_python.bucketfs\_factory
+=================================================
+
+.. automodule:: exasol_bucketfs_utils_python.bucketfs_factory
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BucketFSFactory
+   
+   
+
+   
+   
+   
+
+
+
