@@ -1,4 +1,4 @@
-# BucketFs Utils Python X.Y.Z, released <TBD>
+# BucketFs Utils Python 0.6.0, released <TBD>
 
 ## Summary
 
