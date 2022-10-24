@@ -1,28 +1,20 @@
-from pathlib import Path
-from exasol_bucketfs_utils_python import upload, list_files
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import BucketFSConnectionConfig
+from exasol.bucketfs import Service, Bucket
 
-connection_config = BucketFSConnectionConfig(
-    host="localhost", port=6666,
-    user="w", pwd="write",
-    is_https=False)
-bucketfs_config = BucketFSConfig(
-    connection_config=connection_config,
-    bucketfs_name="bfsdefault")
-bucket_config = BucketConfig(
-    bucket_name="default",
-    bucketfs_config=bucketfs_config)
+URL = "http://localhost:6666"
+AUTHENTICATOR = {'default': {'username': 'w', 'password': 'write'}}
+BUCKET_NAME = 'default'
 
-local_input_file_path = Path("local_input_file.txt")
-path_in_bucket = "path/in/bucket/file.txt"
-upload.upload_file_to_bucketfs(
-    bucket_config=bucket_config,
-    bucket_file_path=path_in_bucket,
-    local_file_path=local_input_file_path)
+# 1. Access files through bucket of service object
+bucketfs = Service(URL, AUTHENTICATOR)
+# TODO: Implement indirect construction
+files = [file for file in bucketfs['default']]
 
-bucket_file_path = "path/in/bucket"
-files = list_files.list_files_in_bucketfs(
-    bucket_config=bucket_config,
-    bucket_file_path=bucket_file_path)
+# 2. Access files using the bucket class
+bucket = Bucket(
+    name=BUCKET_NAME,
+    service=URL,
+    username=AUTHENTICATOR[BUCKET_NAME]['username'],
+    password=AUTHENTICATOR[BUCKET_NAME]['password']
+)
+
+files = [file for file in bucket]
