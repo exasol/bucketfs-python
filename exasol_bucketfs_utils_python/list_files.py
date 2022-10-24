@@ -1,11 +1,13 @@
 from typing import Iterable
 import requests
 from pathlib import Path
+from exasol_bucketfs_utils_python import deprecated
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python import bucketfs_utils
 from exasol_bucketfs_utils_python.bucketfs_utils import generate_bucket_http_url
 
 
+@deprecated
 def list_files_in_bucketfs(bucket_config: BucketConfig,
                            bucket_file_path: str = "") -> Iterable[str]:
     """
