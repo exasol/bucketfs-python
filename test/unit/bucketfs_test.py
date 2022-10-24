@@ -6,29 +6,23 @@ import pytest
 from exasol.bucketfs import Bucket, Service
 
 
-@dataclass(frozen=True)
-class ServiceTestData:
-    url: str
-    port: int
-
-
 @pytest.mark.parametrize(
-    "data,expected",
+    "url,expected",
     [
-        (ServiceTestData(url="http://127.0.0.1", port=2580), set()),
-        (ServiceTestData(url="http://127.0.0.1", port=2580), {"bucket1"}),
+        ("http://127.0.0.1:2580", set()),
+        ("http://127.0.0.1:2500", {"bucket1"}),
         (
-            ServiceTestData(url="http://127.0.0.1", port=2580),
+            "http://127.0.0.1:6666",
             {"bucket1", "bucket2", "bucket3"},
         ),
     ],
 )
-def test_list_buckets(data, expected):
+def test_list_buckets(url, expected):
     with patch("requests.get") as mock:
         instance = mock.return_value
         instance.text = "\n".join(expected)
 
-        service = Service(data.url, data.port)
+        service = Service(url)
         actual = {bucket for bucket in service}
         assert actual == expected
 
@@ -42,7 +36,7 @@ class BucketTestData:
 
 
 @pytest.mark.parametrize(
-    "data,expected",
+    "test_data,expected",
     [
         (
             BucketTestData(
@@ -73,16 +67,16 @@ class BucketTestData:
         ),
     ],
 )
-def test_list_files_in_bucket(data, expected):
+def test_list_files_in_bucket(test_data, expected):
     with patch("requests.get") as mock:
         instance = mock.return_value
         instance.text = "\n".join(expected)
 
         bucket = Bucket(
-            name=data.name,
-            service=data.service,
-            username=data.username,
-            password=data.password,
+            name=test_data.name,
+            service=test_data.service,
+            username=test_data.username,
+            password=test_data.password,
         )
         actual = {file for file in bucket}
         assert actual == expected

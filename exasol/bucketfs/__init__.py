@@ -47,20 +47,18 @@ class Service:
         buckets: lists all available buckets.
     """
 
-    def __init__(self, url, port=None):
+    def __init__(self, url):
         """Create a new Service instance.
 
         Args:
-            url: base url of the bucketfs service, e.g. http(s)://127.0.0.1.
-            port: on which the service is listening for incoming requests.
+            url: of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.
         """
         self._url = url
-        self._port = port if port is not None else 2580
 
     @property
     def buckets(self) -> Iterable[str]:
         """List all available buckets."""
-        return _list_buckets(self._url, self._port)
+        return _list_buckets(self._url)
 
     def __len__(self):
         return len(self.buckets)
@@ -71,12 +69,14 @@ class Service:
 
 def _list_buckets(
     url: str,
-    port: int = 2580,
 ) -> Iterable[str]:
+    info = urlparse(url)
     # suppress warning for users of the new api until the internal migration is done too.
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=BucketFsDeprecationWarning)
-        return list_buckets(url, path="", port=port)
+        return list_buckets(
+            f"{info.scheme}://{info.hostname}", path=info.path, port=info.port
+        )
 
 
 class Bucket:
@@ -92,8 +92,8 @@ class Bucket:
         """
         self._name = name
         self._service = service
-        self._username = username if username is not None else "w"
-        self._password = password if password is not None else "write"
+        self._username = username
+        self._password = password
 
     @property
     def files(self) -> Iterable[str]:
@@ -115,7 +115,7 @@ def _list_files_in_bucket(name, url, username, password) -> Iterable[str]:
     # suppress warning for users of the new api until the internal migration is done too.
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=BucketFsDeprecationWarning)
-        connection = urlparse(url)
+        metadata = urlparse(url)
         try:
             return list_files_in_bucketfs(
                 BucketConfig(
@@ -123,11 +123,11 @@ def _list_files_in_bucket(name, url, username, password) -> Iterable[str]:
                     bucketfs_config=BucketFSConfig(
                         bucketfs_name=name,
                         connection_config=BucketFSConnectionConfig(
-                            host=connection.hostname,
-                            port=connection.port,
+                            host=metadata.hostname,
+                            port=metadata.port,
                             user=username,
                             pwd=password,
-                            is_https="https" in connection.scheme,
+                            is_https="https" in metadata.scheme,
                         ),
                     ),
                 ),
