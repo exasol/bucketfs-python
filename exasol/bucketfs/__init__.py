@@ -1,3 +1,22 @@
+"""
+This module contains python api to programmatically access exasol bucketfs service(s).
+
+
+.. attention:
+
+    If no python api is required, one can also use CLI tools like CURL and HTTPIE to access bucketfs services.
+
+    Example's using CURL and HTTPIE
+    -------------------------------
+
+    #. Listing buckets of a bucketfs service
+
+        HTTPIE:
+          $ http GET http://127.0.0.1:6666/
+
+        CURL:
+          $ curl -i http://127.0.0.1:6666/
+"""
 import warnings
 from typing import Iterable
 
