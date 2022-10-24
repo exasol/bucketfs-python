@@ -1,8 +1,9 @@
-from exasol_bucketfs_utils_python import BucketFsError
 import requests
 from typing import Iterator
+from exasol_bucketfs_utils_python import BucketFsError, deprecated
 
 
+@deprecated
 def list_buckets(
     base_url: str,
     path: str = "",
