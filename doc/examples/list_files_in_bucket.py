@@ -4,12 +4,13 @@ URL = "http://localhost:6666"
 AUTHENTICATOR = {'default': {'username': 'w', 'password': 'write'}}
 BUCKET_NAME = 'default'
 
-# 1. Access files through bucket of service object
+# 1. List files through bucket of service object
+# TODO: Update service constructor to support authenticator
 bucketfs = Service(URL, AUTHENTICATOR)
 # TODO: Implement indirect construction
 files = [file for file in bucketfs['default']]
 
-# 2. Access files using the bucket class
+# 2. List files using the bucket class
 bucket = Bucket(
     name=BUCKET_NAME,
     service=URL,

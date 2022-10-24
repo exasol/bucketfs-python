@@ -53,6 +53,7 @@ class Service:
         Args:
             url: of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.
         """
+        # TODO: Issue warning for http urls
         self._url = url
 
     @property
