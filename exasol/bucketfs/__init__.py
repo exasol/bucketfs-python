@@ -30,10 +30,10 @@ This module contains python api to programmatically access exasol bucketfs servi
     #. Upload file into a bucket
 
         HTTPIE:
-          $  http --auth w:write --auth-type basic GET http://127.0.0.1:6666/default
+          $  http --auth w:write --auth-type basic PUT http://127.0.0.1:6666/default/myfile.txt @some-file.txt
 
         CURL:
-          $ curl -i -u "w:write" http://127.0.0.1:6666/default
+          $ curl -i -u "w:write" -X PUT --binary-data @some-file.txt  http://127.0.0.1:6666/default/myfile.txt
 
 """
 import warnings
