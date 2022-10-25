@@ -94,7 +94,7 @@ def _list_buckets(
 
 
 class Bucket:
-    def __init__(self, name, service, username, password):
+    def __init__(self, name: str, service: str, username: str, password: str):
         """
         Create a new bucket instance.
 
