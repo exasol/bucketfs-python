@@ -25,6 +25,16 @@ This module contains python api to programmatically access exasol bucketfs servi
 
         CURL:
           $ curl -i -u "w:write" http://127.0.0.1:6666/default
+
+
+    #. Upload file into a bucket
+
+        HTTPIE:
+          $  http --auth w:write --auth-type basic GET http://127.0.0.1:6666/default
+
+        CURL:
+          $ curl -i -u "w:write" http://127.0.0.1:6666/default
+
 """
 import warnings
 from collections import defaultdict
@@ -40,6 +50,8 @@ from exasol_bucketfs_utils_python.bucketfs_connection_config import (
 from exasol_bucketfs_utils_python.buckets import list_buckets
 from exasol_bucketfs_utils_python.upload import upload_fileobj_to_bucketfs
 from exasol_bucketfs_utils_python.list_files import list_files_in_bucketfs
+
+__all__ = ['Service', 'Bucket']
 
 
 class Service:
