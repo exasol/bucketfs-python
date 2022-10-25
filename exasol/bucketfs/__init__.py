@@ -51,7 +51,7 @@ from exasol_bucketfs_utils_python.buckets import list_buckets
 from exasol_bucketfs_utils_python.upload import upload_fileobj_to_bucketfs
 from exasol_bucketfs_utils_python.list_files import list_files_in_bucketfs
 
-__all__ = ['Service', 'Bucket']
+__all__ = ['Service', 'Bucket', 'MappedBucket']
 
 
 class Service:
@@ -129,19 +129,6 @@ class Bucket:
     def __iter__(self):
         yield from self.files
 
-    def __setitem__(self, key, value):
-        """
-        Uploads a file onto this bucket
-
-        Args:
-            key: filename for the file in the bucket.
-            value: file content of the uploaded file.
-
-        Attention: Network connection involved
-        """
-        # todo: check if value is byte or file-like type
-        self.upload(key, value)
-
     def upload(self, path: str, data: Union[ByteString, BinaryIO]):
         """
         Uploads a file onto this bucket
@@ -153,6 +140,30 @@ class Bucket:
         Attention: Network connection involved
         """
         _upload_to_bucketfs(self, path, data)
+
+
+class MappedBucket:
+    """
+    Wraps a bucket to provide additional features, like index based access from and to the bucket.
+
+    Attention:
+        TODO: discribe network, nodes, async storeage etc.
+        Access is more convenient API wise but still as expensive ....
+    """
+
+    def __init__(self, bucket):
+        self._bucket = bucket
+
+    def __setitem__(self, key, value):
+        """
+        Uploads a file onto this bucket
+
+        Args:
+            key: filename for the file in the bucket.
+            value: file content of the uploaded file.
+        """
+        # TODO: check if value is byte or file-like type
+        self._bucket.upload(key, value)
 
 
 def _create_bucket_config(name, url, username, password) -> BucketConfig:
@@ -193,4 +204,4 @@ def _upload_to_bucketfs(bucket, path, data):
         config = _create_bucket_config(
             bucket._name, bucket._service, bucket._username, bucket._password
         )
-        _url, _path = upload_fileobj_to_bucketfs(config, path, data)
+        _, _ = upload_fileobj_to_bucketfs(config, path, data)
