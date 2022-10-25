@@ -4,12 +4,14 @@ from typing import Tuple, IO, Any
 from urllib.parse import ParseResult
 import joblib
 import requests
+from exasol_bucketfs_utils_python import deprecated
 from exasol_bucketfs_utils_python import bucketfs_utils
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_utils import \
     generate_bucket_http_url, generate_bucket_udf_path
 
 
+@deprecated
 def upload_file_to_bucketfs(bucket_config: BucketConfig,
                             bucket_file_path: str,
                             local_file_path: Path) -> \
@@ -26,6 +28,7 @@ def upload_file_to_bucketfs(bucket_config: BucketConfig,
         return upload_fileobj_to_bucketfs(bucket_config, bucket_file_path, f)
 
 
+@deprecated
 def upload_fileobj_to_bucketfs(bucket_config: BucketConfig,
                                bucket_file_path: str,
                                fileobj: IO) -> \
@@ -49,6 +52,7 @@ def upload_fileobj_to_bucketfs(bucket_config: BucketConfig,
     return url, path
 
 
+@deprecated
 def upload_string_to_bucketfs(bucket_config: BucketConfig,
                               bucket_file_path: str,
                               string: str) -> \
@@ -71,6 +75,7 @@ def upload_string_to_bucketfs(bucket_config: BucketConfig,
     return url, path
 
 
+@deprecated
 def upload_object_to_bucketfs_via_joblib(object: Any,
                                          bucket_config: BucketConfig,
                                          bucket_file_path: str,
