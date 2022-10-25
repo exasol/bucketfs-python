@@ -118,11 +118,8 @@ class Bucket:
             password=self._password,
         )
 
-    def __len__(self):
-        return len(self.files)
-
-    def __getitem__(self, item):
-        return sorted(self.files)[item]
+    def __iter__(self):
+        yield from self.files
 
 
 def _list_files_in_bucket(name, url, username, password) -> Iterable[str]:
