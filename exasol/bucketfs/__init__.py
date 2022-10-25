@@ -27,7 +27,8 @@ This module contains python api to programmatically access exasol bucketfs servi
           $ curl -i -u "w:write" http://127.0.0.1:6666/default
 """
 import warnings
-from typing import Iterable
+from collections import defaultdict
+from typing import Iterable, Mapping, MutableMapping
 from urllib.parse import urlparse
 
 from exasol_bucketfs_utils_python import BucketFsDeprecationWarning
@@ -47,29 +48,41 @@ class Service:
         buckets: lists all available buckets.
     """
 
-    def __init__(self, url):
+    def __init__(self, url: str, credentials: Mapping[str, Mapping[str, str]] = None):
         """Create a new Service instance.
 
         Args:
             url: of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.
+            credentials: a mapping containing credentials (username and password) for buckets.
+                E.g. {"bucket1": { "username": "foo", "password": "bar" }}
         """
         # TODO: Add sanity check for url
         self._url = url
+        self._authenticator = defaultdict(
+            lambda: {"username": "r", "password": "read"},
+            credentials if credentials is not None else {},
+        )
 
     @property
-    def buckets(self) -> Iterable[str]:
+    def buckets(self) -> MutableMapping[str, "Bucket"]:
         """List all available buckets."""
-        return _list_buckets(self._url)
+        buckets = _list_buckets(self._url)
+        return {
+            name: Bucket(
+                name=name,
+                service=self._url,
+                username=self._authenticator[name]["username"],
+                password=self._authenticator[name]["password"],
+            )
+            for name in buckets
+        }
 
-    def __len__(self):
-        return len(self.buckets)
-
-    def __getitem__(self, item):
-        return sorted(self.buckets)[item]
+    def __iter__(self):
+        yield from self.buckets
 
 
 def _list_buckets(
-    url: str,
+        url: str,
 ) -> Iterable[str]:
     info = urlparse(url)
     # suppress warning for users of the new api until the internal migration is done too.

@@ -4,9 +4,9 @@ from exasol.bucketfs import Bucket, Service
 
 
 @pytest.mark.parametrize(
-    "url,port,expected",
+    "url,expected",
     [
-        ("http://127.0.0.1", 6666, {"default", "myudfs", "jdbc_adapter"}),
+        ("http://127.0.0.1:6666", {"default", "myudfs", "jdbc_adapter"}),
     ],
 )
 def test_list_buckets(url, port, expected):
@@ -25,8 +25,15 @@ def test_list_buckets(url, port, expected):
             "write",
             {
                 "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
-                "test_up_down_obj/test_file.txt",
-                "virtualschemas/virtual-schema-dist",
+            },
+        ),
+        (
+            "default",
+            "http://127.0.0.1:6666",
+            "r",
+            "read",
+            {
+                "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
             },
         ),
         (
