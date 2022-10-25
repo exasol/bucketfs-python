@@ -4,11 +4,16 @@ URL = "http://localhost:6666"
 CREDENTAILS = {'default': {'username': 'w', 'password': 'write'}}
 BUCKET_NAME = 'default'
 
-# 1. List files through bucket of service object
+bucketfs = Service(URL, CREDENTAILS)
+
+# 0. List buckets
+buckets = [bucket for bucket in bucketfs]
+
+# 1. List files in bucket  through of service object
 bucketfs = Service(URL, CREDENTAILS)
 files = [file for file in bucketfs['default']]
 
-# 2. List files using the bucket class
+# 2. List files in bucket using the bucket class
 bucket = Bucket(
     name=BUCKET_NAME,
     service=URL,
