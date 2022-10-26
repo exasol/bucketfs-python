@@ -9,7 +9,7 @@ This module contains python api to programmatically access exasol bucketfs servi
     Example's using CURL and HTTPIE
     -------------------------------
 
-    #. Listing buckets of a bucketfs service
+    1. Listing buckets of a bucketfs service
 
         HTTPIE:
           $ http GET http://127.0.0.1:6666/
@@ -18,7 +18,7 @@ This module contains python api to programmatically access exasol bucketfs servi
           $ curl -i http://127.0.0.1:6666/
 
 
-    #. List all files in a bucket
+    2. List all files in a bucket
     
         HTTPIE:
           $  http --auth w:write --auth-type basic GET http://127.0.0.1:6666/default
@@ -27,7 +27,7 @@ This module contains python api to programmatically access exasol bucketfs servi
           $ curl -i -u "w:write" http://127.0.0.1:6666/default
 
 
-    #. Upload file into a bucket
+    3. Upload file into a bucket
 
         HTTPIE:
           $  http --auth w:write --auth-type basic PUT http://127.0.0.1:6666/default/myfile.txt @some-file.txt
@@ -35,9 +35,18 @@ This module contains python api to programmatically access exasol bucketfs servi
         CURL:
           $ curl -i -u "w:write" -X PUT --binary-data @some-file.txt  http://127.0.0.1:6666/default/myfile.txt
 
+    4. Download a file from a bucket
+
+        HTTPIE:
+          $  http --auth w:write --auth-type basic --download GET http://127.0.0.1:6666/default/myfile.txt
+
+        CURL:
+          $ curl -u "w:write" --output myfile.txt  http://127.0.0.1:6666/default/myfile.txt
 """
+import hashlib
 import warnings
 from collections import defaultdict
+from pathlib import Path
 from typing import BinaryIO, ByteString, Iterable, Mapping, MutableMapping, Union
 from urllib.parse import urlparse
 
@@ -45,7 +54,7 @@ import requests
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
 
-from exasol_bucketfs_utils_python import BucketFsDeprecationWarning, BucketFsError
+from exasol_bucketfs_utils_python import BucketFsDeprecationWarning
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
 from exasol_bucketfs_utils_python.bucketfs_connection_config import (
@@ -55,7 +64,20 @@ from exasol_bucketfs_utils_python.buckets import list_buckets
 from exasol_bucketfs_utils_python.list_files import list_files_in_bucketfs
 from exasol_bucketfs_utils_python.upload import upload_fileobj_to_bucketfs
 
-__all__ = ["Service", "Bucket", "MappedBucket"]
+__all__ = [
+    "Service",
+    "Bucket",
+    "MappedBucket",
+    "as_bytes",
+    "as_string",
+    "as_file",
+    "as_hash",
+]
+
+
+class BucketFsError(Exception):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class Service:
@@ -137,7 +159,7 @@ class Bucket:
     def __iter__(self):
         yield from self.files
 
-    def upload(self, path: str, data: Union[ByteString, BinaryIO]):
+    def upload(self, path: str, data: Union[ByteString, BinaryIO]) -> None:
         """
         Uploads a file onto this bucket
 
@@ -147,9 +169,9 @@ class Bucket:
         """
         _upload_to_bucketfs(self, path, data)
 
-    def delete(self, path):
+    def delete(self, path) -> None:
         """
-        Deletes a specific file/path in this bucket.
+        Deletes a specific file in this bucket.
 
         Args:
             path: points to the file which shall be deleted.
@@ -165,20 +187,62 @@ class Bucket:
         except HTTPError as ex:
             raise BucketFsError(f"Couldn't delete: {path}") from ex
 
+    def download(self, path, chunk_size=8192) -> Iterable[ByteString]:
+        """
+        Downloads a specific file of this bucket.
+
+        Args:
+            path: which shall be downloaded.
+            chunk_size: which shall be used for downloading.
+
+        Returns:
+            An iterable of binary chunks representing the downloaded file.
+        """
+        url = f"{self._service}/{self.name}/{path.lstrip('/')}"
+        auth = HTTPBasicAuth(self._username, self._password)
+        with requests.get(url, stream=True, auth=auth) as response:
+            try:
+                response.raise_for_status()
+            except HTTPError as ex:
+                raise BucketFsError(f"Couldn't download: {path}") from ex
+
+            yield from response.iter_content(chunk_size=chunk_size)
+
 
 class MappedBucket:
     """
-    Wraps a bucket to provide additional features, like index based access from and to the bucket.
+    Wraps a bucket and provides various convenience features to it (e.g. index based access).
 
     Attention:
-        TODO: discribe network, nodes, async storeage etc.
-        Access is more convenient API wise but still as expensive ....
+
+        Even though this class provides a very convenient interface,
+        the functionality of this class should be used with care.
+        Even though it may not be obvious, all the provided features do involve interactions with a bucketfs service
+        in the background (upload, download, sync, etc.).
+        Keep this in mind when using this class.
     """
 
-    def __init__(self, bucket):
-        self._bucket = bucket
+    def __init__(self, bucket, chunk_size=8192):
+        """
+        Creates a new MappedBucket.
 
-    def __setitem__(self, key, value):
+        Args:
+            bucket: which shall be wrapped.
+            chunk_size: which shall be used for downloads.
+        """
+        self._bucket = bucket
+        self._chunk_size = chunk_size
+
+    @property
+    def chunk_size(self) -> int:
+        """Chunk size which will be used for downloads."""
+        return self._chunk_size
+
+    @chunk_size.setter
+    def chunk_size(self, value) -> None:
+        self._chunk_size = value
+
+    def __setitem__(self, key, value) -> None:
         """
         Uploads a file onto this bucket.
 
@@ -186,13 +250,99 @@ class MappedBucket:
         """
         self._bucket.upload(path=key, data=value)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key) -> None:
         """
         Deletes a file from the bucket.
 
         See also Bucket:delete
         """
         self._bucket.delete(path=key)
+
+    def __getitem__(self, item) -> Iterable[ByteString]:
+        """
+        Downloads a file from this bucket.
+
+        See also Bucket::download
+        """
+        return self._bucket.download(item, self._chunk_size)
+
+
+def _bytes(chunks: Iterable[ByteString]) -> ByteString:
+    data = bytearray()
+    for chunk in chunks:
+        data.join(chunk)
+    return data
+
+
+def as_bytes(chunks: Iterable[ByteString]) -> ByteString:
+    """
+    Transforms a set of byte chunks into a bytes like object.
+
+    Args:
+        chunks: which shall be concatenated.
+
+    Return:
+        A single continues byte like object.
+    """
+    return _bytes(chunks)
+
+
+def as_string(chunks: Iterable[ByteString], encoding="utf-8") -> str:
+    """
+    Transforms a set of byte chunks into a string.
+
+    Args:
+        chunks: which shall be converted into a single string.
+        encoding: which shall be used to convert the bytes to a string.
+
+    Return:
+        A string representation of the converted bytes.
+    """
+    return _bytes(chunks).decode(encoding)
+
+
+def as_file(chunks: Iterable[ByteString], filename: Union[str, Path]) -> Path:
+    """
+    Transforms a set of byte chunks into a string.
+
+    Args:
+        chunks: which shall be written to file.
+        filename: for the file which is to be created.
+
+    Return:
+        A path to the created file.
+    """
+    filename = Path(filename)
+    with open(filename, "rb") as f:
+        for chunk in chunks:
+            f.write(chunk)
+    return filename
+
+
+def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> str:
+    """
+    Calculate the hash for a set of byte chunks.
+
+    Args:
+        chunks: which shall be used as input for the checksum.
+        algorithm: which shall be used for calculating the checksum.
+
+    Return:
+        A string representing the hex digest.
+    """
+    try:
+        klass = getattr(hashlib, algorithm)
+    except AttributeError as ex:
+        raise BucketFsError(
+            "Algorithm ({algorithm}) is not available, please use [{algorithms}]".format(
+                algorithm=algorithm, algorithms=",".join(hashlib.algorithms_available)
+            )
+        ) from ex
+
+    hasher = klass()
+    for chunk in chunks:
+        hasher.update(chunk)
+    return hasher.hexdigest()
 
 
 def _create_bucket_config(name, url, username, password) -> BucketConfig:
