@@ -123,6 +123,10 @@ class Bucket:
         self._password = password
 
     @property
+    def name(self) -> str:
+        return self._name
+
+    @property
     def files(self) -> Iterable[str]:
         return _list_files_in_bucket(self)
 
@@ -190,7 +194,7 @@ def _list_files_in_bucket(bucket) -> Iterable[str]:
         try:
             return list_files_in_bucketfs(
                 _create_bucket_config(
-                    bucket._name, bucket._service, bucket._username, bucket._password
+                    bucket.name, bucket._service, bucket._username, bucket._password
                 ),
                 bucket_file_path="",
             )
@@ -202,6 +206,6 @@ def _upload_to_bucketfs(bucket, path, data):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=BucketFsDeprecationWarning)
         config = _create_bucket_config(
-            bucket._name, bucket._service, bucket._username, bucket._password
+            bucket.name, bucket._service, bucket._username, bucket._password
         )
         _, _ = upload_fileobj_to_bucketfs(config, path, data)
