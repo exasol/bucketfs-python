@@ -60,7 +60,7 @@ def test_list_buckets(url, port, expected):
 def test_list_buckets(bucket, url, username, password, expected):
     service = Bucket(bucket, url, username, password)
     actual = {bucket for bucket in service}
-    assert actual == expected
+    assert expected.issubset(actual)
 
 @pytest.mark.parametrize(
     "bucket,url,username,password",
