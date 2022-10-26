@@ -1,5 +1,6 @@
 import random
 import string
+from dataclasses import dataclass
 
 import pytest
 import requests
@@ -106,3 +107,51 @@ def test_upload_to_bucket(bucket, url, username, password):
     auth = HTTPBasicAuth(username, password)
     r = requests.delete(f"{url}/{bucket.name}/{upload_file}", auth=auth)
     r.raise_for_status()
+
+
+@dataclass
+class File:
+    path: str
+    content: bytes
+
+
+def _upload_file(service, bucket, username, password, file):
+    auth = HTTPBasicAuth(username, password)
+    filename = f"{file.path}"
+    url = f"{service.rstrip('/')}/{bucket}/{filename}"
+    response = requests.put(url, data=file.content, auth=auth)
+    response.raise_for_status()
+    return filename
+
+
+@pytest.mark.parametrize(
+    "service,bucket,username,password,file",
+    [
+        (
+            "http://127.0.0.1:6666",
+            "default",
+            "w",
+            "write",
+            File(path="hello.txt", content=b"foobar"),
+        ),
+        (
+            "http://127.0.0.1:6666",
+            "default",
+            "w",
+            "write",
+            File(path="foo/bar/hello.txt", content=b"foobar"),
+        ),
+    ],
+)
+def test_delete_file_from_bucket(service, bucket, username, password, file):
+    uploaded_file = _upload_file(service, bucket, username, password, file)
+    bucket = Bucket(bucket, service, username, password)
+
+    # make sure this file does not exist yet in the bucket
+    assert uploaded_file in bucket.files
+
+    # run test scenario
+    bucket.delete(uploaded_file)
+
+    # assert expectations
+    assert uploaded_file not in bucket.files

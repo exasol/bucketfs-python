@@ -89,4 +89,14 @@ def test_mapped_bucket_supports_item_access_based_upload():
     bucket[name] = data
 
     assert bucket_mock.upload.called
-    assert call(name, data) in bucket_mock.upload.mock_calls
+    assert call(path=name, data=data) in bucket_mock.upload.mock_calls
+
+
+def test_mapped_bucket_supports_item_deletion_based_delete():
+    bucket_mock = Mock(Bucket)
+    bucket = MappedBucket(bucket_mock)
+    path = "/some/odd/path.txt"
+    del bucket[path]
+
+    assert bucket_mock.delete.called
+    assert call(path=path) in bucket_mock.delete.mock_calls

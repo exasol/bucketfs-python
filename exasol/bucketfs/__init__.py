@@ -41,7 +41,11 @@ from collections import defaultdict
 from typing import BinaryIO, ByteString, Iterable, Mapping, MutableMapping, Union
 from urllib.parse import urlparse
 
-from exasol_bucketfs_utils_python import BucketFsDeprecationWarning
+import requests
+from requests import HTTPError
+from requests.auth import HTTPBasicAuth
+
+from exasol_bucketfs_utils_python import BucketFsDeprecationWarning, BucketFsError
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
 from exasol_bucketfs_utils_python.bucketfs_connection_config import (
@@ -140,10 +144,26 @@ class Bucket:
         Args:
             path: in the bucket the file shall be associated with.
             data: raw content of the file.
-
-        Attention: Network connection involved
         """
         _upload_to_bucketfs(self, path, data)
+
+    def delete(self, path):
+        """
+        Deletes a specific file/path in this bucket.
+
+        Args:
+            path: points to the file which shall be deleted.
+
+        Raises:
+            A BucketFsError if the operation couldn't be executed successfully.
+        """
+        url = f"{self._service}/{self.name}/{path.lstrip('/')}"
+        auth = HTTPBasicAuth(self._username, self._password)
+        response = requests.delete(url, auth=auth)
+        try:
+            response.raise_for_status()
+        except HTTPError as ex:
+            raise BucketFsError(f"Couldn't delete: {path}") from ex
 
 
 class MappedBucket:
@@ -160,14 +180,19 @@ class MappedBucket:
 
     def __setitem__(self, key, value):
         """
-        Uploads a file onto this bucket
+        Uploads a file onto this bucket.
 
-        Args:
-            key: filename for the file in the bucket.
-            value: file content of the uploaded file.
+        See also Bucket:upload
         """
-        # TODO: check if value is byte or file-like type
-        self._bucket.upload(key, value)
+        self._bucket.upload(path=key, data=value)
+
+    def __delitem__(self, key):
+        """
+        Deletes a file from the bucket.
+
+        See also Bucket:delete
+        """
+        self._bucket.delete(path=key)
 
 
 def _create_bucket_config(name, url, username, password) -> BucketConfig:

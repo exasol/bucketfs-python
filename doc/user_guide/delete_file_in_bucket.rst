@@ -11,5 +11,5 @@ with the provided delete method.
 
 Example:
 
-.. literalinclude:: /examples/delete_file_in_bucket.py
+.. literalinclude:: /examples/delete.py
    :language: python3
