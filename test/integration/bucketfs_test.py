@@ -1,11 +1,11 @@
+import random
 import string
 
 import pytest
-import random
-
-from exasol.bucketfs import Bucket, Service
 import requests
 from requests.auth import HTTPBasicAuth
+
+from exasol.bucketfs import Bucket, Service
 
 
 @pytest.mark.parametrize(
@@ -62,26 +62,27 @@ def test_list_buckets(bucket, url, username, password, expected):
     actual = {bucket for bucket in service}
     assert expected.issubset(actual)
 
+
 @pytest.mark.parametrize(
     "bucket,url,username,password",
     [
         (
-                "default",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
+            "default",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
         ),
         (
-                "myudfs",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
+            "myudfs",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
         ),
         (
-                "jdbc_adapter",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
+            "jdbc_adapter",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
         ),
     ],
 )
@@ -105,4 +106,3 @@ def test_upload_to_bucket(bucket, url, username, password):
     auth = HTTPBasicAuth(username, password)
     r = requests.delete(f"{url}/{bucket.name}/{upload_file}", auth=auth)
     r.raise_for_status()
-

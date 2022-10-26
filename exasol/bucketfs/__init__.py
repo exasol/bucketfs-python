@@ -38,7 +38,7 @@ This module contains python api to programmatically access exasol bucketfs servi
 """
 import warnings
 from collections import defaultdict
-from typing import Iterable, Mapping, MutableMapping, ByteString, BinaryIO, Union
+from typing import BinaryIO, ByteString, Iterable, Mapping, MutableMapping, Union
 from urllib.parse import urlparse
 
 from exasol_bucketfs_utils_python import BucketFsDeprecationWarning
@@ -48,10 +48,10 @@ from exasol_bucketfs_utils_python.bucketfs_connection_config import (
     BucketFSConnectionConfig,
 )
 from exasol_bucketfs_utils_python.buckets import list_buckets
-from exasol_bucketfs_utils_python.upload import upload_fileobj_to_bucketfs
 from exasol_bucketfs_utils_python.list_files import list_files_in_bucketfs
+from exasol_bucketfs_utils_python.upload import upload_fileobj_to_bucketfs
 
-__all__ = ['Service', 'Bucket', 'MappedBucket']
+__all__ = ["Service", "Bucket", "MappedBucket"]
 
 
 class Service:
@@ -95,7 +95,7 @@ class Service:
 
 
 def _list_buckets(
-        url: str,
+    url: str,
 ) -> Iterable[str]:
     info = urlparse(url)
     # suppress warning for users of the new api until the internal migration is done too.

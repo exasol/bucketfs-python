@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from unittest.mock import patch, Mock, call
+from unittest.mock import Mock, call, patch
 
 import pytest
 
-from exasol.bucketfs import Bucket, Service, MappedBucket
+from exasol.bucketfs import Bucket, MappedBucket, Service
 
 
 @pytest.mark.parametrize(
@@ -12,8 +12,8 @@ from exasol.bucketfs import Bucket, Service, MappedBucket
         ("http://127.0.0.1:2580", set()),
         ("http://127.0.0.1:2500", {"bucket1"}),
         (
-                "http://127.0.0.1:6666",
-                {"bucket1", "bucket2", "bucket3"},
+            "http://127.0.0.1:6666",
+            {"bucket1", "bucket2", "bucket3"},
         ),
     ],
 )
@@ -39,31 +39,31 @@ class BucketTestData:
     "test_data,expected",
     [
         (
-                BucketTestData(
-                    name="default",
-                    service="http://127.0.0.1:2580/",
-                    username="w",
-                    password="write",
-                ),
-                set(),
+            BucketTestData(
+                name="default",
+                service="http://127.0.0.1:2580/",
+                username="w",
+                password="write",
+            ),
+            set(),
         ),
         (
-                BucketTestData(
-                    name="default",
-                    service="http://127.0.0.1:2580/",
-                    username="w",
-                    password="write",
-                ),
-                {"file1"},
+            BucketTestData(
+                name="default",
+                service="http://127.0.0.1:2580/",
+                username="w",
+                password="write",
+            ),
+            {"file1"},
         ),
         (
-                BucketTestData(
-                    name="default",
-                    service="http://127.0.0.1:2580/",
-                    username="w",
-                    password="write",
-                ),
-                {"root/sub1/file", "root/sub1/sub2/file"},
+            BucketTestData(
+                name="default",
+                service="http://127.0.0.1:2580/",
+                username="w",
+                password="write",
+            ),
+            {"root/sub1/file", "root/sub1/sub2/file"},
         ),
     ],
 )
@@ -85,7 +85,7 @@ def test_list_files_in_bucket(test_data, expected):
 def test_mapped_bucket_supports_item_access_based_upload():
     bucket_mock = Mock(Bucket)
     bucket = MappedBucket(bucket_mock)
-    name, data = 'foo', bytes([1, 2, 3, 4])
+    name, data = "foo", bytes([1, 2, 3, 4])
     bucket[name] = data
 
     assert bucket_mock.upload.called
