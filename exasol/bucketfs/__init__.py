@@ -46,6 +46,7 @@ This module contains python api to programmatically access exasol bucketfs servi
 import hashlib
 import warnings
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
 from typing import BinaryIO, ByteString, Iterable, Mapping, MutableMapping, Union
 from urllib.parse import urlparse
@@ -270,7 +271,10 @@ class MappedBucket:
 def _bytes(chunks: Iterable[ByteString]) -> ByteString:
     data = bytearray()
     for chunk in chunks:
-        data.join(chunk)
+        if isinstance(chunk, Iterable):
+            data.extend(chunk)
+        else:
+            data.append(chunk)
     return data
 
 
@@ -301,6 +305,12 @@ def as_string(chunks: Iterable[ByteString], encoding="utf-8") -> str:
     return _bytes(chunks).decode(encoding)
 
 
+def _chunk_as_bytes(chunk) -> ByteString:
+    if not isinstance(chunk, Iterable):
+        chunk = bytes([chunk])
+    return chunk
+
+
 def as_file(chunks: Iterable[ByteString], filename: Union[str, Path]) -> Path:
     """
     Transforms a set of byte chunks into a string.
@@ -312,8 +322,9 @@ def as_file(chunks: Iterable[ByteString], filename: Union[str, Path]) -> Path:
     Return:
         A path to the created file.
     """
+    chunks = (_chunk_as_bytes(c) for c in chunks)
     filename = Path(filename)
-    with open(filename, "rb") as f:
+    with open(filename, "wb") as f:
         for chunk in chunks:
             f.write(chunk)
     return filename
@@ -339,6 +350,7 @@ def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> str:
             )
         ) from ex
 
+    chunks = (_chunk_as_bytes(c) for c in chunks)
     hasher = klass()
     for chunk in chunks:
         hasher.update(chunk)
