@@ -46,7 +46,6 @@ This module contains python api to programmatically access exasol bucketfs servi
 import hashlib
 import warnings
 from collections import defaultdict
-from collections.abc import Iterable
 from pathlib import Path
 from typing import BinaryIO, ByteString, Iterable, Mapping, MutableMapping, Union
 from urllib.parse import urlparse
@@ -122,7 +121,7 @@ class Service:
 
 
 def _list_buckets(
-    url: str,
+        url: str,
 ) -> Iterable[str]:
     info = urlparse(url)
     # suppress warning for users of the new api until the internal migration is done too.
@@ -268,13 +267,17 @@ class MappedBucket:
         return self._bucket.download(item, self._chunk_size)
 
 
+def _chunk_as_bytes(chunk) -> ByteString:
+    if not isinstance(chunk, Iterable):
+        chunk = bytes([chunk])
+    return chunk
+
+
 def _bytes(chunks: Iterable[ByteString]) -> ByteString:
+    chunks = (_chunk_as_bytes(c) for c in chunks)
     data = bytearray()
     for chunk in chunks:
-        if isinstance(chunk, Iterable):
-            data.extend(chunk)
-        else:
-            data.append(chunk)
+        data.extend(chunk)
     return data
 
 
@@ -303,12 +306,6 @@ def as_string(chunks: Iterable[ByteString], encoding="utf-8") -> str:
         A string representation of the converted bytes.
     """
     return _bytes(chunks).decode(encoding)
-
-
-def _chunk_as_bytes(chunk) -> ByteString:
-    if not isinstance(chunk, Iterable):
-        chunk = bytes([chunk])
-    return chunk
 
 
 def as_file(chunks: Iterable[ByteString], filename: Union[str, Path]) -> Path:
