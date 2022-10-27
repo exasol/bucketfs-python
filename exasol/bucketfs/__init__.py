@@ -121,7 +121,7 @@ class Service:
 
 
 def _list_buckets(
-        url: str,
+    url: str,
 ) -> Iterable[str]:
     info = urlparse(url)
     # suppress warning for users of the new api until the internal migration is done too.

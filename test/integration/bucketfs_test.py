@@ -26,7 +26,6 @@ def _delete_file(service, bucket, username, password, filename):
 
 
 @pytest.mark.parametrize(
-
     "url,expected",
     [
         ("http://127.0.0.1:6666", {"default", "myudfs", "jdbc_adapter"}),
@@ -42,36 +41,36 @@ def test_list_buckets(url, port, expected):
     "bucket,url,username,password,expected",
     [
         (
-                "default",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
-                {
-                    "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
-                },
+            "default",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
+            {
+                "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
+            },
         ),
         (
-                "default",
-                "http://127.0.0.1:6666",
-                "r",
-                "read",
-                {
-                    "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
-                },
+            "default",
+            "http://127.0.0.1:6666",
+            "r",
+            "read",
+            {
+                "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
+            },
         ),
         (
-                "myudfs",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
-                set(),
+            "myudfs",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
+            set(),
         ),
         (
-                "jdbc_adapter",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
-                set(),
+            "jdbc_adapter",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
+            set(),
         ),
     ],
 )
@@ -85,22 +84,22 @@ def test_list_buckets(bucket, url, username, password, expected):
     "bucket,url,username,password",
     [
         (
-                "default",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
+            "default",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
         ),
         (
-                "myudfs",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
+            "myudfs",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
         ),
         (
-                "jdbc_adapter",
-                "http://127.0.0.1:6666",
-                "w",
-                "write",
+            "jdbc_adapter",
+            "http://127.0.0.1:6666",
+            "w",
+            "write",
         ),
     ],
 )
@@ -134,23 +133,25 @@ class File:
     "service,bucket,username,password,file",
     [
         (
-                "http://127.0.0.1:6666",
-                "default",
-                "w",
-                "write",
-                File(path="hello.txt", content=b"foobar"),
+            "http://127.0.0.1:6666",
+            "default",
+            "w",
+            "write",
+            File(path="hello.txt", content=b"foobar"),
         ),
         (
-                "http://127.0.0.1:6666",
-                "default",
-                "w",
-                "write",
-                File(path="foo/bar/hello.bin", content=b"foobar"),
+            "http://127.0.0.1:6666",
+            "default",
+            "w",
+            "write",
+            File(path="foo/bar/hello.bin", content=b"foobar"),
         ),
     ],
 )
 def test_download_file_from_bucket(service, bucket, username, password, file):
-    uploaded_file, _ = _upload_file(service, bucket, username, password, file.path, file.content)
+    uploaded_file, _ = _upload_file(
+        service, bucket, username, password, file.path, file.content
+    )
     bucket = Bucket(bucket, service, username, password)
 
     # make sure this file does not exist yet in the bucket
