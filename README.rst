@@ -47,7 +47,7 @@ Exasol Bucketfs is a python library to interact with Exasol `Bucketfs-Service(s)
 
 - `Python <https://www.python.org/>`_ >= 3.8
 
-🛠️ Installation
+💾 Installation
 ---------------
 
 .. code-block:: shell
@@ -57,5 +57,5 @@ Exasol Bucketfs is a python library to interact with Exasol `Bucketfs-Service(s)
 📚 Documentation
 ----------------
 
-The documentation for the main branch can be found `here <https://exasol.github.io/bucketfs-python/>`_.
+The latest documentation can be found `here <https://exasol.github.io/bucketfs-python/>`_.
 
