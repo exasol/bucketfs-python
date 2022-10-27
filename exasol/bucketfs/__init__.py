@@ -95,7 +95,6 @@ class Service:
             credentials: a mapping containing credentials (username and password) for buckets.
                 E.g. {"bucket1": { "username": "foo", "password": "bar" }}
         """
-        # TODO: Add sanity check for url
         self._url = url
         self._authenticator = defaultdict(
             lambda: {"username": "r", "password": "read"},
