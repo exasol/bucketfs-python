@@ -25,22 +25,8 @@ def _delete_file(service, bucket, username, password, filename):
     return filename, url
 
 
-@pytest.fixture
-def temporary_file_on_bucket(service, bucket, username, password):
-    to_be_deleted = []
-
-    def upload_file(name, content):
-        name, _ = _upload_file(service, bucket, username, password, name, content)
-        to_be_deleted.append(name)
-        return name
-
-    yield upload_file
-
-    for filename in to_be_deleted:
-        _, _, = _delete_file(service, bucket, username, password, filename)
-
-
 @pytest.mark.parametrize(
+
     "url,expected",
     [
         ("http://127.0.0.1:6666", {"default", "myudfs", "jdbc_adapter"}),
