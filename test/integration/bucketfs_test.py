@@ -6,7 +6,38 @@ import pytest
 import requests
 from requests.auth import HTTPBasicAuth
 
-from exasol.bucketfs import Bucket, Service
+from exasol.bucketfs import Bucket, Service, as_bytes
+
+
+def _upload_file(service, bucket, username, password, filename, content):
+    auth = HTTPBasicAuth(username, password)
+    url = f"{service.rstrip('/')}/{bucket}/{filename}"
+    response = requests.put(url, data=content, auth=auth)
+    response.raise_for_status()
+    return filename, url
+
+
+def _delete_file(service, bucket, username, password, filename):
+    auth = HTTPBasicAuth(username, password)
+    url = f"{service.rstrip('/')}/{bucket}/{filename}"
+    response = requests.delete(url, auth=auth)
+    response.raise_for_status()
+    return filename, url
+
+
+@pytest.fixture
+def temporary_file_on_bucket(service, bucket, username, password):
+    to_be_deleted = []
+
+    def upload_file(name, content):
+        name, _ = _upload_file(service, bucket, username, password, name, content)
+        to_be_deleted.append(name)
+        return name
+
+    yield upload_file
+
+    for filename in to_be_deleted:
+        _, _, = _delete_file(service, bucket, username, password, filename)
 
 
 @pytest.mark.parametrize(
@@ -25,36 +56,36 @@ def test_list_buckets(url, port, expected):
     "bucket,url,username,password,expected",
     [
         (
-            "default",
-            "http://127.0.0.1:6666",
-            "w",
-            "write",
-            {
-                "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
-            },
+                "default",
+                "http://127.0.0.1:6666",
+                "w",
+                "write",
+                {
+                    "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
+                },
         ),
         (
-            "default",
-            "http://127.0.0.1:6666",
-            "r",
-            "read",
-            {
-                "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
-            },
+                "default",
+                "http://127.0.0.1:6666",
+                "r",
+                "read",
+                {
+                    "EXAClusterOS/ScriptLanguages-standard-EXASOL-7.1.0-slc-v4.0.0-CM4RWW6R.tar.gz",
+                },
         ),
         (
-            "myudfs",
-            "http://127.0.0.1:6666",
-            "w",
-            "write",
-            set(),
+                "myudfs",
+                "http://127.0.0.1:6666",
+                "w",
+                "write",
+                set(),
         ),
         (
-            "jdbc_adapter",
-            "http://127.0.0.1:6666",
-            "w",
-            "write",
-            set(),
+                "jdbc_adapter",
+                "http://127.0.0.1:6666",
+                "w",
+                "write",
+                set(),
         ),
     ],
 )
@@ -68,22 +99,22 @@ def test_list_buckets(bucket, url, username, password, expected):
     "bucket,url,username,password",
     [
         (
-            "default",
-            "http://127.0.0.1:6666",
-            "w",
-            "write",
+                "default",
+                "http://127.0.0.1:6666",
+                "w",
+                "write",
         ),
         (
-            "myudfs",
-            "http://127.0.0.1:6666",
-            "w",
-            "write",
+                "myudfs",
+                "http://127.0.0.1:6666",
+                "w",
+                "write",
         ),
         (
-            "jdbc_adapter",
-            "http://127.0.0.1:6666",
-            "w",
-            "write",
+                "jdbc_adapter",
+                "http://127.0.0.1:6666",
+                "w",
+                "write",
         ),
     ],
 )
@@ -104,9 +135,7 @@ def test_upload_to_bucket(bucket, url, username, password):
     assert upload_file in bucket.files
 
     # cleanup
-    auth = HTTPBasicAuth(username, password)
-    r = requests.delete(f"{url}/{bucket.name}/{upload_file}", auth=auth)
-    r.raise_for_status()
+    _, _ = _delete_file(url, bucket.name, username, password, upload_file)
 
 
 @dataclass
@@ -115,43 +144,38 @@ class File:
     content: bytes
 
 
-def _upload_file(service, bucket, username, password, file):
-    auth = HTTPBasicAuth(username, password)
-    filename = f"{file.path}"
-    url = f"{service.rstrip('/')}/{bucket}/{filename}"
-    response = requests.put(url, data=file.content, auth=auth)
-    response.raise_for_status()
-    return filename
-
-
 @pytest.mark.parametrize(
     "service,bucket,username,password,file",
     [
         (
-            "http://127.0.0.1:6666",
-            "default",
-            "w",
-            "write",
-            File(path="hello.txt", content=b"foobar"),
+                "http://127.0.0.1:6666",
+                "default",
+                "w",
+                "write",
+                File(path="hello.txt", content=b"foobar"),
         ),
         (
-            "http://127.0.0.1:6666",
-            "default",
-            "w",
-            "write",
-            File(path="foo/bar/hello.txt", content=b"foobar"),
+                "http://127.0.0.1:6666",
+                "default",
+                "w",
+                "write",
+                File(path="foo/bar/hello.bin", content=b"foobar"),
         ),
     ],
 )
-def test_delete_file_from_bucket(service, bucket, username, password, file):
-    uploaded_file = _upload_file(service, bucket, username, password, file)
+def test_download_file_from_bucket(service, bucket, username, password, file):
+    uploaded_file, _ = _upload_file(service, bucket, username, password, file.path, file.content)
     bucket = Bucket(bucket, service, username, password)
 
     # make sure this file does not exist yet in the bucket
     assert uploaded_file in bucket.files
 
     # run test scenario
-    bucket.delete(uploaded_file)
+    data = as_bytes(bucket.download(uploaded_file))
 
     # assert expectations
-    assert uploaded_file not in bucket.files
+    expected = file.content
+    assert data == expected
+
+    # clean up
+    _, _ = _delete_file(service, bucket.name, username, password, file.path)
