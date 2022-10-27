@@ -5,6 +5,6 @@
    :hidden:
 
    user_guide/user_guide
-   developer_guide/developer_guide
    api
+   developer_guide/developer_guide
    changes/changelog

@@ -1,5 +1,3 @@
-import io
-
 from exasol.bucketfs import Service, as_bytes, as_file, as_string
 
 bucketfs = Service(
@@ -21,8 +19,6 @@ my_ascii_string = as_string(
 
 
 # Expert/Mapped bucket API
-import io
-
 from exasol.bucketfs import MappedBucket, Service
 
 bucketfs = Service(

@@ -1,4 +1,4 @@
-# Changes
+# 📝 Changes
 
 * [0.6.0](changes_0.6.0.md)
 * [0.5.0](changes_0.5.0.md)

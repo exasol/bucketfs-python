@@ -43,12 +43,12 @@ Exasol Bucketfs is a python library to interact with Exasol `Bucketfs-Service(s)
 * Pythonic API
 
 🔌️ Prerequisites
-----------------
+-----------------
 
 - `Python <https://www.python.org/>`_ >= 3.8
 
 💾 Installation
----------------
+----------------
 
 .. code-block:: shell
 
