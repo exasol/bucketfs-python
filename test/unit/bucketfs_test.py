@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from unittest.mock import Mock, call, patch
+from unittest.mock import Mock, PropertyMock, call, patch
 
 import pytest
 
@@ -89,6 +89,24 @@ def test_list_files_in_bucket(test_data, expected):
         )
         actual = {file for file in bucket}
         assert actual == expected
+
+
+def test_mapped_bucket_supports_iteration():
+    expected = ["a", "b"]
+    bucket_mock = Mock(Bucket)
+    type(bucket_mock).files = PropertyMock(return_value=expected)
+    bucket = MappedBucket(bucket_mock)
+    actual = [f for f in bucket]
+    assert set(actual) == set(expected)
+
+
+def test_mapped_bucket_supports_item_access_based_download():
+    bucket_mock = Mock(Bucket)
+    bucket = MappedBucket(bucket_mock)
+    name = "foo.txt"
+    _ = bucket[name]
+    assert bucket_mock.download.called
+    assert call(name, 8192) in bucket_mock.download.mock_calls
 
 
 def test_mapped_bucket_supports_item_access_based_upload():

@@ -241,6 +241,9 @@ class MappedBucket:
     def chunk_size(self, value) -> None:
         self._chunk_size = value
 
+    def __iter__(self):
+        yield from self._bucket.files
+
     def __setitem__(self, key, value) -> None:
         """
         Uploads a file onto this bucket.
