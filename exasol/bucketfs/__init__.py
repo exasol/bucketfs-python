@@ -358,7 +358,7 @@ def as_file(chunks: Iterable[ByteString], filename: Union[str, Path]) -> Path:
     return filename
 
 
-def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> str:
+def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> ByteString:
     """
     Calculate the hash for a set of byte chunks.
 
@@ -382,4 +382,4 @@ def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> str:
     hasher = klass()
     for chunk in chunks:
         hasher.update(chunk)
-    return hasher.hexdigest()
+    return hasher.digest()

@@ -181,7 +181,7 @@ def test_as_string_converter(chunks, expected):
     ],
 )
 def test_as_hash_converter(chunks, algorithm, expected):
-    assert as_hash(chunks, algorithm) == expected
+    assert as_hash(chunks, algorithm).hex() == expected
 
 
 @pytest.mark.parametrize(
