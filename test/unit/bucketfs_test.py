@@ -201,3 +201,30 @@ def test_as_file_converter(temporary_directory, chunks, filename, expected_conte
 
     with open(file, "rb") as f:
         assert f.read() == expected_content
+
+
+def test_dunder_str_of_service():
+    service = Service(url="https://127.0.0.1:6666")
+    expected = "Service<https://127.0.0.1:6666>"
+    assert f"{service}" == expected
+
+
+def test_dunder_str_of_bucket():
+    bucket = Bucket(
+        name="foobar", service="https://127.0.0.1:6666", username=None, password=None
+    )
+    expected = "Bucket<foobar | on: https://127.0.0.1:6666>"
+    assert f"{bucket}" == expected
+
+
+def test_dunder_str_of_mapped_bucket():
+    bucket = MappedBucket(
+        Bucket(
+            name="foobar",
+            service="https://127.0.0.1:6666",
+            username=None,
+            password=None,
+        )
+    )
+    expected = "MappedBucket<Bucket<foobar | on: https://127.0.0.1:6666>>"
+    assert f"{bucket}" == expected

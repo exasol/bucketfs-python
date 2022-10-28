@@ -65,6 +65,8 @@ __all__ = [
 
 
 class BucketFsError(Exception):
+    """Error occurred while interacting with the bucket fs service."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -128,6 +130,9 @@ class Service:
             for name in buckets
         }
 
+    def __str__(self):
+        return f"Service<{self._url}>"
+
     def __iter__(self):
         yield from self.buckets
 
@@ -147,6 +152,9 @@ class Bucket:
         self._service = service
         self._username = username
         self._password = password
+
+    def __str__(self):
+        return f"Bucket<{self.name} | on: {self._service}>"
 
     @property
     def name(self) -> str:
@@ -285,6 +293,9 @@ class MappedBucket:
         See also Bucket::download
         """
         return self._bucket.download(item, self._chunk_size)
+
+    def __str__(self):
+        return f"MappedBucket<{self._bucket}>"
 
 
 def _chunk_as_bytes(chunk) -> ByteString:
