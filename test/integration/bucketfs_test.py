@@ -81,33 +81,35 @@ def test_list_buckets(bucket, url, username, password, expected):
 
 
 @pytest.mark.parametrize(
-    "bucket,url,username,password",
+    "bucket,url,username,password,data",
     [
         (
             "default",
             "http://127.0.0.1:6666",
             "w",
             "write",
+            bytes([65, 66, 67, 68, 69, 70]),
         ),
         (
-            "myudfs",
+            "default",
             "http://127.0.0.1:6666",
             "w",
             "write",
+            [b"12", b"34", b"56", b"78"],
         ),
         (
-            "jdbc_adapter",
+            "default",
             "http://127.0.0.1:6666",
             "w",
             "write",
+            (b"1" for _ in range(0, 10)),
         ),
     ],
 )
-def test_upload_to_bucket(bucket, url, username, password):
+def test_upload_to_bucket(bucket, url, username, password, data):
     upload_file = "Uploaded-File-{rnd}.bin".format(
         rnd="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
-    data = bytes([65, 66, 67, 68, 69, 70])
     bucket = Bucket(bucket, url, username, password)
 
     # make sure this file does not exist yet in the bucket

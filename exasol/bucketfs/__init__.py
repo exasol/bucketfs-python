@@ -158,7 +158,9 @@ class Bucket:
     def __iter__(self):
         yield from self.files
 
-    def upload(self, path: str, data: Union[ByteString, BinaryIO]) -> None:
+    def upload(
+        self, path: str, data: Union[ByteString, BinaryIO, Iterable[ByteString]]
+    ) -> None:
         """
         Uploads a file onto this bucket
 
@@ -166,7 +168,13 @@ class Bucket:
             path: in the bucket the file shall be associated with.
             data: raw content of the file.
         """
-        _upload_to_bucketfs(self, path, data)
+        url = f"{self._service}/{self.name}/{path.lstrip('/')}"
+        auth = HTTPBasicAuth(self._username, self._password)
+        response = requests.put(url, data=data, auth=auth)
+        try:
+            response.raise_for_status()
+        except HTTPError as ex:
+            raise BucketFsError(f"Couldn't upload file: {path}") from ex
 
     def delete(self, path) -> None:
         """
@@ -386,12 +394,3 @@ def _list_files_in_bucket(bucket) -> Iterable[str]:
             )
         except FileNotFoundError:
             return list()
-
-
-def _upload_to_bucketfs(bucket, path, data):
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=BucketFsDeprecationWarning)
-        config = _create_bucket_config(
-            bucket.name, bucket._service, bucket._username, bucket._password
-        )
-        _, _ = upload_fileobj_to_bucketfs(config, path, data)
