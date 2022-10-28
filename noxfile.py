@@ -21,8 +21,6 @@ from version_check import (
 
 nox.options.sessions = []
 
-from exasol.toolbox.nox.tasks import *
-
 
 def _build_html_doc(session: nox.Session):
     session.run("sphinx-build", "-b", "html", ".", ".build-docu")
