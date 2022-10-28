@@ -3,7 +3,6 @@
 
 exasol.bucketfs.Service
 -----------------------
-
 .. autoclass:: exasol.bucketfs.Service
    :noindex:
    :members:
@@ -12,7 +11,6 @@ exasol.bucketfs.Service
 
 exasol.bucketfs.Bucket
 -----------------------
-
 .. autoclass:: exasol.bucketfs.Bucket
    :members:
    :undoc-members:
@@ -36,8 +34,12 @@ exasol.bucketfs.as_hash
 
 exasol.bucketfs.MappedBucket
 ----------------------------
-
 .. autoclass:: exasol.bucketfs.MappedBucket
    :members:
    :undoc-members:
    :show-inheritance:
+
+exasol.bucketfs.BucketFsError
+-----------------------------
+.. autoexception:: exasol.bucketfs.BucketFsError
+
