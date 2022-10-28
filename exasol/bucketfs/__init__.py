@@ -80,6 +80,21 @@ class BucketFsError(Exception):
         super().__init__(*args, **kwargs)
 
 
+def _lines(response):
+    lines = (line for line in response.text.split("\n") if not line.isspace())
+    return (line for line in lines if line != "")
+
+
+def _build_url(service_url, bucket=None, path=None) -> str:
+    info = urlparse(service_url)
+    url = f"{info.scheme}://{info.hostname}:{info.port}"
+    if bucket is not None:
+        url += f"/{bucket}"
+    if path is not None:
+        url += f"/{path}"
+    return url
+
+
 class Service:
     """Provides a simple to use api to access a bucketfs service.
 
@@ -104,7 +119,16 @@ class Service:
     @property
     def buckets(self) -> MutableMapping[str, "Bucket"]:
         """List all available buckets."""
-        buckets = _list_buckets(self._url)
+        url = _build_url(service_url=self._url)
+        response = requests.get(url)
+        try:
+            response.raise_for_status()
+        except HTTPError as ex:
+            raise BucketFsError(
+                f"Couldn't list of all buckets from: {self._url}"
+            ) from ex
+
+        buckets = _lines(response)
         return {
             name: Bucket(
                 name=name,
@@ -117,18 +141,6 @@ class Service:
 
     def __iter__(self):
         yield from self.buckets
-
-
-def _list_buckets(
-    url: str,
-) -> Iterable[str]:
-    info = urlparse(url)
-    # suppress warning for users of the new api until the internal migration is done too.
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=BucketFsDeprecationWarning)
-        return list_buckets(
-            f"{info.scheme}://{info.hostname}", path=info.path, port=info.port
-        )
 
 
 class Bucket:
@@ -153,7 +165,16 @@ class Bucket:
 
     @property
     def files(self) -> Iterable[str]:
-        return _list_files_in_bucket(self)
+        url = _build_url(service_url=self._service, bucket=self.name)
+        auth = HTTPBasicAuth(self._username, self._password)
+        response = requests.get(url, auth=auth)
+        try:
+            response.raise_for_status()
+        except HTTPError as ex:
+            raise BucketFsError(
+                f"Couldn't retrieve file list form bucket: {self.name}"
+            ) from ex
+        return {line for line in _lines(response)}
 
     def __iter__(self):
         yield from self.files
@@ -168,7 +189,7 @@ class Bucket:
             path: in the bucket the file shall be associated with.
             data: raw content of the file.
         """
-        url = f"{self._service}/{self.name}/{path.lstrip('/')}"
+        url = _build_url(service_url=self._service, bucket=self.name, path=path)
         auth = HTTPBasicAuth(self._username, self._password)
         response = requests.put(url, data=data, auth=auth)
         try:
@@ -186,7 +207,7 @@ class Bucket:
         Raises:
             A BucketFsError if the operation couldn't be executed successfully.
         """
-        url = f"{self._service}/{self.name}/{path.lstrip('/')}"
+        url = _build_url(service_url=self._service, bucket=self.name, path=path)
         auth = HTTPBasicAuth(self._username, self._password)
         response = requests.delete(url, auth=auth)
         try:
@@ -205,7 +226,7 @@ class Bucket:
         Returns:
             An iterable of binary chunks representing the downloaded file.
         """
-        url = f"{self._service}/{self.name}/{path.lstrip('/')}"
+        url = _build_url(service_url=self._service, bucket=self.name, path=path)
         auth = HTTPBasicAuth(self._username, self._password)
         with requests.get(url, stream=True, auth=auth) as response:
             try:
@@ -362,35 +383,3 @@ def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> str:
     for chunk in chunks:
         hasher.update(chunk)
     return hasher.hexdigest()
-
-
-def _create_bucket_config(name, url, username, password) -> BucketConfig:
-    metadata = urlparse(url)
-    return BucketConfig(
-        bucket_name=name,
-        bucketfs_config=BucketFSConfig(
-            bucketfs_name=name,
-            connection_config=BucketFSConnectionConfig(
-                host=metadata.hostname,
-                port=metadata.port,
-                user=username,
-                pwd=password,
-                is_https="https" in metadata.scheme,
-            ),
-        ),
-    )
-
-
-def _list_files_in_bucket(bucket) -> Iterable[str]:
-    # suppress warning for users of the new api until the internal migration is done too.
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=BucketFsDeprecationWarning)
-        try:
-            return list_files_in_bucketfs(
-                _create_bucket_config(
-                    bucket.name, bucket._service, bucket._username, bucket._password
-                ),
-                bucket_file_path="",
-            )
-        except FileNotFoundError:
-            return list()
