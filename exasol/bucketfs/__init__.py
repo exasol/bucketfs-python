@@ -44,7 +44,6 @@ This module contains python api to programmatically access exasol bucketfs servi
           $ curl -u "w:write" --output myfile.txt  http://127.0.0.1:6666/default/myfile.txt
 """
 import hashlib
-import warnings
 from collections import defaultdict
 from pathlib import Path
 from typing import BinaryIO, ByteString, Iterable, Mapping, MutableMapping, Union
@@ -53,16 +52,6 @@ from urllib.parse import urlparse
 import requests
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
-
-from exasol_bucketfs_utils_python import BucketFsDeprecationWarning
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import (
-    BucketFSConnectionConfig,
-)
-from exasol_bucketfs_utils_python.buckets import list_buckets
-from exasol_bucketfs_utils_python.list_files import list_files_in_bucketfs
-from exasol_bucketfs_utils_python.upload import upload_fileobj_to_bucketfs
 
 __all__ = [
     "Service",
@@ -164,10 +153,13 @@ class Bucket:
         return self._name
 
     @property
+    def _auth(self) -> HTTPBasicAuth:
+        return HTTPBasicAuth(username=self._username, password=self._password)
+
+    @property
     def files(self) -> Iterable[str]:
         url = _build_url(service_url=self._service, bucket=self.name)
-        auth = HTTPBasicAuth(self._username, self._password)
-        response = requests.get(url, auth=auth)
+        response = requests.get(url, auth=self._auth)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -190,8 +182,7 @@ class Bucket:
             data: raw content of the file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        auth = HTTPBasicAuth(self._username, self._password)
-        response = requests.put(url, data=data, auth=auth)
+        response = requests.put(url, data=data, auth=self._auth)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -208,8 +199,7 @@ class Bucket:
             A BucketFsError if the operation couldn't be executed successfully.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        auth = HTTPBasicAuth(self._username, self._password)
-        response = requests.delete(url, auth=auth)
+        response = requests.delete(url, auth=self._auth)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -227,8 +217,7 @@ class Bucket:
             An iterable of binary chunks representing the downloaded file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        auth = HTTPBasicAuth(self._username, self._password)
-        with requests.get(url, stream=True, auth=auth) as response:
+        with requests.get(url, stream=True, auth=self._auth) as response:
             try:
                 response.raise_for_status()
             except HTTPError as ex:
