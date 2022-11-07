@@ -108,7 +108,7 @@ def test_list_buckets(bucket, url, username, password, expected):
 )
 def test_upload_to_bucket(bucket, url, username, password, data):
     upload_file = "Uploaded-File-{rnd}.bin".format(
-        rnd="".join(random.choice(string.hexdigits) for _ in range(0, 10))
+        random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
     bucket = Bucket(bucket, url, username, password)
 
