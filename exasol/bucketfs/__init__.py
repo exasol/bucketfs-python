@@ -325,7 +325,7 @@ def as_bytes(chunks: Iterable[ByteString]) -> ByteString:
     return _bytes(chunks)
 
 
-def as_string(chunks: Iterable[ByteString], encoding="utf-8") -> str:
+def as_string(chunks: Iterable[ByteString], encoding:str="utf-8") -> str:
     """
     Transforms a set of byte chunks into a string.
 
