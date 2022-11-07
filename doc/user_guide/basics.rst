@@ -22,7 +22,7 @@ Get a Bucket reference
    :start-after: # Get bucket reference
 
 
-Buckets class
+Bucket class
 -------------
 A Bucket contains a set of files which may be restricted, depending on the credentials of the requester.
 Using :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.Bucket>` class the user can interact (download, upload, list and delete) files.
