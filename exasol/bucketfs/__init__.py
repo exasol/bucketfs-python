@@ -1,5 +1,5 @@
 """
-This module contains python api to programmatically access exasol bucketfs service(s).
+This module contains a python api to programmatically access exasol bucketfs service(s).
 
 
 .. attention:
