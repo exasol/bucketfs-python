@@ -2,10 +2,11 @@ import io
 
 from exasol.bucketfs import Service
 
-bucketfs = Service(
-    "http://127.0.0.1:6666", {"default": {"username": "w", "password": "write"}}
-)
-bucket = bucketfs.buckets["default"]
+URL = "http://localhost:6666"
+CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+
+bucketfs = Service(URL, CREDENTAILS)
+bucket = bucketfs["default"]
 
 # Upload bytes
 data = bytes([65, 65, 65, 65])
@@ -23,17 +24,20 @@ bucket.upload("file/like/file1.txt", file_like)
 text = "Some string content"
 bucket.upload("string/file1.txt", text.encode("utf-8"))
 
+# Upload generated content
+generator = (b"abcd" for _ in range(0, 10))
+bucket.upload("string/file2.txt", generator)
 
 # Expert/Mapped bucket API
 import io
 
 from exasol.bucketfs import MappedBucket, Service
 
-bucketfs = Service(
-    "http://127.0.0.1:6666", {"default": {"username": "w", "password": "write"}}
-)
-bucket = bucketfs.buckets["default"]
-bucket = MappedBucket(bucket)
+URL = "http://localhost:6666"
+CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+
+bucketfs = Service(URL, CREDENTAILS)
+bucket = MappedBucket(bucketfs["default"])
 
 # Upload bytes
 data = bytes([65, 65, 65, 65])
@@ -49,3 +53,6 @@ bucket["file/like/file2.txt"] = file_like
 
 # Upload string conent
 bucket["string/file2.txt"] = text.encode("utf-8")
+
+# Upload generated content
+bucket["string/file2.txt"] = (b"abcd" for _ in range(0, 10))

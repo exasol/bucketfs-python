@@ -1,9 +1,10 @@
 from exasol.bucketfs import Service, as_bytes, as_file, as_string
 
-bucketfs = Service(
-    "http://127.0.0.1:6666", {"default": {"username": "w", "password": "write"}}
-)
-bucket = bucketfs.buckets["default"]
+URL = "http://localhost:6666"
+CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+
+bucketfs = Service(URL, CREDENTAILS)
+bucket = bucketfs["default"]
 
 # Download as raw bytes
 data = as_bytes(bucket.download("some/other/path/file2.bin"))
@@ -21,12 +22,11 @@ my_ascii_string = as_string(
 # Expert/Mapped bucket API
 from exasol.bucketfs import MappedBucket, Service
 
-bucketfs = Service(
-    "http://127.0.0.1:6666", {"default": {"username": "w", "password": "write"}}
-)
-bucket = bucketfs.buckets["default"]
-bucket = MappedBucket(bucket)
+URL = "http://localhost:6666"
+CREDENTAILS = {"default": {"username": "w", "password": "write"}}
 
+bucketfs = Service(URL, CREDENTAILS)
+bucket = MappedBucket(bucketfs["default"])
 
 # Download as raw bytes
 data = as_bytes(bucket["some/other/path/file2.bin"])

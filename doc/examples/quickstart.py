@@ -2,7 +2,6 @@ from exasol.bucketfs import Service, as_bytes
 
 URL = "http://localhost:6666"
 CREDENTAILS = {"default": {"username": "w", "password": "write"}}
-BUCKET_NAME = "default"
 
 bucketfs = Service(URL, CREDENTAILS)
 

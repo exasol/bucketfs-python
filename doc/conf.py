@@ -36,6 +36,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosummary",
     "myst_parser",
+    "sphinx_copybutton",
     "sphinx.ext.autosectionlabel",
 ]
 

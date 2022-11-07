@@ -2,7 +2,6 @@ from exasol.bucketfs import Service
 
 URL = "http://localhost:6666"
 CREDENTAILS = {"default": {"username": "w", "password": "write"}}
-BUCKET_NAME = "default"
 bucketfs = Service(URL, CREDENTAILS)
 
 default_bucket = bucketfs["default"]
@@ -13,7 +12,6 @@ from exasol.bucketfs import MappedBucket, Service
 
 URL = "http://localhost:6666"
 CREDENTAILS = {"default": {"username": "w", "password": "write"}}
-BUCKET_NAME = "default"
 bucketfs = Service(URL, CREDENTAILS)
 
 default_bucket = MappedBucket(bucketfs["default"])

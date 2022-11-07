@@ -136,6 +136,9 @@ class Service:
     def __iter__(self):
         yield from self.buckets
 
+    def __getitem__(self, item: str) -> "Bucket":
+        return self.buckets[item]
+
 
 class Bucket:
     def __init__(self, name: str, service: str, username: str, password: str):
@@ -213,7 +216,7 @@ class Bucket:
         except HTTPError as ex:
             raise BucketFsError(f"Couldn't delete: {path}") from ex
 
-    def download(self, path: str,  chunk_size:int=8192) -> Iterable[ByteString]:
+    def download(self, path: str, chunk_size: int = 8192) -> Iterable[ByteString]:
         """
         Downloads a specific file of this bucket.
 
@@ -247,7 +250,7 @@ class MappedBucket:
         Keep this in mind when using this class.
     """
 
-    def __init__(self, bucket:Bucket, chunk_size:int=8192):
+    def __init__(self, bucket: Bucket, chunk_size: int = 8192):
         """
         Creates a new MappedBucket.
 
@@ -264,13 +267,15 @@ class MappedBucket:
         return self._chunk_size
 
     @chunk_size.setter
-    def chunk_size(self, value:int) -> None:
+    def chunk_size(self, value: int) -> None:
         self._chunk_size = value
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[str]:
         yield from self._bucket.files
 
-    def __setitem__(self, key, value) -> None:
+    def __setitem__(
+        self, key: str, value: Union[ByteString, BinaryIO, Iterable[ByteString]]
+    ) -> None:
         """
         Uploads a file onto this bucket.
 
@@ -278,7 +283,7 @@ class MappedBucket:
         """
         self._bucket.upload(path=key, data=value)
 
-    def __delitem__(self, key) -> None:
+    def __delitem__(self, key: str) -> None:
         """
         Deletes a file from the bucket.
 
@@ -286,7 +291,7 @@ class MappedBucket:
         """
         self._bucket.delete(path=key)
 
-    def __getitem__(self, item) -> Iterable[ByteString]:
+    def __getitem__(self, item: str) -> Iterable[ByteString]:
         """
         Downloads a file from this bucket.
 
@@ -325,7 +330,7 @@ def as_bytes(chunks: Iterable[ByteString]) -> ByteString:
     return _bytes(chunks)
 
 
-def as_string(chunks: Iterable[ByteString], encoding:str="utf-8") -> str:
+def as_string(chunks: Iterable[ByteString], encoding: str = "utf-8") -> str:
     """
     Transforms a set of byte chunks into a string.
 
