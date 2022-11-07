@@ -213,7 +213,7 @@ class Bucket:
         except HTTPError as ex:
             raise BucketFsError(f"Couldn't delete: {path}") from ex
 
-    def download(self, path, chunk_size=8192) -> Iterable[ByteString]:
+    def download(self, path: str,  chunk_size:int=8192) -> Iterable[ByteString]:
         """
         Downloads a specific file of this bucket.
 
