@@ -247,7 +247,7 @@ class MappedBucket:
         Keep this in mind when using this class.
     """
 
-    def __init__(self, bucket, chunk_size=8192):
+    def __init__(self, bucket:Bucket, chunk_size:int=8192):
         """
         Creates a new MappedBucket.
 
