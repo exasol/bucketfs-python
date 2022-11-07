@@ -18,7 +18,7 @@ This module contains a python api to programmatically access exasol bucketfs ser
           $ curl -i http://127.0.0.1:6666/
 
 
-    2. List all files in a bucket
+    2. List all files in the bucket "default"
     
         HTTPIE:
           $  http --auth w:write --auth-type basic GET http://127.0.0.1:6666/default
