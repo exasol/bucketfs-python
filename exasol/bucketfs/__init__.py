@@ -264,7 +264,7 @@ class MappedBucket:
         return self._chunk_size
 
     @chunk_size.setter
-    def chunk_size(self, value) -> None:
+    def chunk_size(self, value:int) -> None:
         self._chunk_size = value
 
     def __iter__(self):
