@@ -22,7 +22,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: 1.2.0
+          poetry-version: 1.2.2
 
       - name: Poetry install
         run: poetry install
@@ -48,7 +48,7 @@ jobs:
     - name: Install Poetry
       uses: abatilo/actions-poetry@v2.1.4
       with:
-        poetry-version: 1.2.0
+        poetry-version: 1.2.2
 
     - name: Poetry install
       run: poetry install
@@ -72,7 +72,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: 1.2.0
+          poetry-version: 1.2.2
 
       - name: Install Project
         run: poetry install
@@ -104,7 +104,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: 1.2.0
+          poetry-version: 1.2.2
 
       - name: Install Project
         run: poetry install

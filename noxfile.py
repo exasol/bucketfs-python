@@ -23,7 +23,7 @@ nox.options.sessions = []
 
 
 def _build_html_doc(session: nox.Session):
-    session.run("sphinx-build", "-b", "html", ".", ".build-docu")
+    session.run("poetry", "run", "sphinx-build", "-b", "html", ".", ".build-docu")
 
 
 def _open_docs_in_browser(session: nox.Session):
@@ -51,121 +51,6 @@ def build_and_open_html_doc(session: nox.Session):
     with session.chdir(DOC):
         _build_html_doc(session)
         _open_docs_in_browser(session)
-
-
-@nox.session(name="commit-pages-main", python=False)
-def commit_pages_main(session: nox.Session):
-    """
-    Generate the GitHub pages documentation for the main branch and
-    commit it to the branch github-pages/main
-    """
-    with session.chdir(PROJECT_ROOT):
-        session.run(
-            "sgpg",
-            "--target_branch",
-            "github-pages/main",
-            "--push_origin",
-            "origin",
-            "--push_enabled",
-            "commit",
-            "--source_branch",
-            "main",
-            "--module_path",
-            "${StringArray[@]}",
-            env={"StringArray": ("../exasol-bucketfs-utils-python")},
-        )
-
-
-@nox.session(name="commit-pages-current", python=False)
-def commit_pages_current(session: nox.Session):
-    """
-    Generate the GitHub pages documentation for the current branch and
-    commit it to the branch github-pages/<current_branch>
-    """
-    branch = session.run("git", "branch", "--show-current", silent=True)
-    with session.chdir(PROJECT_ROOT):
-        session.run(
-            "sgpg",
-            "--target_branch",
-            "github-pages/" + branch[:-1],
-            "--push_origin",
-            "origin",
-            "--push_enabled",
-            "commit",
-            "--module_path",
-            "${StringArray[@]}",
-            env={"StringArray": ("../exasol-bucketfs-utils-python")},
-        )
-
-
-@nox.session(name="push-pages-main", python=False)
-def push_pages_main(session: nox.Session):
-    """
-    Generate the GitHub pages documentation for the main branch and
-    pushes it to the remote branch github-pages/main
-    """
-    with session.chdir(PROJECT_ROOT):
-        session.run(
-            "sgpg",
-            "--target_branch",
-            "github-pages/main",
-            "--push_origin",
-            "origin",
-            "--push_enabled",
-            "push",
-            "--source_branch",
-            "main",
-            "--module_path",
-            "${StringArray[@]}",
-            env={"StringArray": ("../exasol-bucketfs-utils-python")},
-        )
-
-
-@nox.session(name="push-pages-current", python=False)
-def push_pages_current(session: nox.Session):
-    """
-    Generate the GitHub pages documentation for the current branch and
-    pushes it to the remote branch github-pages/<current_branch>
-    """
-    branch = session.run("git", "branch", "--show-current", silent=True)
-    with session.chdir(PROJECT_ROOT):
-        session.run(
-            "sgpg",
-            "--target_branch",
-            "github-pages/" + branch[:-1],
-            "--push_origin",
-            "origin",
-            "--push_enabled",
-            "push",
-            "--module_path",
-            "${StringArray[@]}",
-            env={"StringArray": ("../exasol-bucketfs-utils-python")},
-        )
-
-
-@nox.session(name="push-pages-release", python=False)
-def push_pages_release(session: nox.Session):
-    """Generate the GitHub pages documentation for the release and pushes it to the remote branch github-pages/main"""
-    tags = session.run("git", "tag", "--sort=committerdate", silent=True)
-    # get the latest tag. last element in list is empty string, so choose second to last
-    tag = tags.split("\n")[-2]
-    with session.chdir(PROJECT_ROOT):
-        session.run(
-            "sgpg",
-            "--target_branch",
-            "github-pages/main",
-            "--push_origin",
-            "origin",
-            "--push_enabled",
-            "push",
-            "--source_branch",
-            tag,
-            "--source_origin",
-            "tags",
-            "--module_path",
-            "${StringArray[@]}",
-            env={"StringArray": ("../exasol-bucketfs-utils-python")},
-        )
 
 
 @nox.session(name="run-tests", python=False)
