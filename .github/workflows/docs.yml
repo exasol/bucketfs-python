@@ -26,7 +26,6 @@ jobs:
 
       - name: Build Documentation
         run: |
-          pip install furo
           poetry run python -m nox -s build-html-doc
 
       - name: Deploy
