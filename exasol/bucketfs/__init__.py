@@ -86,6 +86,20 @@ def _build_url(service_url, bucket=None, path=None) -> str:
     return url
 
 
+def _parse_service_url(url: str) -> str:
+    supported_schemes = ("http", "https")
+    elements = urlparse(url)
+    if elements.scheme not in supported_schemes:
+        raise BucketFsError(
+            f"Invalid scheme: {elements.scheme}. Supported schemes [{', '.join(supported_schemes)}]"
+        )
+    if not elements.netloc:
+        raise BucketFsError(f"Invalid location: {elements.netloc}")
+    # use bucket fs default port if no explicit port was specified
+    port = elements.port if elements.port else 2580
+    return f"{elements.scheme}://{elements.hostname}:{port}"
+
+
 class Service:
     """Provides a simple to use api to access a bucketfs service.
 
@@ -101,7 +115,7 @@ class Service:
             credentials: a mapping containing credentials (username and password) for buckets.
                 E.g. {"bucket1": { "username": "foo", "password": "bar" }}
         """
-        self._url = url
+        self._url = _parse_service_url(url)
         self._authenticator = defaultdict(
             lambda: {"username": "r", "password": "read"},
             credentials if credentials is not None else {},
@@ -152,7 +166,7 @@ class Bucket:
             password: used for authentication.
         """
         self._name = name
-        self._service = service
+        self._service = _parse_service_url(service)
         self._username = username
         self._password = password
 
@@ -303,7 +317,14 @@ class MappedBucket:
         return f"MappedBucket<{self._bucket}>"
 
 
-def _chunk_as_bytes(chunk) -> ByteString:
+def _chunk_as_bytes(chunk: Union[int, ByteString]) -> ByteString:
+    """
+    In some scenarios python converts single bytes to integers:
+    >>> chunks = [type(chunk) for chunk in b"abc"]
+    >>> chunks
+    ... [<class 'int'>, <class 'int'>, <class 'int'>]
+    in order to cope with this transparently this wrapper can be used.
+    """
     if not isinstance(chunk, Iterable):
         chunk = bytes([chunk])
     return chunk
@@ -375,8 +396,8 @@ def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> ByteString
         A string representing the hex digest.
     """
     try:
-        klass = getattr(hashlib, algorithm)
-    except AttributeError as ex:
+        hasher = hashlib.new(algorithm)
+    except ValueError as ex:
         raise BucketFsError(
             "Algorithm ({algorithm}) is not available, please use [{algorithms}]".format(
                 algorithm=algorithm, algorithms=",".join(hashlib.algorithms_available)
@@ -384,7 +405,6 @@ def as_hash(chunks: Iterable[ByteString], algorithm: str = "sha1") -> ByteString
         ) from ex
 
     chunks = (_chunk_as_bytes(c) for c in chunks)
-    hasher = klass()
     for chunk in chunks:
         hasher.update(chunk)
     return hasher.digest()

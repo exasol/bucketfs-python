@@ -24,9 +24,14 @@ jobs:
       - name: Poetry Install
         run: poetry install
 
-      - name: Publish Documentation
+      - name: Build Documentation
         run: |
-          git config --local user.email "opensource@exasol.com"
-          git config --local user.name "GitHub Action"
-          git fetch
-          poetry run python -m nox -s push-pages-release
+          poetry run python -m nox -s build-html-doc
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.3.0
+        with:
+          branch: gh-pages
+          folder: ./doc/build-docu
+          git-config-name: Github Action
+          git-config-email: opensource@exasol.com

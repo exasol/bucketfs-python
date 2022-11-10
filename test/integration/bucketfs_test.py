@@ -1,8 +1,9 @@
 import random
 import string
+from typing import ByteString, Iterable, Tuple, Union
 
 import pytest
-from integration.conftest import File, delete_file
+from integration.conftest import File, TestConfig, delete_file
 
 from exasol.bucketfs import Bucket, Service, as_bytes
 
@@ -20,7 +21,7 @@ def test_list_buckets(test_config, expected):
 
 
 @pytest.mark.parametrize(
-    "bucket,data",
+    "name,data",
     [
         (
             "default",
@@ -36,24 +37,29 @@ def test_list_buckets(test_config, expected):
         ),
     ],
 )
-def test_upload_to_bucket(test_config, bucket, data):
-    file = "Uploaded-File-{random_string}.bin".format(
+def test_upload_to_bucket(
+    test_config: TestConfig,
+    name: str,
+    data: Union[ByteString, Iterable[ByteString], Iterable[int]],
+):
+    file_name = "Uploaded-File-{random_string}.bin".format(
         random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
-    bucket = Bucket(bucket, test_config.url, test_config.username, test_config.password)
-
-    # make sure this file does not exist yet in the bucket
-    assert file not in bucket.files
+    bucket = Bucket(name, test_config.url, test_config.username, test_config.password)
 
     # run test scenario
     try:
-        bucket.upload(file, data)
+        bucket.upload(file_name, data)
         # assert expectations
-        assert file in bucket.files
+        assert file_name in bucket.files
     finally:
         # cleanup
         _, _ = delete_file(
-            test_config.url, bucket.name, test_config.username, test_config.password, file
+            test_config.url,
+            bucket.name,
+            test_config.username,
+            test_config.password,
+            file_name,
         )
 
 
@@ -71,9 +77,12 @@ def test_upload_to_bucket(test_config, bucket, data):
     ],
     indirect=True,
 )
-def test_download_file_from_bucket(temporary_bucket_files, test_config):
-    bucket, files = temporary_bucket_files
-    bucket = Bucket(bucket, test_config.url, test_config.username, test_config.password)
+def test_download_file_from_bucket(
+    temporary_bucket_files: Tuple[str, Union[File, Iterable[File]]],
+    test_config: TestConfig,
+):
+    name, files = temporary_bucket_files
+    bucket = Bucket(name, test_config.url, test_config.username, test_config.password)
 
     for file in files:
         expected = file.content
@@ -94,9 +103,12 @@ def test_download_file_from_bucket(temporary_bucket_files, test_config):
     ],
     indirect=True,
 )
-def test_list_files_in_bucket(temporary_bucket_files, test_config):
-    bucket, files = temporary_bucket_files
-    bucket = Bucket(bucket, test_config.url, test_config.username, test_config.password)
+def test_list_files_in_bucket(
+    temporary_bucket_files: Tuple[str, Union[File, Iterable[File]]],
+    test_config: TestConfig,
+):
+    name, files = temporary_bucket_files
+    bucket = Bucket(name, test_config.url, test_config.username, test_config.password)
     expected = {file.name for file in files}
     actual = {file for file in bucket}
     assert expected.issubset(actual)

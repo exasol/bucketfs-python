@@ -1,12 +1,19 @@
 from dataclasses import dataclass
-from typing import Sequence
+from typing import BinaryIO, ByteString, Iterable, Sequence, Tuple, Union
 
 import pytest
 import requests
 from requests.auth import HTTPBasicAuth
 
 
-def upload_file(service, bucket, username, password, filename, content):
+def upload_file(
+    service: str,
+    bucket: str,
+    username: str,
+    password: str,
+    filename: str,
+    content: Union[ByteString, BinaryIO, Iterable[ByteString]],
+) -> Tuple[str, str]:
     auth = HTTPBasicAuth(username, password)
     url = f"{service.rstrip('/')}/{bucket}/{filename}"
     response = requests.put(url, data=content, auth=auth)
@@ -14,7 +21,9 @@ def upload_file(service, bucket, username, password, filename, content):
     return filename, url
 
 
-def delete_file(service, bucket, username, password, filename):
+def delete_file(
+    service: str, bucket: str, username: str, password: str, filename: str
+) -> Tuple[str, str]:
     auth = HTTPBasicAuth(username, password)
     url = f"{service.rstrip('/')}/{bucket}/{filename}"
     response = requests.delete(url, auth=auth)
@@ -71,9 +80,19 @@ class File:
 
 
 @pytest.fixture
-def temporary_bucket_files(request):
+def temporary_bucket_files(request) -> Tuple[str, Iterable[File]]:
+    """
+    Create temporary files within a bucket and clean them once the test is done.
+
+    Attention:
+
+        This fixture expects the using test to be parameterized using `pytest.mark.parameterize`
+        together with the `indirect` parameter, for further details see `Indirect parameterization  <https://docs.pytest.org/en/7.2.x/example/parametrize.html#indirect-parametrization>`_.
+    """
+    params: Tuple[str, Union[File, Iterable[File]]] = request.param
     options = request.config.option
-    bucket, files = request.param
+    bucket, files = params
+    # support for a single file argument
     if not isinstance(files, Sequence):
         files = [files]
 
