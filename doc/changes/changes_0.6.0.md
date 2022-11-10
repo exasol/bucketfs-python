@@ -1,4 +1,4 @@
-# BucketFs Utils Python 0.6.0, released <TBD>
+# BucketFs Python 0.6.0, released 2022-11-10
 
 ## Summary
 
@@ -10,10 +10,6 @@ and will be removed in the near future.
 - New pythonic api, which will integrate more easily into python code. 
   This provides the ability to use more standard and built in mechanisms
   to achieve desired outcomes without the need of extending the existing API.
-
-## Bug Fixes
-
-- n/a 
 
 ## Documentation
 
