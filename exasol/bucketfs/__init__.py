@@ -193,7 +193,7 @@ class Bucket:
             ) from ex
         return {line for line in _lines(response)}
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[str]:
         yield from self.files
 
     def upload(
