@@ -1,6 +1,6 @@
-from exasol_bucketfs_utils_python import BucketFsError
 import requests
 from typing import Iterator
+from exasol_bucketfs_utils_python import BucketFsError
 
 
 def list_buckets(
