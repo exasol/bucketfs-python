@@ -33,6 +33,7 @@ List files in a Bucket
 
 .. literalinclude:: /examples/list.py
    :language: python3
+   :end-before: # Expert/Mapped bucket API
 
 Upload files to a Bucket
 ++++++++++++++++++++++++

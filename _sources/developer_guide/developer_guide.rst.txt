@@ -32,7 +32,7 @@ For further details see: `.github/workflows/ci-cd.yml`.
 
     .. code-block:: shell
 
-        git tag push origin x.y.z
+        git push origin x.y.z
 
 What to do if the release failed?
 ---------------------------------
