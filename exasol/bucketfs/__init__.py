@@ -46,7 +46,15 @@ This module contains a python api to programmatically access exasol bucketfs ser
 import hashlib
 from collections import defaultdict
 from pathlib import Path
-from typing import BinaryIO, ByteString, Iterable, Mapping, MutableMapping, Union
+from typing import (
+    BinaryIO,
+    ByteString,
+    Iterable,
+    Iterator,
+    Mapping,
+    MutableMapping,
+    Union,
+)
 from urllib.parse import urlparse
 
 import requests
@@ -144,10 +152,10 @@ class Service:
             for name in buckets
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Service<{self._url}>"
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator["Bucket"]:
         yield from self.buckets
 
     def __getitem__(self, item: str) -> "Bucket":
@@ -193,7 +201,7 @@ class Bucket:
             ) from ex
         return {line for line in _lines(response)}
 
-    def __iter__(self) -> Iterable[str]:
+    def __iter__(self) -> Iterator[str]:
         yield from self.files
 
     def upload(
