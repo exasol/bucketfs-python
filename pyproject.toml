@@ -38,7 +38,6 @@ myst-parser = "^0.17.0"
 pyexasol = "^0.24.0"
 dill = "^0.3.4"
 exasol-udf-mock-python = { git = "https://github.com/exasol/udf-mock-python.git", branch = "main" }
-gitpython = ">=2.1.0"
 toml = ">=0.10.2"
 nox = "^2022.1.7"
 
