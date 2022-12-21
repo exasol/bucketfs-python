@@ -138,3 +138,4 @@ doc/api
 
 # Language container
 .build_output
+.html-documentation
