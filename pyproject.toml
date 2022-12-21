@@ -40,3 +40,42 @@ sphinx-copybutton = "^0.5.0"
 myst-parser = "^0.18.1"
 exasol-toolbox = "^0.2.0"
 
+[tool.coverage.run]
+source = [
+    "exasol",
+]
+
+[tool.coverage.report]
+fail_under = 15
+
+
+[tool.black]
+line-length = 88
+verbose = false
+include = "\\.pyi?$"
+
+
+[tool.isort]
+profile = "black"
+force_grid_wrap = 2
+
+
+[tool.pylint.master]
+fail-under = 7.0
+
+[tool.pylint.format]
+max-line-length = 88
+max-module-lines = 800
+
+[tool.mypy]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+    "language_container/exasol-bucketfs-utils-python-container/flavor_base/build_steps.py",
+    "exasol_bucketfs_utils_python.*",
+    "noxfile",
+    "tests.*",
+    "test.*"
+]
+ignore_errors = true
