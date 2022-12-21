@@ -31,7 +31,10 @@ bucket.upload("string/file2.txt", generator)
 # Expert/Mapped bucket API
 import io
 
-from exasol.bucketfs import MappedBucket, Service
+from exasol.bucketfs import (
+    MappedBucket,
+    Service,
+)
 
 URL = "http://localhost:6666"
 CREDENTAILS = {"default": {"username": "w", "password": "write"}}

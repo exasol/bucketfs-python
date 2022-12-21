@@ -8,16 +8,22 @@ class BucketFSConnectionConfig:
     """
 
     @typechecked(always=True)
-    def __init__(self, host: str, port: int,
-                 user: str, pwd: str, is_https: bool = False):
+    def __init__(
+        self, host: str, port: int, user: str, pwd: str, is_https: bool = False
+    ):
         self._is_https = is_https
         if host == "":
             raise ValueError("Host can't be an empty string")
         self._host = host
         self._port = port
-        if user not in ["w", "r"]:  # The BucketFs currently supports only these two users
-            raise ValueError(f"User can only be, 'w' (read-write access) or "
-                             f"'r' (read-only access), but got {user}")
+        if user not in [
+            "w",
+            "r",
+        ]:  # The BucketFs currently supports only these two users
+            raise ValueError(
+                f"User can only be, 'w' (read-write access) or "
+                f"'r' (read-only access), but got {user}"
+            )
         self._user = user
         if pwd == "":
             raise ValueError("Password can't be an empty string")

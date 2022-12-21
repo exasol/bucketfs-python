@@ -21,16 +21,21 @@ def find_script(script_name: str):
 @pytest.fixture(scope="session")
 def language_container():
     script_dir = find_script("build_language_container.sh")
-    completed_process = subprocess.run([script_dir], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    completed_process = subprocess.run(
+        [script_dir], stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
     output = completed_process.stdout.decode("UTF-8")
     print(output)
     completed_process.check_returncode()
     lines = output.splitlines()
     alter_session_selector = "ALTER SESSION SET SCRIPT_LANGUAGES='"
-    alter_session = [line for line in lines if line.startswith(alter_session_selector)][0]
-    alter_session = alter_session[len(alter_session_selector):-2]
+    alter_session = [line for line in lines if line.startswith(alter_session_selector)][
+        0
+    ]
+    alter_session = alter_session[len(alter_session_selector) : -2]
     container_path_selector = "Cached container under "
-    container_path = [line for line in lines if line.startswith(container_path_selector)][0]
-    container_path = container_path[len(container_path_selector):]
-    return {"container_path": container_path,
-            "alter_session": alter_session}
+    container_path = [
+        line for line in lines if line.startswith(container_path_selector)
+    ][0]
+    container_path = container_path[len(container_path_selector) :]
+    return {"container_path": container_path, "alter_session": alter_session}

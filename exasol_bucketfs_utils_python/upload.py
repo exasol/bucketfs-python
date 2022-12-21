@@ -1,19 +1,29 @@
-from pathlib import Path, PurePosixPath
+from pathlib import (
+    Path,
+    PurePosixPath,
+)
 from tempfile import NamedTemporaryFile
-from typing import Tuple, IO, Any
+from typing import (
+    IO,
+    Any,
+    Tuple,
+)
 from urllib.parse import ParseResult
+
 import joblib
 import requests
+
 from exasol_bucketfs_utils_python import bucketfs_utils
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
-from exasol_bucketfs_utils_python.bucketfs_utils import \
-    generate_bucket_http_url, generate_bucket_udf_path
+from exasol_bucketfs_utils_python.bucketfs_utils import (
+    generate_bucket_http_url,
+    generate_bucket_udf_path,
+)
 
 
-def upload_file_to_bucketfs(bucket_config: BucketConfig,
-                            bucket_file_path: str,
-                            local_file_path: Path) -> \
-        Tuple[ParseResult, PurePosixPath]:
+def upload_file_to_bucketfs(
+    bucket_config: BucketConfig, bucket_file_path: str, local_file_path: Path
+) -> Tuple[ParseResult, PurePosixPath]:
     """
     This function uploads a file to the specified path in a bucket of the BucketFS.
 
@@ -26,10 +36,9 @@ def upload_file_to_bucketfs(bucket_config: BucketConfig,
         return upload_fileobj_to_bucketfs(bucket_config, bucket_file_path, f)
 
 
-def upload_fileobj_to_bucketfs(bucket_config: BucketConfig,
-                               bucket_file_path: str,
-                               fileobj: IO) -> \
-        Tuple[ParseResult, PurePosixPath]:
+def upload_fileobj_to_bucketfs(
+    bucket_config: BucketConfig, bucket_file_path: str, fileobj: IO
+) -> Tuple[ParseResult, PurePosixPath]:
     """
     This function uploads a `file object <https://docs.python.org/3/glossary.html#term-file-object>`_
     to the specified path in a bucket of the BucketFS.
@@ -49,10 +58,9 @@ def upload_fileobj_to_bucketfs(bucket_config: BucketConfig,
     return url, path
 
 
-def upload_string_to_bucketfs(bucket_config: BucketConfig,
-                              bucket_file_path: str,
-                              string: str) -> \
-        Tuple[ParseResult, PurePosixPath]:
+def upload_string_to_bucketfs(
+    bucket_config: BucketConfig, bucket_file_path: str, string: str
+) -> Tuple[ParseResult, PurePosixPath]:
     """
     This function uploads a string to the specified path in a bucket of the BucketFS.
 
@@ -71,11 +79,9 @@ def upload_string_to_bucketfs(bucket_config: BucketConfig,
     return url, path
 
 
-def upload_object_to_bucketfs_via_joblib(object: Any,
-                                         bucket_config: BucketConfig,
-                                         bucket_file_path: str,
-                                         **kwargs) -> \
-        Tuple[ParseResult, PurePosixPath]:
+def upload_object_to_bucketfs_via_joblib(
+    object: Any, bucket_config: BucketConfig, bucket_file_path: str, **kwargs
+) -> Tuple[ParseResult, PurePosixPath]:
     """
     This function serializes a python object with
     `joblib.dump <https://joblib.readthedocs.io/en/latest/generated/joblib.dump.html#>`_
@@ -91,5 +97,4 @@ def upload_object_to_bucketfs_via_joblib(object: Any,
         joblib.dump(object, temp_file.name, **kwargs)
         temp_file.flush()
         temp_file.seek(0)
-        return upload_fileobj_to_bucketfs(
-            bucket_config, bucket_file_path, temp_file)
+        return upload_fileobj_to_bucketfs(bucket_config, bucket_file_path, temp_file)

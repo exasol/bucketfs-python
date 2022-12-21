@@ -1,5 +1,7 @@
-import requests
 from typing import Iterator
+
+import requests
+
 from exasol_bucketfs_utils_python import BucketFsError
 
 
@@ -15,11 +17,11 @@ def list_buckets(
 
     :param base_url: URL of the bucketfs service e.g. http://127.0.0.1.
     :param path: if the service root is hidden behind a sub-path, the default "" should work in most cases.
-    :param port: the bucketfs service is listening on (default: 2580). 
+    :param port: the bucketfs service is listening on (default: 2580).
                  In case of error make sure the correct port is used.
-    
+
     :raises BucketFsError:
-    
+
     :return: all accessible buckets off the bucketfs service.
     """
     url = f"{base_url}:{port}/{path}"

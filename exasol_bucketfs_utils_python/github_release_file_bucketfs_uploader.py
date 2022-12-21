@@ -6,8 +6,13 @@ from exasol_bucketfs_utils_python.release_link_extractor import ReleaseLinkExtra
 
 class GithubReleaseFileBucketFSUploader:
     def __init__(
-            self, file_to_download_name: str, github_user: str,
-            repository_name: str, release_name: str, path_inside_bucket: str):
+        self,
+        file_to_download_name: str,
+        github_user: str,
+        repository_name: str,
+        release_name: str,
+        path_inside_bucket: str,
+    ):
         self.file_to_download_name = file_to_download_name
         self.github_user = github_user
         self.repository_name = repository_name
@@ -29,7 +34,8 @@ class GithubReleaseFileBucketFSUploader:
         requests.put(
             upload_url,
             data=r_download.iter_content(10 * 1024),
-            auth=HTTPBasicAuth(username, password))
+            auth=HTTPBasicAuth(username, password),
+        )
 
     def __build_upload_url(self, address: str) -> str:
         if self.path_inside_bucket:
@@ -41,9 +47,12 @@ class GithubReleaseFileBucketFSUploader:
         github_api_link = self.__build_github_api_link()
         release_link_extractor = ReleaseLinkExtractor(github_api_link)
         download_url = release_link_extractor.get_link_by_release_name(
-            self.file_to_download_name)
+            self.file_to_download_name
+        )
         return download_url
 
     def __build_github_api_link(self) -> str:
-        return f"https://api.github.com/repos/{self.github_user}/" \
-               f"{self.repository_name}/releases/{self.release_name}"
+        return (
+            f"https://api.github.com/repos/{self.github_user}/"
+            f"{self.repository_name}/releases/{self.release_name}"
+        )

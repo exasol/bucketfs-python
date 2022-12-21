@@ -1,7 +1,10 @@
 from typing import Union
+
 from typeguard import typechecked
-from exasol_bucketfs_utils_python.bucketfs_connection_config import \
-    BucketFSConnectionConfig
+
+from exasol_bucketfs_utils_python.bucketfs_connection_config import (
+    BucketFSConnectionConfig,
+)
 
 
 class BucketFSConfig:
@@ -14,9 +17,10 @@ class BucketFSConfig:
 
     @typechecked(always=True)
     def __init__(
-            self,
-            bucketfs_name: str,
-            connection_config: Union[BucketFSConnectionConfig, None] = None):
+        self,
+        bucketfs_name: str,
+        connection_config: Union[BucketFSConnectionConfig, None] = None,
+    ):
         self._connection_config = connection_config
         if bucketfs_name == "":
             raise ValueError("BucketFS name can't be an empty string")
@@ -29,5 +33,3 @@ class BucketFSConfig:
     @property
     def connection_config(self) -> Union[BucketFSConnectionConfig, None]:
         return self._connection_config
-
-

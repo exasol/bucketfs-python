@@ -1,4 +1,7 @@
-from exasol.bucketfs import Service, as_bytes
+from exasol.bucketfs import (
+    Service,
+    as_bytes,
+)
 
 URL = "http://localhost:6666"
 CREDENTAILS = {"default": {"username": "w", "password": "write"}}

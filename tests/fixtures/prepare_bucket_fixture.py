@@ -1,20 +1,25 @@
 import pytest
+
 from exasol_bucketfs_utils_python import upload
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import \
-    BucketFSConnectionConfig
-from tests.integration_tests.with_db.test_load_fs_file_from_udf import delete_testfile_from_bucketfs
+from exasol_bucketfs_utils_python.bucketfs_connection_config import (
+    BucketFSConnectionConfig,
+)
+from tests.integration_tests.with_db.test_load_fs_file_from_udf import (
+    delete_testfile_from_bucketfs,
+)
 
 
 @pytest.fixture(scope="module")
 def prepare_bucket():
     connection_config = BucketFSConnectionConfig(
-        host="localhost", port=6666, user="w", pwd="write", is_https=False)
+        host="localhost", port=6666, user="w", pwd="write", is_https=False
+    )
     bucketfs_config = BucketFSConfig(
-        connection_config=connection_config, bucketfs_name="bfsdefault")
-    bucket_config = BucketConfig(
-        bucket_name="default", bucketfs_config=bucketfs_config)
+        connection_config=connection_config, bucketfs_name="bfsdefault"
+    )
+    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=bucketfs_config)
     test_string = "test_string"
 
     path_list = ["path/in/bucket/file.txt", "path/file2.txt"]
@@ -23,10 +28,11 @@ def prepare_bucket():
             upload.upload_string_to_bucketfs(
                 bucket_config=bucket_config,
                 bucket_file_path=path_in_bucket,
-                string=test_string)
+                string=test_string,
+            )
         yield bucket_config
     finally:
         for path_in_bucket in path_list:
             delete_testfile_from_bucketfs(
-                file_path=path_in_bucket,
-                bucket_config=bucket_config)
+                file_path=path_in_bucket, bucket_config=bucket_config
+            )
