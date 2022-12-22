@@ -59,7 +59,6 @@ class Config:
     ) -> bool:
         """Implement if project specific behaviour is required"""
         session.run("docker", "kill", "db_container_test", external=True)
-        session.run("docker", "kill", "test_container_test", external=True)
         return True
 
 
