@@ -2,7 +2,7 @@
 
 ## Summary
 
-Update documentation and add support for exasol toolbox.
+Updated documentation and added support for exasol toolbox.
 
 ## Documentation
 
