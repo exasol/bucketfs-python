@@ -1,6 +1,30 @@
 🛠 Developer Guide
 ==================
 
+Setting up the workspace
+*************************
+
+Checkout the Project
+--------------------
+
+.. code-block:: shell
+
+    git checkout git@github.com:exasol/bucketfs-python.git
+
+Install project dependencies
+----------------------------
+
+.. code-block:: shell
+
+    poetry install
+
+Setup pre-commit hook(s)
+------------------------
+
+.. code-block:: shell
+
+    poetry run pre-commit install
+
 Creating a Release
 *******************
 
@@ -66,4 +90,3 @@ One of the release steps failed (Partial Release)
     **Scenario**: Publishing of the release on Github was successfully but during the PyPi release, the upload step got interrupted.
 
     **Solution**: Manually push the package to PyPi
-
