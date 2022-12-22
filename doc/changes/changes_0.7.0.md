@@ -1,4 +1,4 @@
-# BucketFs Python 0.7.0, releaseda 2022-12-22
+# BucketFs Python 0.7.0, released 2022-12-22
 
 ## Summary
 
