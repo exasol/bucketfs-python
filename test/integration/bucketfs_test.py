@@ -1,11 +1,24 @@
 import random
 import string
-from typing import ByteString, Iterable, Tuple, Union
+from typing import (
+    ByteString,
+    Iterable,
+    Tuple,
+    Union,
+)
 
 import pytest
-from integration.conftest import File, TestConfig, delete_file
+from integration.conftest import (
+    File,
+    TestConfig,
+    delete_file,
+)
 
-from exasol.bucketfs import Bucket, Service, as_bytes
+from exasol.bucketfs import (
+    Bucket,
+    Service,
+    as_bytes,
+)
 
 
 @pytest.mark.parametrize(

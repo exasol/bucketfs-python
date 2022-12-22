@@ -4,13 +4,48 @@ on:
   push:
     branches-ignore:
       - "github-pages/*"
+      - "gh-pages/*"
       - "main"
+      - "master"
   pull_request:
-    branches-ignore:
-      - 'main'
+    types: [opened, reopened]
+  schedule:
+    # “At 00:00 on every 7th day-of-month from 1 through 31.” (https://crontab.guru)
+    - cron: "0 0 1/7 * *"
 
 jobs:
 
   ci-job:
     name: Checks
-    uses: ./.github/workflows/checks.yml
+    uses: exasol/python-toolbox/.github/workflows/checks.yml@0.3.0
+
+  tests-job:
+    name: Tests (Python-${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.2.2
+
+      - name: Install Project
+        run: poetry install
+
+      - name: Checkout ITDE
+        run: git clone https://github.com/exasol/integration-test-docker-environment.git
+        working-directory: ..
+
+      - name: Start EXASOL Test-Environment
+        run: ./start-test-env spawn-test-environment --environment-name test --database-port-forward 8888 --bucketfs-port-forward 6666 --db-mem-size 4GB
+        working-directory: ../integration-test-docker-environment
+
+      - name: Run Tests
+        run: poetry run pytest tests

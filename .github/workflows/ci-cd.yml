@@ -8,74 +8,48 @@ on:
 jobs:
 
   check-tag-version-job:
-    name: Check Tag Version
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: SCM Checkout
-        uses: actions/checkout@v2
-
-      - name: Install Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.4
-        with:
-          poetry-version: 1.2.2
-
-      - name: Check Tag Version
-        # make sure the pushed/created tag matched the project version
-        run: "[[ `poetry version --short` == ${{ github.ref_name }} ]]"
+    name: Check Release Tag
+    uses: exasol/python-toolbox/.github/workflows/check-release-tag.yml@0.3.0
 
   ci-job:
     name: Checks
     needs: [ check-tag-version-job ]
-    uses: ./.github/workflows/checks.yml
+    uses: exasol/python-toolbox/.github/workflows/checks.yml@main
 
-  docs-job:
-    name: Publish Documentation
-    needs: [ ci-job ]
-    uses: ./.github/workflows/docs.yml
-
-  cd-job:
-    name: Continues Delivery
-    needs: [ ci-job ]
+  tests-job:
+    name: Tests (Python-${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
     steps:
-
-      - name: SCM Checkout
-        uses: actions/checkout@v2
-
-      - name: Install Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
-
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.4
+          python-version: ${{ matrix.python-version }}
+      - uses: abatilo/actions-poetry@v2.1.4
         with:
           poetry-version: 1.2.2
 
-      - name: Poetry Install
+      - name: Install Project
         run: poetry install
 
-      - name: Build Artifacts
-        run: poetry build
+      - name: Checkout ITDE
+        run: git clone https://github.com/exasol/integration-test-docker-environment.git
+        working-directory: ..
 
-      - name: PyPi Release
-        env:
-          POETRY_HTTP_BASIC_PYPI_USERNAME: "__token__"
-          POETRY_HTTP_BASIC_PYPI_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
-        run: poetry publish
+      - name: Start EXASOL Test-Environment
+        run: ./start-test-env spawn-test-environment --environment-name test --database-port-forward 8888 --bucketfs-port-forward 6666 --db-mem-size 4GB
+        working-directory: ../integration-test-docker-environment
 
-      - name: GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >
-          gh release create ${GITHUB_REF_NAME}
-          --title ${GITHUB_REF_NAME}
-          --notes-file doc/changes/changes_${GITHUB_REF_NAME}.md
-          dist/*
-              
+      - name: Run Tests
+        run: poetry run pytest tests
+
+  cd-job:
+    name: Continues Delivery
+    needs: [ ci-job, tests-job ]
+    uses: exasol/python-toolbox/.github/workflows/build-and-publish.yml@main
+    secrets:
+      PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}

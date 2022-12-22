@@ -1,7 +1,9 @@
 from pathlib import Path
 from typing import Dict
 
-from exasol_script_languages_container_tool.lib.tasks.build.docker_flavor_image_task import DockerFlavorAnalyzeImageTask
+from exasol_script_languages_container_tool.lib.tasks.build.docker_flavor_image_task import (
+    DockerFlavorAnalyzeImageTask,
+)
 
 
 class AnalyzeRelease(DockerFlavorAnalyzeImageTask):

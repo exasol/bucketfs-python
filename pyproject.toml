@@ -4,7 +4,7 @@ packages  = [
     {include = "exasol"},
     {include = "exasol_bucketfs_utils_python"}
 ]
-version = "0.6.1"
+version = "0.7.0"
 description = "BucketFS utilities for the Python programming language"
 
 license = "MIT"
@@ -30,17 +30,49 @@ typeguard = ">=2.11.1"
 
 
 [tool.poetry.dev-dependencies]
-furo = "^2022.9.29"
-pytest = ">=7.1.2"
-pytest-cov = "^3.0.0"
-Sphinx = "^4.5"
-myst-parser = "^0.17.0"
 pyexasol = "^0.24.0"
 dill = "^0.3.4"
 exasol-udf-mock-python = { git = "https://github.com/exasol/udf-mock-python.git", branch = "main" }
 toml = ">=0.10.2"
-nox = "^2022.1.7"
 
 [tool.poetry.group.dev.dependencies]
 sphinx-copybutton = "^0.5.0"
+myst-parser = "^0.18.1"
+exasol-toolbox = ">=0.3.0"
 
+[tool.coverage.run]
+source = [
+    "exasol",
+]
+
+[tool.coverage.report]
+fail_under = 15
+
+
+[tool.black]
+line-length = 88
+verbose = false
+include = "\\.pyi?$"
+
+
+[tool.isort]
+profile = "black"
+force_grid_wrap = 2
+
+
+[tool.pylint.master]
+fail-under = 7.0
+
+[tool.pylint.format]
+max-line-length = 88
+max-module-lines = 800
+
+[tool.mypy]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+    "test.*",
+]
+ignore_errors = true

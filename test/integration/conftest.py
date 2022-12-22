@@ -1,5 +1,12 @@
 from dataclasses import dataclass
-from typing import BinaryIO, ByteString, Iterable, Sequence, Tuple, Union
+from typing import (
+    BinaryIO,
+    ByteString,
+    Iterable,
+    Sequence,
+    Tuple,
+    Union,
+)
 
 import pytest
 import requests

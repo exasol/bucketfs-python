@@ -21,17 +21,18 @@ class ReleaseLinkExtractor:
         json_release_page = response.json()
         list_of_available_releases = json_release_page["assets"]
         result_link = self.__find_link(
-            list_of_available_releases, file_to_download_name)
+            list_of_available_releases, file_to_download_name
+        )
         if result_link is not None:
             return result_link
         else:
-            raise ValueError(f'Release with the name {file_to_download_name} '
-                             f'was not found. Please check the name or '
-                             f'select another release')
+            raise ValueError(
+                f"Release with the name {file_to_download_name} "
+                f"was not found. Please check the name or "
+                f"select another release"
+            )
 
-    def __find_link(self,
-                    list_of_available_releases: list,
-                    release_name: str) -> str:
+    def __find_link(self, list_of_available_releases: list, release_name: str) -> str:
         for release in list_of_available_releases:
             if release_name in release["name"]:
                 return release["browser_download_url"]

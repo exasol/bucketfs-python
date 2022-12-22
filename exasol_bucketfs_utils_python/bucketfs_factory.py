@@ -1,22 +1,26 @@
 import urllib.parse
 from pathlib import PurePosixPath
 from typing import Optional
+
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import \
-    BucketFSConnectionConfig
+from exasol_bucketfs_utils_python.bucketfs_connection_config import (
+    BucketFSConnectionConfig,
+)
 from exasol_bucketfs_utils_python.bucketfs_location import BucketFSLocation
-from exasol_bucketfs_utils_python.localfs_mock_bucketfs_location import \
-    LocalFSMockBucketFSLocation
+from exasol_bucketfs_utils_python.localfs_mock_bucketfs_location import (
+    LocalFSMockBucketFSLocation,
+)
 
 
 class BucketFSFactory:
     """
     Creates a BucketFSLocation given an url.
     """
-    def create_bucketfs_location(self, url: str, user: str, pwd: str,
-                                 base_path: Optional[PurePosixPath] = None) -> \
-            BucketFSLocation:
+
+    def create_bucketfs_location(
+        self, url: str, user: str, pwd: str, base_path: Optional[PurePosixPath] = None
+    ) -> BucketFSLocation:
         """
         Create BucketFSLocation from the url given.
         If the url has the schema http:// or https://, this function creates a
@@ -39,30 +43,32 @@ class BucketFSFactory:
                 port=parsed_url.port,
                 user=user,
                 pwd=pwd,
-                is_https=is_https)
+                is_https=is_https,
+            )
             url_path = PurePosixPath(parsed_url.path)
             bucket_name = url_path.parts[1]
-            base_path_in_bucket = PurePosixPath(
-                url_path.parts[2]).joinpath(*url_path.parts[3:])
+            base_path_in_bucket = PurePosixPath(url_path.parts[2]).joinpath(
+                *url_path.parts[3:]
+            )
             if base_path is not None:
-                base_path_in_bucket = PurePosixPath(
-                    base_path_in_bucket, base_path)
+                base_path_in_bucket = PurePosixPath(base_path_in_bucket, base_path)
             bucketfs_name = parsed_url.params
             bucketfs_config = BucketFSConfig(
-                bucketfs_name, connection_config=connection_config)
+                bucketfs_name, connection_config=connection_config
+            )
             bucket_config = BucketConfig(
-                bucket_name=bucket_name, bucketfs_config=bucketfs_config)
-            bucketfs_location = BucketFSLocation(
-                bucket_config, base_path_in_bucket)
+                bucket_name=bucket_name, bucketfs_config=bucketfs_config
+            )
+            bucketfs_location = BucketFSLocation(bucket_config, base_path_in_bucket)
             return bucketfs_location
         elif parsed_url.scheme == "file":
-            if parsed_url.netloc != '':
-                raise ValueError(f"URL '{url}' with file:// schema "
-                                 f"and netloc not support.")
+            if parsed_url.netloc != "":
+                raise ValueError(
+                    f"URL '{url}' with file:// schema " f"and netloc not support."
+                )
             base_path_in_bucket = PurePosixPath(parsed_url.path)
             if base_path is not None:
-                base_path_in_bucket = PurePosixPath(
-                    base_path_in_bucket, base_path)
+                base_path_in_bucket = PurePosixPath(base_path_in_bucket, base_path)
             bucketfs_location = LocalFSMockBucketFSLocation(base_path_in_bucket)
             return bucketfs_location
         else:

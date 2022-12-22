@@ -1,16 +1,21 @@
-from typing import IO, Any
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from typing import (
+    IO,
+    Any,
+)
+
 import joblib
 import requests
+
 from exasol_bucketfs_utils_python import bucketfs_utils
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_utils import generate_bucket_http_url
 
 
-def download_from_bucketfs_to_file(bucket_config: BucketConfig,
-                                   bucket_file_path: str,
-                                   local_file_path: Path) -> None:
+def download_from_bucketfs_to_file(
+    bucket_config: BucketConfig, bucket_file_path: str, local_file_path: Path
+) -> None:
     """
     Download a file from the specified path in the bucket in the BucketFs
     and save as a local file.
@@ -24,9 +29,9 @@ def download_from_bucketfs_to_file(bucket_config: BucketConfig,
         download_from_bucketfs_to_fileobj(bucket_config, bucket_file_path, f)
 
 
-def download_from_bucketfs_to_fileobj(bucket_config: BucketConfig,
-                                      bucket_file_path: str,
-                                      fileobj: IO) -> None:
+def download_from_bucketfs_to_fileobj(
+    bucket_config: BucketConfig, bucket_file_path: str, fileobj: IO
+) -> None:
     """
     Download a file from the specified path in the BucketFs into a given file
     object <https://docs.python.org/3/glossary.html#term-file-object>`_
@@ -46,8 +51,9 @@ def download_from_bucketfs_to_fileobj(bucket_config: BucketConfig,
             fileobj.write(chunk)
 
 
-def download_from_bucketfs_to_string(bucket_config: BucketConfig,
-                                     bucket_file_path: str) -> str:
+def download_from_bucketfs_to_string(
+    bucket_config: BucketConfig, bucket_file_path: str
+) -> str:
     """
     Download a file from the specified path in the bucket in the BucketFs into a string
 
@@ -64,8 +70,9 @@ def download_from_bucketfs_to_string(bucket_config: BucketConfig,
     return response.text
 
 
-def download_object_from_bucketfs_via_joblib(bucket_config: BucketConfig,
-                                             bucket_file_path: str) -> Any:
+def download_object_from_bucketfs_via_joblib(
+    bucket_config: BucketConfig, bucket_file_path: str
+) -> Any:
     """
     Download a file from the specified path in the bucket in the BucketFs and deserialize it via
     `joblib.load <https://joblib.readthedocs.io/en/latest/generated/joblib.load.html#>`_
@@ -75,8 +82,7 @@ def download_object_from_bucketfs_via_joblib(bucket_config: BucketConfig,
     :return: The deserialized object which was downloaded from the BucketFS
     """
     with NamedTemporaryFile() as temp_file:
-        download_from_bucketfs_to_fileobj(
-            bucket_config, bucket_file_path, temp_file)
+        download_from_bucketfs_to_fileobj(bucket_config, bucket_file_path, temp_file)
         temp_file.flush()
         temp_file.seek(0)
         obj = joblib.load(temp_file)

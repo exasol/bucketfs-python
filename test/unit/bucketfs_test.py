@@ -1,6 +1,11 @@
 from dataclasses import dataclass
 from pathlib import Path
-from unittest.mock import Mock, PropertyMock, call, patch
+from unittest.mock import (
+    Mock,
+    PropertyMock,
+    call,
+    patch,
+)
 
 import pytest
 

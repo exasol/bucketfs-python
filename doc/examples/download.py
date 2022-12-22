@@ -1,4 +1,9 @@
-from exasol.bucketfs import Service, as_bytes, as_file, as_string
+from exasol.bucketfs import (
+    Service,
+    as_bytes,
+    as_file,
+    as_string,
+)
 
 URL = "http://localhost:6666"
 CREDENTAILS = {"default": {"username": "w", "password": "write"}}
@@ -20,7 +25,10 @@ my_ascii_string = as_string(
 
 
 # Expert/Mapped bucket API
-from exasol.bucketfs import MappedBucket, Service
+from exasol.bucketfs import (
+    MappedBucket,
+    Service,
+)
 
 URL = "http://localhost:6666"
 CREDENTAILS = {"default": {"username": "w", "password": "write"}}
