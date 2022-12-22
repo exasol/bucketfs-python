@@ -1,8 +1,8 @@
-# BucketFs Python {TBD}, released {TBD}
+# BucketFs Python 0.7.0, releaseda 2022-12-22
 
 ## Summary
 
-TBD
+Update documentation and add support for exasol toolbox.
 
 ## Documentation
 
