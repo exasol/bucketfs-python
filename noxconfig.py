@@ -5,6 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import (
     Any,
+    Iterable,
     MutableMapping,
 )
 
@@ -16,24 +17,29 @@ class Config:
     root: Path = Path(__file__).parent
     doc: Path = Path(__file__).parent / "doc"
     version_file: Path = Path(__file__).parent / "exasol" / "bucketfs" / "version.py"
+    path_filters: Iterable[str] = (
+        "dist",
+        ".eggs",
+        "venv",
+    )
 
     @staticmethod
     def pre_integration_tests_hook(
-        _session: Session, _config: Config, _context: MutableMapping[str, Any]
+        session: Session, _config: Config, _context: MutableMapping[str, Any]
     ) -> bool:
         """Implement if project specific behaviour is required"""
         with TemporaryDirectory() as tmp_dir:
             tmp_dir = Path(tmp_dir)
             checkout_name = "ITDE"
-            with _session.chdir(tmp_dir):
-                _session.run(
+            with session.chdir(tmp_dir):
+                session.run(
                     "git",
                     "clone",
                     "https://github.com/exasol/integration-test-docker-environment.git",
                     checkout_name,
                 )
-            with _session.chdir(tmp_dir / checkout_name):
-                _session.run(
+            with session.chdir(tmp_dir / checkout_name):
+                session.run(
                     "./start-test-env",
                     "spawn-test-environment",
                     "--environment-name",
@@ -49,9 +55,11 @@ class Config:
 
     @staticmethod
     def post_integration_tests_hook(
-        _session: Session, _config: Config, _context: MutableMapping[str, Any]
+        session: Session, _config: Config, _context: MutableMapping[str, Any]
     ) -> bool:
         """Implement if project specific behaviour is required"""
+        session.run("docker", "kill", "db_container_test", external=True)
+        session.run("docker", "kill", "test_container_test", external=True)
         return True
 
 
