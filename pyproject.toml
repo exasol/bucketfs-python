@@ -24,13 +24,13 @@ keywords = ['exasol', 'bucketfs']
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-requests = ">=2.24.0"
+requests = ">=2.28.2"
 joblib=">=1.0.1"
 typeguard = ">=2.11.1"
 
 
 [tool.poetry.dev-dependencies]
-pyexasol = "^0.24.0"
+pyexasol = "^0.25.1"
 dill = "^0.3.4"
 exasol-udf-mock-python = { git = "https://github.com/exasol/udf-mock-python.git", branch = "main" }
 toml = ">=0.10.2"
