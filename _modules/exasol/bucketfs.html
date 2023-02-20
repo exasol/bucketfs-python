@@ -287,7 +287,7 @@
 
 
 <div class="viewcode-block" id="BucketFsError"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.BucketFsError">[docs]</a><span class="k">class</span> <span class="nc">BucketFsError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Error occurred while interacting with the bucket fs service.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Error occurred while interacting with the bucket fs service.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
@@ -323,14 +323,14 @@
 
 
 <div class="viewcode-block" id="Service"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.Service">[docs]</a><span class="k">class</span> <span class="nc">Service</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Provides a simple to use api to access a bucketfs service.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides a simple to use api to access a bucketfs service.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        buckets: lists all available buckets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new Service instance.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new Service instance.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            url: of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.</span>
@@ -345,7 +345,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">buckets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Bucket&quot;</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;List all available buckets.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all available buckets.&quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -378,7 +378,7 @@
 
 <div class="viewcode-block" id="Bucket"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket">[docs]</a><span class="k">class</span> <span class="nc">Bucket</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">service</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new bucket instance.</span>
 
 <span class="sd">        Args:</span>
@@ -421,7 +421,7 @@
 <div class="viewcode-block" id="Bucket.upload"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket.upload">[docs]</a>    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ByteString</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Uploads a file onto this bucket</span>
 
 <span class="sd">        Args:</span>
@@ -436,7 +436,7 @@
             <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t upload file: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span></div>
 
 <div class="viewcode-block" id="Bucket.delete"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deletes a specific file in this bucket.</span>
 
 <span class="sd">        Args:</span>
@@ -453,7 +453,7 @@
             <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t delete: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span></div>
 
 <div class="viewcode-block" id="Bucket.download"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Downloads a specific file of this bucket.</span>
 
 <span class="sd">        Args:</span>
@@ -474,7 +474,7 @@
 
 
 <div class="viewcode-block" id="MappedBucket"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.MappedBucket">[docs]</a><span class="k">class</span> <span class="nc">MappedBucket</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wraps a bucket and provides various convenience features to it (e.g. index based access).</span>
 
 <span class="sd">    Attention:</span>
@@ -487,7 +487,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="n">Bucket</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new MappedBucket.</span>
 
 <span class="sd">        Args:</span>
@@ -499,7 +499,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">chunk_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Chunk size which will be used for downloads.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Chunk size which will be used for downloads.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chunk_size</span>
 
     <span class="nd">@chunk_size</span><span class="o">.</span><span class="n">setter</span>
@@ -512,7 +512,7 @@
     <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ByteString</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Uploads a file onto this bucket.</span>
 
 <span class="sd">        See also Bucket:upload</span>
@@ -520,7 +520,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deletes a file from the bucket.</span>
 
 <span class="sd">        See also Bucket:delete</span>
@@ -528,7 +528,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Downloads a file from this bucket.</span>
 
 <span class="sd">        See also Bucket::download</span>
@@ -540,7 +540,7 @@
 
 
 <span class="k">def</span> <span class="nf">_chunk_as_bytes</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    In some scenarios python converts single bytes to integers:</span>
 <span class="sd">    &gt;&gt;&gt; chunks = [type(chunk) for chunk in b&quot;abc&quot;]</span>
 <span class="sd">    &gt;&gt;&gt; chunks</span>
@@ -561,7 +561,7 @@
 
 
 <div class="viewcode-block" id="as_bytes"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_bytes">[docs]</a><span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transforms a set of byte chunks into a bytes like object.</span>
 
 <span class="sd">    Args:</span>
@@ -574,7 +574,7 @@
 
 
 <div class="viewcode-block" id="as_string"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_string">[docs]</a><span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transforms a set of byte chunks into a string.</span>
 
 <span class="sd">    Args:</span>
@@ -588,7 +588,7 @@
 
 
 <div class="viewcode-block" id="as_file"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_file">[docs]</a><span class="k">def</span> <span class="nf">as_file</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transforms a set of byte chunks into a string.</span>
 
 <span class="sd">    Args:</span>
@@ -607,7 +607,7 @@
 
 
 <div class="viewcode-block" id="as_hash"><a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_hash">[docs]</a><span class="k">def</span> <span class="nf">as_hash</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sha1&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the hash for a set of byte chunks.</span>
 
 <span class="sd">    Args:</span>

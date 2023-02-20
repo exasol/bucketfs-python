@@ -219,19 +219,19 @@
 <h2>Setting up the workspace<a class="headerlink" href="#setting-up-the-workspace" title="Permalink to this heading">#</a></h2>
 <section id="checkout-the-project">
 <h3>Checkout the Project<a class="headerlink" href="#checkout-the-project" title="Permalink to this heading">#</a></h3>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout git@github.com:exasol/bucketfs-python.git
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>git@github.com:exasol/bucketfs-python.git
 </pre></div>
 </div>
 </section>
 <section id="install-project-dependencies">
 <h3>Install project dependencies<a class="headerlink" href="#install-project-dependencies" title="Permalink to this heading">#</a></h3>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry install
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
 </pre></div>
 </div>
 </section>
 <section id="setup-pre-commit-hook-s">
 <h3>Setup pre-commit hook(s)<a class="headerlink" href="#setup-pre-commit-hook-s" title="Permalink to this heading">#</a></h3>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run pre-commit install
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>pre-commit<span class="w"> </span>install
 </pre></div>
 </div>
 </section>
@@ -262,14 +262,14 @@ For further details see: <cite>.github/workflows/ci-cd.yml</cite>.</p>
 <ol class="arabic">
 <li><p>Create a local tag with the appropriate version number</p>
 <blockquote>
-<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git tag x.y.z
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>tag<span class="w"> </span>x.y.z
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 <li><p>Push the tag to Github</p>
 <blockquote>
-<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git push origin x.y.z
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>x.y.z
 </pre></div>
 </div>
 </div></blockquote>
@@ -283,14 +283,14 @@ For further details see: <cite>.github/workflows/ci-cd.yml</cite>.</p>
 <ol class="arabic">
 <li><p>Delete the local tag</p>
 <blockquote>
-<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git tag -d x.y.z
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>tag<span class="w"> </span>-d<span class="w"> </span>x.y.z
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 <li><p>Delete the remote tag</p>
 <blockquote>
-<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git push --delete origin x.y.z
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>--delete<span class="w"> </span>origin<span class="w"> </span>x.y.z
 </pre></div>
 </div>
 </div></blockquote>
