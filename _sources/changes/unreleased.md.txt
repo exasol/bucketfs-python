@@ -14,3 +14,6 @@ TBD
 * Updated dependencies to address security issue (internal: poetry.lock)
   * CVE-2023-0286
   * CVE-2023-23931
+
+# Dependencies
+- #58: Restricted typeguard version
