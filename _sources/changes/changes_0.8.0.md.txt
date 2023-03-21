@@ -1,7 +1,8 @@
-# BucketFs Python {TBD}, released {TBD}
+# BucketFs Python 0.8.0, released 2023-03-21
 
 ## Summary
-TBD
+
+Dependency updates
 
 ## Security
 
@@ -17,3 +18,4 @@ TBD
 
 # Dependencies
 - #58: Restricted typeguard version
+- Updated dependencies
