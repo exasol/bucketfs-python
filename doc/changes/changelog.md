@@ -14,7 +14,7 @@
 ---
 hidden:
 ---
-unreleased
+changes_0.8.0
 changes_0.7.0
 changes_0.6.0
 changes_0.5.0
