@@ -26,7 +26,7 @@ keywords = ['exasol', 'bucketfs']
 python = ">=3.8,<4.0"
 requests = ">=2.24.0"
 joblib=">=1.0.1"
-typeguard = "^2.11.1"
+typeguard = "4.0.0"
 
 
 [tool.poetry.dev-dependencies]

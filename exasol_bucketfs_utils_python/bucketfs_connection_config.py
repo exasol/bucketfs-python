@@ -7,7 +7,7 @@ class BucketFSConnectionConfig:
     to connect to the BucketFS Server via HTTP[s]
     """
 
-    @typechecked(always=True)
+    @typechecked()
     def __init__(
         self, host: str, port: int, user: str, pwd: str, is_https: bool = False
     ):

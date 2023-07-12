@@ -1,4 +1,5 @@
 import pytest
+from typeguard import TypeCheckError
 
 from exasol_bucketfs_utils_python.bucketfs_connection_config import (
     BucketFSConnectionConfig,
@@ -153,28 +154,28 @@ def test_bucketfs_connection_config_with_empty_password():
 
 
 def test_bucketfs_connection_config_with_none_as_host():
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeCheckError):
         connection_config = BucketFSConnectionConfig(
             host=None, port=6666, user="w", pwd="write", is_https=False
         )
 
 
 def test_bucketfs_connection_config_with_none_as_port():
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeCheckError):
         connection_config = BucketFSConnectionConfig(
             host="localhost", port=None, user="w", pwd="write", is_https=False
         )
 
 
 def test_bucketfs_connection_config_with_none_as_user():
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeCheckError):
         connection_config = BucketFSConnectionConfig(
             host="localhost", port=6666, user=None, pwd="write", is_https=False
         )
 
 
 def test_bucketfs_connection_config_with_none_as_password():
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeCheckError):
         connection_config = BucketFSConnectionConfig(
             host="localhost", port=6666, user="w", pwd=None, is_https=False
         )

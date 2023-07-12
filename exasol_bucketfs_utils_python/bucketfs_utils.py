@@ -35,7 +35,7 @@ def make_path_relative(
     return path_in_bucket
 
 
-@typechecked(always=True)
+@typechecked()
 def generate_bucketfs_udf_path(bucketfs_config: BucketFSConfig) -> PurePosixPath:
     """
     This function generates the path where UDFs can access the content of a
@@ -48,7 +48,7 @@ def generate_bucketfs_udf_path(bucketfs_config: BucketFSConfig) -> PurePosixPath
     return path
 
 
-@typechecked(always=True)
+@typechecked()
 def generate_bucket_udf_path(
     bucket_config: BucketConfig, path_in_bucket: Union[None, str, PurePosixPath]
 ) -> PurePosixPath:
@@ -72,7 +72,7 @@ def generate_bucket_udf_path(
     return path
 
 
-@typechecked(always=True)
+@typechecked()
 def generate_bucketfs_http_url(
     bucketfs_config: BucketFSConfig, with_credentials: bool = False
 ) -> urllib.parse.ParseResult:
@@ -107,7 +107,7 @@ def generate_bucketfs_http_url(
     return urlparse
 
 
-@typechecked(always=True)
+@typechecked()
 def generate_bucket_http_url(
     bucket_config: BucketConfig,
     path_in_bucket: Union[None, str, PurePosixPath],
@@ -136,7 +136,7 @@ def generate_bucket_http_url(
     return urlparse
 
 
-@typechecked(always=True)
+@typechecked()
 def create_auth_object(bucket_config: BucketConfig) -> HTTPBasicAuth:
     if bucket_config.bucketfs_config.connection_config is None:
         raise TypeError(

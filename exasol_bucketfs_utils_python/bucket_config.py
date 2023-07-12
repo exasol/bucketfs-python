@@ -9,7 +9,7 @@ class BucketConfig:
     to access it either via HTTP[S] or in the file system inside of UDFs.
     """
 
-    @typechecked(always=True)
+    @typechecked()
     def __init__(self, bucket_name: str, bucketfs_config: BucketFSConfig):
         if bucket_name == "":
             raise ValueError("Bucket name can't be an empty string")
