@@ -20,7 +20,6 @@ from tests.integration_tests.with_db.test_load_fs_file_from_udf import (
 def test_generate_bucket_udf_path_with_db(
     upload_language_container, pyexasol_connection
 ):
-
     connection_config = BucketFSConnectionConfig(
         host="localhost", port=6666, user="w", pwd="write", is_https=False
     )
@@ -102,7 +101,6 @@ def test_read_files_to_str_from_bucketfs_inside_udf(
     bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
 
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(
@@ -174,7 +172,6 @@ def test_read_files_via_joblib_from_bucketfs_inside_udf(
     bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
 
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(
@@ -242,7 +239,6 @@ def test_read_files_to_file_from_bucketfs_inside_udf(
     bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
 
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(
@@ -315,7 +311,6 @@ def test_read_files_to_fileobj_from_bucketfs_inside_udf(
     bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
 
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(

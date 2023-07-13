@@ -15,7 +15,7 @@ class BucketFSConfig:
     because in UDF we sometimes don't want to use HTTP[S].
     """
 
-    @typechecked(always=True)
+    @typechecked()
     def __init__(
         self,
         bucketfs_name: str,

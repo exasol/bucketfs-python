@@ -1,4 +1,5 @@
 import pytest
+from typeguard import TypeCheckError
 
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
@@ -7,7 +8,7 @@ from exasol_bucketfs_utils_python.bucketfs_connection_config import (
 )
 
 
-def create_test_bucketfs_config():
+def create_test_bucketfs_config() -> BucketFSConfig:
     connection_config = BucketFSConnectionConfig(
         host="localhost", port=6666, user="w", pwd="write", is_https=False
     )
@@ -57,12 +58,12 @@ def test_bucket_config_set_bucketfs_config():
 
 
 def test_bucket_config_with_empty_bucketfs_config():
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeCheckError):
         bucket_config = BucketConfig(bucket_name="", bucketfs_config=None)
 
 
 def test_bucket_config_with_None_as_bucket_name():
     bucketfs_config = create_test_bucketfs_config()
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeCheckError):
         bucket_config = BucketConfig(bucket_name=None, bucketfs_config=bucketfs_config)

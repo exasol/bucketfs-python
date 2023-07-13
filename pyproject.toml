@@ -4,7 +4,7 @@ packages  = [
     {include = "exasol"},
     {include = "exasol_bucketfs_utils_python"}
 ]
-version = "0.8.0"
+version = "0.9.0"
 description = "BucketFS utilities for the Python programming language"
 
 license = "MIT"
@@ -26,7 +26,7 @@ keywords = ['exasol', 'bucketfs']
 python = ">=3.8,<4.0"
 requests = ">=2.24.0"
 joblib=">=1.0.1"
-typeguard = "^2.11.1"
+typeguard = "4.0.0"
 
 
 [tool.poetry.dev-dependencies]
