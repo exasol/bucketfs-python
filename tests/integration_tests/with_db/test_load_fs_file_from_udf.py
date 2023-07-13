@@ -50,7 +50,6 @@ def test_load_file_to_string(
         bucketfs_location.bucket_config, path_in_bucket, test_input_string
     )
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(
@@ -108,7 +107,6 @@ def test_load_file_to_fileobj(
         bucketfs_location.bucket_config, path_in_bucket, test_input_string
     )
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(
@@ -171,7 +169,6 @@ def test_load_file_to_file(
         bucketfs_location.bucket_config, path_in_bucket, test_input_string
     )
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(f"CREATE SCHEMA IF NOT EXISTS {target_schema};")
@@ -235,7 +232,6 @@ def test_load_file_to_object_via_joblib(
         object=test_python_object,
     )
     try:
-
         # load file from udf
         target_schema = "TARGET_SCHEMA"
         pyexasol_connection.execute(f"CREATE SCHEMA IF NOT EXISTS {target_schema};")

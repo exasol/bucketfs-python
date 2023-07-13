@@ -27,8 +27,8 @@ def test_bucket_config_with_bucketfs_config():
     )
 
     assert (
-            bucket_config.bucket_name == bucket_name
-            and bucket_config.bucketfs_config == bucketfs_config
+        bucket_config.bucket_name == bucket_name
+        and bucket_config.bucketfs_config == bucketfs_config
     )
 
 
