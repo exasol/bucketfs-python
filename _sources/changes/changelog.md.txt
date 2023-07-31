@@ -1,6 +1,6 @@
 # 📝 Changes
 
-* [0.9.0](changes_0.9.0.md)
+* [unreleased](unreleased.md)
 * [0.8.0](changes_0.8.0.md)
 * [0.7.0](changes_0.7.0.md)
 * [0.6.0](changes_0.6.0.md)
@@ -10,12 +10,11 @@
 * [0.2.0](changes_0.2.0.md)
 * [0.1.0](changes_0.1.0.md)
 
-<!--- This MyST Parser Sphinx directive is necessary to keep Sphinx happy. We need list here all release letters again, because release droid and other scripts assume Markdown --->
 ```{toctree}
 ---
 hidden:
 ---
-changes_0.9.0
+unreleased
 changes_0.8.0
 changes_0.7.0
 changes_0.6.0

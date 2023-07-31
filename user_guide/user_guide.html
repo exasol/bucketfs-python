@@ -169,8 +169,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../api.html">🧰 API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide/developer_guide.html">🛠 Developer Guide</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../changes/changelog.html">📝 Changes</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.9.0.html">BucketFs Python 0.9.0, released t.b.d</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.9.0.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/unreleased.html">Unreleased</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html">BucketFs Python 0.8.0, released 2023-03-21</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.7.0.html">BucketFs Python 0.7.0, released 2022-12-22</a></li>
@@ -218,6 +217,21 @@
         <article role="main">
           <section id="user-guide">
 <h1>👤 User Guide<a class="headerlink" href="#user-guide" title="Permalink to this heading">#</a></h1>
+<section id="bucketfs">
+<h2>Bucketfs<a class="headerlink" href="#bucketfs" title="Permalink to this heading">#</a></h2>
+<p>Depending on the database configuration, the bucketfs setup can range from straight forward to fairly complex.
+This is due to the fact that:</p>
+<ul class="simple">
+<li><p>Each database can have one or more BucketFS services</p></li>
+<li><p>Each BucketFS service is available on all worker cluster of a database</p></li>
+<li><p>Each BucketFS service runs on all data nodes of a database</p></li>
+<li><p>Each BucketFS service can have one or more Buckets</p></li>
+<li><p>Each Bucket can hold one or more files</p></li>
+</ul>
+<p>The overview bellow tries to illustrate this in a more tangible manner.
+For more details on bucketfs, please also have a look in the <a class="reference external" href="https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm">bucketfs section</a> of the <a class="reference external" href="https://docs.exasol.com/db/latest/home.htm">database documentation</a>.</p>
+<img alt="BucketFS Overview" src="../_images/bucketfs.png" />
+</section>
 <section id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="p">(</span>
@@ -318,6 +332,7 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">👤 User Guide</a><ul>
+<li><a class="reference internal" href="#bucketfs">Bucketfs</a></li>
 <li><a class="reference internal" href="#quickstart">Quickstart</a></li>
 <li><a class="reference internal" href="#follow-up">Follow Up</a></li>
 </ul>
