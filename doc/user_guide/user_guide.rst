@@ -1,6 +1,16 @@
 👤 User Guide
 ==============
 
+Bucketfs
+--------
+Depending on the database configuration, the bucketfs setup can range from striaght forward to fairly complex.
+The overview bellow should give you a rough idea about the bucketfs system in general.
+For more details on bucketfs, plase have a look in the `bucketfs section`_ of the `database documentation`_.
+
+.. image:: ../_static/bucketfs.png
+  :alt: BucketFS Overview
+
+
 Quickstart
 ----------
 
@@ -18,3 +28,5 @@ Follow Up
     advanced
     upload_github_release_to_bucket
 
+.. _bucketfs section: https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm
+.. _database documentation: https://docs.exasol.com/db/latest/home.htm
