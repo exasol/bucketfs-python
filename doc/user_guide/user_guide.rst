@@ -5,7 +5,7 @@ Bucketfs
 --------
 Depending on the database configuration, the bucketfs setup can range from straight forward to fairly complex.
 The overview bellow should give you a rough idea about the bucketfs system in general.
-For more details on bucketfs, plase have a look in the `bucketfs section`_ of the `database documentation`_.
+For more details on bucketfs, please have a look in the `bucketfs section`_ of the `database documentation`_.
 
 .. image:: ../_static/bucketfs.png
   :alt: BucketFS Overview
