@@ -4,8 +4,16 @@
 Bucketfs
 --------
 Depending on the database configuration, the bucketfs setup can range from straight forward to fairly complex.
-The overview bellow should give you a rough idea about the bucketfs system in general.
-For more details on bucketfs, please have a look in the `bucketfs section`_ of the `database documentation`_.
+This is due to the fact that:
+
+* Each database can have one or more BucketFS services
+* Each BucketFS service is available on all worker cluster of a database
+* Each BucketFS service runs on all data nodes of a database
+* Each BucketFS service can have one or more Buckets
+* Each Bucket can hold one or more files
+
+The overview bellow tries to illustrate this in a more tangible manner.
+For more details on bucketfs, please also have a look in the `bucketfs section`_ of the `database documentation`_.
 
 .. image:: ../_static/bucketfs.png
   :alt: BucketFS Overview
