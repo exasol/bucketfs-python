@@ -4,9 +4,9 @@ from exasol.bucketfs import (
 )
 
 URL = "http://localhost:6666"
-CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 
-bucketfs = Service(URL, CREDENTAILS)
+bucketfs = Service(URL, CREDENTIALS)
 
 # 0. List buckets
 buckets = [bucket for bucket in bucketfs]
