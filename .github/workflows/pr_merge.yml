@@ -10,7 +10,7 @@ jobs:
 
   ci-job:
     name: Checks
-    uses: exasol/python-toolbox/.github/workflows/checks.yml@0.3.0
+    uses: exasol/python-toolbox/.github/workflows/checks.yml@0.5.0
 
   tests-job:
     name: Tests (Python-${{ matrix.python-version }})
@@ -45,4 +45,4 @@ jobs:
 
   publish-docs:
     name: Publish Documentation
-    uses: exasol/python-toolbox/.github/workflows/gh-pages.yml@0.3.0
+    uses: exasol/python-toolbox/.github/workflows/gh-pages.yml@0.5.0
