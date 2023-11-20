@@ -17,7 +17,7 @@ jobs:
 
   ci-job:
     name: Checks
-    uses: exasol/python-toolbox/.github/workflows/checks.yml@0.3.0
+    uses: exasol/python-toolbox/.github/workflows/checks.yml@0.6.2
 
   tests-job:
     name: Tests (Python-${{ matrix.python-version }})
