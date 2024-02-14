@@ -1,6 +1,6 @@
-from inspect import cleandoc
 import random
 import string
+from inspect import cleandoc
 from typing import (
     ByteString,
     Iterable,
@@ -9,6 +9,7 @@ from typing import (
 )
 
 import pytest
+import requests
 from integration.conftest import (
     File,
     TestConfig,
@@ -132,11 +133,12 @@ def test_ssl_verification_for_bucketfs_service_fails(httpsserver):
     bucketfs_service_response = "Client should not be able to retrieve this!"
     httpsserver.serve_content(bucketfs_service_response, 200)
     CREDENTAILS = {"default": {"username": "w", "password": "write"}}
-    bucketfs = Service(httpsserver.url, CREDENTAILS)
+    service = Service(httpsserver.url, CREDENTAILS)
 
-    expected = ['default', 'demo_foo', 'demo_bar']
-    actual = [bucket for bucket in bucketfs]
-    assert expected == actual
+    with pytest.raises(requests.exceptions.SSLError) as execinfo:
+        _ = [bucket for bucket in service]
+    assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
+
 
 def test_ssl_verification_for_bucketfs_service_can_be_bypassed(httpsserver):
     bucketfs_service_response = cleandoc(
@@ -151,6 +153,6 @@ def test_ssl_verification_for_bucketfs_service_can_be_bypassed(httpsserver):
     CREDENTAILS = {"default": {"username": "w", "password": "write"}}
     bucketfs = Service(httpsserver.url, CREDENTAILS, verify=False)
 
-    expected = ['default', 'demo_foo', 'demo_bar']
+    expected = ["default", "demo_foo", "demo_bar"]
     actual = [bucket for bucket in bucketfs]
     assert expected == actual
