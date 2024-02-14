@@ -115,7 +115,12 @@ class Service:
         buckets: lists all available buckets.
     """
 
-    def __init__(self, url: str, credentials: Mapping[str, Mapping[str, str]] = None):
+    def __init__(
+        self,
+        url: str,
+        credentials: Mapping[str, Mapping[str, str]] = None,
+        verify: bool | str = True,
+    ):
         """Create a new Service instance.
 
         Args:
@@ -128,12 +133,13 @@ class Service:
             lambda: {"username": "r", "password": "read"},
             credentials if credentials is not None else {},
         )
+        self._verify = verify
 
     @property
     def buckets(self) -> MutableMapping[str, "Bucket"]:
         """List all available buckets."""
         url = _build_url(service_url=self._url)
-        response = requests.get(url)
+        response = requests.get(url, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
