@@ -1,3 +1,4 @@
+from inspect import cleandoc
 import random
 import string
 from typing import (
@@ -125,3 +126,31 @@ def test_list_files_in_bucket(
     expected = {file.name for file in files}
     actual = {file for file in bucket}
     assert expected.issubset(actual)
+
+
+def test_ssl_verification_for_bucketfs_service_fails(httpsserver):
+    bucketfs_service_response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(bucketfs_service_response, 200)
+    CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+    bucketfs = Service(httpsserver.url, CREDENTAILS)
+
+    expected = ['default', 'demo_foo', 'demo_bar']
+    actual = [bucket for bucket in bucketfs]
+    assert expected == actual
+
+def test_ssl_verification_for_bucketfs_service_can_be_bypassed(httpsserver):
+    bucketfs_service_response = cleandoc(
+        """
+        default
+        demo_foo
+        demo_bar
+        """
+    )
+    httpsserver.serve_content(bucketfs_service_response, 200)
+
+    CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+    bucketfs = Service(httpsserver.url, CREDENTAILS, verify=False)
+
+    expected = ['default', 'demo_foo', 'demo_bar']
+    actual = [bucket for bucket in bucketfs]
+    assert expected == actual
