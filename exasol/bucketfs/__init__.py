@@ -124,9 +124,16 @@ class Service:
         """Create a new Service instance.
 
         Args:
-            url: of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.
-            credentials: a mapping containing credentials (username and password) for buckets.
+            url:
+                Url of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.
+            credentials:
+                A mapping containing credentials (username and password) for buckets.
                 E.g. {"bucket1": { "username": "foo", "password": "bar" }}
+            verify:
+                Either a boolean, in which case it controls whether we verify
+                the server's TLS certificate, or a string, in which case it must be a path
+                to a CA bundle to use. Defaults to ``True``.
+
         """
         self._url = _parse_service_url(url)
         self._authenticator = defaultdict(
