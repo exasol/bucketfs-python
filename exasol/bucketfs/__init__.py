@@ -133,7 +133,6 @@ class Service:
                 Either a boolean, in which case it controls whether we verify
                 the server's TLS certificate, or a string, in which case it must be a path
                 to a CA bundle to use. Defaults to ``True``.
-
         """
         self._url = _parse_service_url(url)
         self._authenticator = defaultdict(
@@ -176,20 +175,36 @@ class Service:
 
 
 class Bucket:
-    def __init__(self, name: str, service: str, username: str, password: str):
+    def __init__(
+        self,
+        name: str,
+        service: str,
+        username: str,
+        password: str,
+        verify: bool | str = True,
+    ):
         """
         Create a new bucket instance.
 
         Args:
-            name: of the bucket.
-            service: url where this bucket is hosted on.
-            username: used for authentication.
-            password: used for authentication.
+            name:
+                Name of the bucket.
+            service:
+                Url where this bucket is hosted on.
+            username:
+                Username used for authentication.
+            password:
+                Password used for authentication.
+            verify:
+                Either a boolean, in which case it controls whether we verify
+                the server's TLS certificate, or a string, in which case it must be a path
+                to a CA bundle to use. Defaults to ``True``.
         """
         self._name = name
         self._service = _parse_service_url(service)
         self._username = username
         self._password = password
+        self._verify = verify
 
     def __str__(self):
         return f"Bucket<{self.name} | on: {self._service}>"
@@ -205,7 +220,7 @@ class Bucket:
     @property
     def files(self) -> Iterable[str]:
         url = _build_url(service_url=self._service, bucket=self.name)
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -228,7 +243,7 @@ class Bucket:
             data: raw content of the file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        response = requests.put(url, data=data, auth=self._auth)
+        response = requests.put(url, data=data, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -245,7 +260,7 @@ class Bucket:
             A BucketFsError if the operation couldn't be executed successfully.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        response = requests.delete(url, auth=self._auth)
+        response = requests.delete(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -263,7 +278,9 @@ class Bucket:
             An iterable of binary chunks representing the downloaded file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        with requests.get(url, stream=True, auth=self._auth) as response:
+        with requests.get(
+            url, stream=True, auth=self._auth, verify=self._verify
+        ) as response:
             try:
                 response.raise_for_status()
             except HTTPError as ex:
