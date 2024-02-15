@@ -43,6 +43,8 @@ This module contains a python api to programmatically access exasol bucketfs ser
         CURL:
           $ curl -u "w:write" --output myfile.txt  http://127.0.0.1:6666/default/myfile.txt
 """
+from __future__ import annotations
+
 import hashlib
 from collections import defaultdict
 from pathlib import Path
@@ -142,7 +144,7 @@ class Service:
         self._verify = verify
 
     @property
-    def buckets(self) -> MutableMapping[str, "Bucket"]:
+    def buckets(self) -> MutableMapping[str, Bucket]:
         """List all available buckets."""
         url = _build_url(service_url=self._url)
         response = requests.get(url, verify=self._verify)
@@ -167,10 +169,10 @@ class Service:
     def __str__(self) -> str:
         return f"Service<{self._url}>"
 
-    def __iter__(self) -> Iterator["Bucket"]:
+    def __iter__(self) -> Iterator[Bucket]:
         yield from self.buckets
 
-    def __getitem__(self, item: str) -> "Bucket":
+    def __getitem__(self, item: str) -> Bucket:
         return self.buckets[item]
 
 
@@ -233,7 +235,7 @@ class Bucket:
         yield from self.files
 
     def upload(
-        self, path: str, data: Union[ByteString, BinaryIO, Iterable[ByteString]]
+        self, path: str, data: ByteString | BinaryIO | Iterable[ByteString]
     ) -> None:
         """
         Uploads a file onto this bucket
@@ -326,7 +328,7 @@ class MappedBucket:
         yield from self._bucket.files
 
     def __setitem__(
-        self, key: str, value: Union[ByteString, BinaryIO, Iterable[ByteString]]
+        self, key: str, value: ByteString | BinaryIO | Iterable[ByteString]
     ) -> None:
         """
         Uploads a file onto this bucket.
@@ -355,7 +357,7 @@ class MappedBucket:
         return f"MappedBucket<{self._bucket}>"
 
 
-def _chunk_as_bytes(chunk: Union[int, ByteString]) -> ByteString:
+def _chunk_as_bytes(chunk: int | ByteString) -> ByteString:
     """
     In some scenarios python converts single bytes to integers:
     >>> chunks = [type(chunk) for chunk in b"abc"]
@@ -403,7 +405,7 @@ def as_string(chunks: Iterable[ByteString], encoding: str = "utf-8") -> str:
     return _bytes(chunks).decode(encoding)
 
 
-def as_file(chunks: Iterable[ByteString], filename: Union[str, Path]) -> Path:
+def as_file(chunks: Iterable[ByteString], filename: str | Path) -> Path:
     """
     Transforms a set of byte chunks into a string.
 
