@@ -12,3 +12,4 @@
 
 ## Internal
 - Updated lockfile
+- Pin python-toolbox version in GitHub workflows
