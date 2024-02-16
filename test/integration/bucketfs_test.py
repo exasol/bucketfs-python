@@ -1,5 +1,7 @@
 import random
 import string
+from contextlib import contextmanager
+from inspect import cleandoc
 from typing import (
     ByteString,
     Iterable,
@@ -8,6 +10,7 @@ from typing import (
 )
 
 import pytest
+import requests
 from integration.conftest import (
     File,
     TestConfig,
@@ -18,7 +21,20 @@ from exasol.bucketfs import (
     Bucket,
     Service,
     as_bytes,
+    as_string,
 )
+
+
+@contextmanager
+def does_not_raise(exception_type: Exception = Exception):
+    try:
+        yield
+
+    except exception_type as ex:
+        raise AssertionError(f"Raised exception {ex} when it should not!") from ex
+
+    except Exception as ex:
+        raise AssertionError(f"An unexpected exception {ex} raised.") from ex
 
 
 @pytest.mark.parametrize(
@@ -125,3 +141,154 @@ def test_list_files_in_bucket(
     expected = {file.name for file in files}
     actual = {file for file in bucket}
     assert expected.issubset(actual)
+
+
+def test_ssl_verification_for_bucketfs_service_fails(httpsserver):
+    bucketfs_service_response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(bucketfs_service_response, 200)
+    CREDENTIALS = {"default": {"username": "w", "password": "write"}}
+    service = Service(httpsserver.url, CREDENTIALS)
+
+    with pytest.raises(requests.exceptions.SSLError) as execinfo:
+        _ = [bucket for bucket in service]
+    assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
+
+
+def test_ssl_verification_for_bucketfs_service_can_be_bypassed(httpsserver):
+    bucketfs_service_response = cleandoc(
+        """
+        default
+        demo_foo
+        demo_bar
+        """
+    )
+    httpsserver.serve_content(bucketfs_service_response, 200)
+
+    CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+    bucketfs = Service(httpsserver.url, CREDENTAILS, verify=False)
+
+    expected = ["default", "demo_foo", "demo_bar"]
+    actual = [bucket for bucket in bucketfs]
+    assert expected == actual
+
+
+def test_ssl_verification_for_bucket_files_fails(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+    )
+
+    with pytest.raises(requests.exceptions.SSLError) as execinfo:
+        _ = {file for file in bucket}
+    assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
+
+
+def test_ssl_verification_for_bucket_files_can_be_bypassed(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+        verify=False,
+    )
+
+    with does_not_raise(requests.exceptions.SSLError):
+        _ = {file for file in bucket}
+
+
+def test_ssl_verification_for_bucket_upload_fails(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+    )
+
+    with pytest.raises(requests.exceptions.SSLError) as execinfo:
+        data = bytes([65, 65, 65, 65])
+        bucket.upload("some/other/path/file2.bin", data)
+    assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
+
+
+def test_ssl_verification_for_bucket_upload_can_be_bypassed(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+        verify=False,
+    )
+
+    with does_not_raise(requests.exceptions.SSLError):
+        data = bytes([65, 65, 65, 65])
+        bucket.upload("some/other/path/file2.bin", data)
+
+
+def test_ssl_verification_for_bucket_delete_fails(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+    )
+
+    with pytest.raises(requests.exceptions.SSLError) as execinfo:
+        bucket.delete("some/other/path/file2.bin")
+    assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
+
+
+def test_ssl_verification_for_bucket_delete_can_be_bypassed(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+        verify=False,
+    )
+
+    with does_not_raise(requests.exceptions.SSLError):
+        bucket.delete("some/other/path/file2.bin")
+
+
+def test_ssl_verification_for_bucket_download_fails(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+    )
+
+    with pytest.raises(requests.exceptions.SSLError) as execinfo:
+        _ = as_string(bucket.download("some/other/path/file2.bin"))
+    assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
+
+
+def test_ssl_verification_for_bucket_download_can_be_bypassed(httpsserver):
+    response = "Client should not be able to retrieve this!"
+    httpsserver.serve_content(response, 200)
+    bucket = Bucket(
+        name="foo",
+        service=httpsserver.url,
+        username="user",
+        password="pw",
+        verify=False,
+    )
+
+    with does_not_raise(requests.exceptions.SSLError):
+        _ = as_string(bucket.download("some/other/path/file2.bin"))

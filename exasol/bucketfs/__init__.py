@@ -43,6 +43,8 @@ This module contains a python api to programmatically access exasol bucketfs ser
         CURL:
           $ curl -u "w:write" --output myfile.txt  http://127.0.0.1:6666/default/myfile.txt
 """
+from __future__ import annotations
+
 import hashlib
 from collections import defaultdict
 from pathlib import Path
@@ -115,25 +117,37 @@ class Service:
         buckets: lists all available buckets.
     """
 
-    def __init__(self, url: str, credentials: Mapping[str, Mapping[str, str]] = None):
+    def __init__(
+        self,
+        url: str,
+        credentials: Mapping[str, Mapping[str, str]] = None,
+        verify: bool | str = True,
+    ):
         """Create a new Service instance.
 
         Args:
-            url: of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.
-            credentials: a mapping containing credentials (username and password) for buckets.
+            url:
+                Url of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.
+            credentials:
+                A mapping containing credentials (username and password) for buckets.
                 E.g. {"bucket1": { "username": "foo", "password": "bar" }}
+            verify:
+                Either a boolean, in which case it controls whether we verify
+                the server's TLS certificate, or a string, in which case it must be a path
+                to a CA bundle to use. Defaults to ``True``.
         """
         self._url = _parse_service_url(url)
         self._authenticator = defaultdict(
             lambda: {"username": "r", "password": "read"},
             credentials if credentials is not None else {},
         )
+        self._verify = verify
 
     @property
-    def buckets(self) -> MutableMapping[str, "Bucket"]:
+    def buckets(self) -> MutableMapping[str, Bucket]:
         """List all available buckets."""
         url = _build_url(service_url=self._url)
-        response = requests.get(url)
+        response = requests.get(url, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -155,28 +169,44 @@ class Service:
     def __str__(self) -> str:
         return f"Service<{self._url}>"
 
-    def __iter__(self) -> Iterator["Bucket"]:
+    def __iter__(self) -> Iterator[Bucket]:
         yield from self.buckets
 
-    def __getitem__(self, item: str) -> "Bucket":
+    def __getitem__(self, item: str) -> Bucket:
         return self.buckets[item]
 
 
 class Bucket:
-    def __init__(self, name: str, service: str, username: str, password: str):
+    def __init__(
+        self,
+        name: str,
+        service: str,
+        username: str,
+        password: str,
+        verify: bool | str = True,
+    ):
         """
         Create a new bucket instance.
 
         Args:
-            name: of the bucket.
-            service: url where this bucket is hosted on.
-            username: used for authentication.
-            password: used for authentication.
+            name:
+                Name of the bucket.
+            service:
+                Url where this bucket is hosted on.
+            username:
+                Username used for authentication.
+            password:
+                Password used for authentication.
+            verify:
+                Either a boolean, in which case it controls whether we verify
+                the server's TLS certificate, or a string, in which case it must be a path
+                to a CA bundle to use. Defaults to ``True``.
         """
         self._name = name
         self._service = _parse_service_url(service)
         self._username = username
         self._password = password
+        self._verify = verify
 
     def __str__(self):
         return f"Bucket<{self.name} | on: {self._service}>"
@@ -192,7 +222,7 @@ class Bucket:
     @property
     def files(self) -> Iterable[str]:
         url = _build_url(service_url=self._service, bucket=self.name)
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -205,7 +235,7 @@ class Bucket:
         yield from self.files
 
     def upload(
-        self, path: str, data: Union[ByteString, BinaryIO, Iterable[ByteString]]
+        self, path: str, data: ByteString | BinaryIO | Iterable[ByteString]
     ) -> None:
         """
         Uploads a file onto this bucket
@@ -215,7 +245,7 @@ class Bucket:
             data: raw content of the file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        response = requests.put(url, data=data, auth=self._auth)
+        response = requests.put(url, data=data, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -232,7 +262,7 @@ class Bucket:
             A BucketFsError if the operation couldn't be executed successfully.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        response = requests.delete(url, auth=self._auth)
+        response = requests.delete(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
         except HTTPError as ex:
@@ -250,7 +280,9 @@ class Bucket:
             An iterable of binary chunks representing the downloaded file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        with requests.get(url, stream=True, auth=self._auth) as response:
+        with requests.get(
+            url, stream=True, auth=self._auth, verify=self._verify
+        ) as response:
             try:
                 response.raise_for_status()
             except HTTPError as ex:
@@ -296,7 +328,7 @@ class MappedBucket:
         yield from self._bucket.files
 
     def __setitem__(
-        self, key: str, value: Union[ByteString, BinaryIO, Iterable[ByteString]]
+        self, key: str, value: ByteString | BinaryIO | Iterable[ByteString]
     ) -> None:
         """
         Uploads a file onto this bucket.
@@ -325,7 +357,7 @@ class MappedBucket:
         return f"MappedBucket<{self._bucket}>"
 
 
-def _chunk_as_bytes(chunk: Union[int, ByteString]) -> ByteString:
+def _chunk_as_bytes(chunk: int | ByteString) -> ByteString:
     """
     In some scenarios python converts single bytes to integers:
     >>> chunks = [type(chunk) for chunk in b"abc"]
@@ -373,7 +405,7 @@ def as_string(chunks: Iterable[ByteString], encoding: str = "utf-8") -> str:
     return _bytes(chunks).decode(encoding)
 
 
-def as_file(chunks: Iterable[ByteString], filename: Union[str, Path]) -> Path:
+def as_file(chunks: Iterable[ByteString], filename: str | Path) -> Path:
     """
     Transforms a set of byte chunks into a string.
 
