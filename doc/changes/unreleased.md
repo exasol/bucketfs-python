@@ -1,5 +1,8 @@
 # Unreleased
 
+## Feature
+- Added support for configuring `SSL/TLS` validation
+
 ## Documentation
 - Added overview of bucketfs system
 
