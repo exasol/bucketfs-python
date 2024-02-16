@@ -2,16 +2,16 @@
 from exasol.bucketfs import Service
 
 URL = "http://localhost:6666"
-CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 
-bucketfs = Service(URL, CREDENTAILS)
+bucketfs = Service(URL, CREDENTIALS)
 buckets = [bucket for bucket in bucketfs]
 
 # Get bucket reference
 from exasol.bucketfs import Service
 
 URL = "http://localhost:6666"
-CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 
-bucketfs = Service(URL, CREDENTAILS)
+bucketfs = Service(URL, CREDENTIALS)
 default_bucket = bucketfs["default"]

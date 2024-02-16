@@ -6,9 +6,9 @@ from exasol.bucketfs import (
 )
 
 URL = "http://localhost:6666"
-CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 
-bucketfs = Service(URL, CREDENTAILS)
+bucketfs = Service(URL, CREDENTIALS)
 bucket = bucketfs["default"]
 
 # Download as raw bytes
@@ -31,9 +31,9 @@ from exasol.bucketfs import (
 )
 
 URL = "http://localhost:6666"
-CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 
-bucketfs = Service(URL, CREDENTAILS)
+bucketfs = Service(URL, CREDENTIALS)
 bucket = MappedBucket(bucketfs["default"])
 
 # Download as raw bytes
