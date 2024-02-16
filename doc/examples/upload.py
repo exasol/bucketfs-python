@@ -3,9 +3,9 @@ import io
 from exasol.bucketfs import Service
 
 URL = "http://localhost:6666"
-CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 
-bucketfs = Service(URL, CREDENTAILS)
+bucketfs = Service(URL, CREDENTIALS)
 bucket = bucketfs["default"]
 
 # Upload bytes
@@ -37,9 +37,9 @@ from exasol.bucketfs import (
 )
 
 URL = "http://localhost:6666"
-CREDENTAILS = {"default": {"username": "w", "password": "write"}}
+CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 
-bucketfs = Service(URL, CREDENTAILS)
+bucketfs = Service(URL, CREDENTIALS)
 bucket = MappedBucket(bucketfs["default"])
 
 # Upload bytes
