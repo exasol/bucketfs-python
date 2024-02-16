@@ -146,8 +146,8 @@ def test_list_files_in_bucket(
 def test_ssl_verification_for_bucketfs_service_fails(httpsserver):
     bucketfs_service_response = "Client should not be able to retrieve this!"
     httpsserver.serve_content(bucketfs_service_response, 200)
-    CREDENTAILS = {"default": {"username": "w", "password": "write"}}
-    service = Service(httpsserver.url, CREDENTAILS)
+    CREDENTIALS = {"default": {"username": "w", "password": "write"}}
+    service = Service(httpsserver.url, CREDENTIALS)
 
     with pytest.raises(requests.exceptions.SSLError) as execinfo:
         _ = [bucket for bucket in service]
