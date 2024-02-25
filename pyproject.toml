@@ -78,3 +78,8 @@ module = [
     "test.*",
 ]
 ignore_errors = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["exasol_bucketfs_utils_python"]
+exclude = []
