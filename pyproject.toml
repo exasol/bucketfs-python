@@ -2,7 +2,7 @@
 name = "exasol-bucketfs"
 packages  = [
     {include = "exasol_bucketfs_utils_python"},
-    {exasol = "exasol_bucketfs_utils_python"}
+    {include = "exasol"}
 ]
 
 version = "0.9.0"
