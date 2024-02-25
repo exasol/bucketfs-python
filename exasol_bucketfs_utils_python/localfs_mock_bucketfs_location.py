@@ -50,7 +50,7 @@ class LocalFSMockBucketFSLocation(AbstractBucketFSLocation):
         return path
 
     def download_from_bucketfs_to_fileobj(self, bucket_file_path: str, fileobj: IO):
-        with open(self.get_complete_file_path_in_bucket(bucket_file_path)) as f:
+        with open(self.get_complete_file_path_in_bucket(bucket_file_path), "rb") as f:
             fileobj.write(f.read())
 
     def download_from_bucketfs_to_string(self, bucket_file_path: str) -> str:
