@@ -1,7 +1,8 @@
 [tool.poetry]
 name = "exasol-bucketfs"
 packages  = [
-    #{include = "exasol"},
+    {exclude = "exasol"},
+    {exclude = "language_container"},
     {include = "exasol_bucketfs_utils_python"}
 ]
 
