@@ -27,13 +27,13 @@ class AbstractBucketFSLocation(ABC, metaclass=ABCMeta):
 
     @abstractmethod
     def generate_bucket_udf_path(
-        self, path_in_bucket: Optional[Union[str, PurePosixPath]] = None
+            self, path_in_bucket: Optional[Union[str, PurePosixPath]] = None
     ) -> PurePosixPath:
         pass
 
     @abstractmethod
     def get_complete_file_path_in_bucket(
-        self, bucket_file_path: Optional[Union[str, PurePosixPath]] = None
+            self, bucket_file_path: Optional[Union[str, PurePosixPath]] = None
     ) -> str:
         pass
 
@@ -42,24 +42,28 @@ class AbstractBucketFSLocation(ABC, metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def download_from_bucketfs_to_fileobj(self, bucket_file_path: str, fileobj: IO):
+        pass
+
+    @abstractmethod
     def download_object_from_bucketfs_via_joblib(self, bucket_file_path: str) -> Any:
         pass
 
     @abstractmethod
     def upload_string_to_bucketfs(
-        self, bucket_file_path: str, string: str
+            self, bucket_file_path: str, string: str
     ) -> Tuple[ParseResult, PurePosixPath]:
         pass
 
     @abstractmethod
     def upload_object_to_bucketfs_via_joblib(
-        self, object: Any, bucket_file_path: str, **kwargs
+            self, object: Any, bucket_file_path: str, **kwargs
     ) -> Tuple[ParseResult, PurePosixPath]:
         pass
 
     @abstractmethod
     def upload_fileobj_to_bucketfs(
-        self, fileobj: IO, bucket_file_path: str
+            self, fileobj: IO, bucket_file_path: str
     ) -> Tuple[ParseResult, PurePosixPath]:
         pass
 
@@ -71,13 +75,13 @@ class AbstractBucketFSLocation(ABC, metaclass=ABCMeta):
 
     @abstractmethod
     def read_file_from_bucketfs_to_file(
-        self, bucket_file_path: str, local_file_path: Path
+            self, bucket_file_path: str, local_file_path: Path
     ) -> None:
         pass
 
     @abstractmethod
     def read_file_from_bucketfs_to_fileobj(
-        self, bucket_file_path: str, fileobj: IO
+            self, bucket_file_path: str, fileobj: IO
     ) -> None:
         pass
 
@@ -95,6 +99,6 @@ class AbstractBucketFSLocation(ABC, metaclass=ABCMeta):
 
     @abstractmethod
     def joinpath(
-        self, *others: Union[str, PurePosixPath]
+            self, *others: Union[str, PurePosixPath]
     ) -> "AbstractBucketFSLocation":
         pass

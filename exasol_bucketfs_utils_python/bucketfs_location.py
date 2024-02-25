@@ -42,14 +42,14 @@ class BucketFSLocation(AbstractBucketFSLocation):
         self.bucket_config = bucket_config
 
     def generate_bucket_udf_path(
-        self, path_in_bucket: Optional[Union[str, PurePosixPath]] = None
+            self, path_in_bucket: Optional[Union[str, PurePosixPath]] = None
     ) -> PurePosixPath:
         return bucketfs_utils.generate_bucket_udf_path(
             self.bucket_config, self.get_complete_file_path_in_bucket(path_in_bucket)
         )
 
     def get_complete_file_path_in_bucket(
-        self, bucket_file_path: Optional[Union[str, PurePosixPath]] = None
+            self, bucket_file_path: Optional[Union[str, PurePosixPath]] = None
     ) -> str:
 
         if bucket_file_path is not None:
@@ -57,6 +57,11 @@ class BucketFSLocation(AbstractBucketFSLocation):
         else:
             bucket_file_path = ""
         return str(PurePosixPath(self.base_path, bucket_file_path))
+
+    def download_from_bucketfs_to_fileobj(self, bucket_file_path: str, fileobj: IO):
+        download.download_from_bucketfs_to_fileobj(fileobj=fileobj,
+                                                   bucket_file_path=bucket_file_path,
+                                                   bucket_config=self.bucket_config)
 
     def download_from_bucketfs_to_string(self, bucket_file_path: str) -> str:
         return download.download_from_bucketfs_to_string(
@@ -69,7 +74,7 @@ class BucketFSLocation(AbstractBucketFSLocation):
         )
 
     def upload_string_to_bucketfs(
-        self, bucket_file_path: str, string: str
+            self, bucket_file_path: str, string: str
     ) -> Tuple[ParseResult, PurePosixPath]:
         return upload.upload_string_to_bucketfs(
             self.bucket_config,
@@ -78,7 +83,7 @@ class BucketFSLocation(AbstractBucketFSLocation):
         )
 
     def upload_object_to_bucketfs_via_joblib(
-        self, object: Any, bucket_file_path: str, **kwargs
+            self, object: Any, bucket_file_path: str, **kwargs
     ) -> Tuple[ParseResult, PurePosixPath]:
         return upload.upload_object_to_bucketfs_via_joblib(
             object,
@@ -88,7 +93,7 @@ class BucketFSLocation(AbstractBucketFSLocation):
         )
 
     def upload_fileobj_to_bucketfs(
-        self, fileobj: IO, bucket_file_path: str
+            self, fileobj: IO, bucket_file_path: str
     ) -> Tuple[ParseResult, PurePosixPath]:
         return upload.upload_fileobj_to_bucketfs(
             self.bucket_config,
@@ -102,7 +107,7 @@ class BucketFSLocation(AbstractBucketFSLocation):
         )
 
     def read_file_from_bucketfs_to_file(
-        self, bucket_file_path: str, local_file_path: Path
+            self, bucket_file_path: str, local_file_path: Path
     ) -> None:
         from_BFS.read_file_from_bucketfs_to_file(
             self.get_complete_file_path_in_bucket(bucket_file_path),
@@ -111,7 +116,7 @@ class BucketFSLocation(AbstractBucketFSLocation):
         )
 
     def read_file_from_bucketfs_to_fileobj(
-        self, bucket_file_path: str, fileobj: IO
+            self, bucket_file_path: str, fileobj: IO
     ) -> None:
         from_BFS.read_file_from_bucketfs_to_fileobj(
             self.get_complete_file_path_in_bucket(bucket_file_path),

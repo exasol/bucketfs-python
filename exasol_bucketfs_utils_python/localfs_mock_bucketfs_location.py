@@ -30,7 +30,7 @@ class LocalFSMockBucketFSLocation(AbstractBucketFSLocation):
         self.base_path = "" if base_path is None else base_path
 
     def get_complete_file_path_in_bucket(
-        self, bucket_file_path: Optional[Union[str, PurePosixPath]] = None
+            self, bucket_file_path: Optional[Union[str, PurePosixPath]] = None
     ) -> str:
         if bucket_file_path is not None:
             bucket_file_path = bucketfs_utils.make_path_relative(bucket_file_path)
@@ -39,7 +39,7 @@ class LocalFSMockBucketFSLocation(AbstractBucketFSLocation):
         return str(PurePosixPath(self.base_path, bucket_file_path))
 
     def generate_bucket_udf_path(
-        self, path_in_bucket: Optional[Union[str, PurePosixPath]] = None
+            self, path_in_bucket: Optional[Union[str, PurePosixPath]] = None
     ) -> PurePosixPath:
 
         if path_in_bucket is not None:
@@ -48,6 +48,10 @@ class LocalFSMockBucketFSLocation(AbstractBucketFSLocation):
             path_in_bucket = ""
         path = PurePosixPath(self.base_path, path_in_bucket)
         return path
+
+    def download_from_bucketfs_to_fileobj(self, bucket_file_path: str, fileobj: IO):
+        with open(self.get_complete_file_path_in_bucket(bucket_file_path)) as f:
+            fileobj.write(f.read())
 
     def download_from_bucketfs_to_string(self, bucket_file_path: str) -> str:
         with open(self.get_complete_file_path_in_bucket(bucket_file_path)) as f:
@@ -65,7 +69,7 @@ class LocalFSMockBucketFSLocation(AbstractBucketFSLocation):
             f.write(string)
 
     def upload_object_to_bucketfs_via_joblib(
-        self, object_: Any, bucket_file_path: str, **kwargs
+            self, object_: Any, bucket_file_path: str, **kwargs
     ) -> None:
         path = self.get_complete_file_path_in_bucket(bucket_file_path)
         Path(path).parent.mkdir(parents=True, exist_ok=True)
@@ -79,7 +83,7 @@ class LocalFSMockBucketFSLocation(AbstractBucketFSLocation):
                 f.write(chunk)
 
     def read_file_from_bucketfs_to_fileobj(
-        self, bucket_file_path: str, fileobj: IO
+            self, bucket_file_path: str, fileobj: IO
     ) -> None:
         bucket_path = self.get_complete_file_path_in_bucket(bucket_file_path)
         with open(bucket_path, "rb") as read_file:
@@ -87,7 +91,7 @@ class LocalFSMockBucketFSLocation(AbstractBucketFSLocation):
             fileobj.write(read_file.read())
 
     def read_file_from_bucketfs_to_file(
-        self, bucket_file_path: str, local_file_path: Path
+            self, bucket_file_path: str, local_file_path: Path
     ) -> None:
         with open(local_file_path, "wb") as fileobj:
             self.read_file_from_bucketfs_to_fileobj(bucket_file_path, fileobj)
