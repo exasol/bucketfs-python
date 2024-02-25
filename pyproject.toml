@@ -1,13 +1,10 @@
 [tool.poetry]
 name = "exasol-bucketfs"
 packages  = [
-    {include = "exasol"},
+    #{include = "exasol"},
     {include = "exasol_bucketfs_utils_python"}
 ]
-include = [
-    { path = "exasol" },
-    { path = "exasol_bucketfs_utils_python" }
-]
+
 version = "0.9.0"
 description = "BucketFS utilities for the Python programming language"
 
