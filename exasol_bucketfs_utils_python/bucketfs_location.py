@@ -60,7 +60,8 @@ class BucketFSLocation(AbstractBucketFSLocation):
 
     def download_from_bucketfs_to_fileobj(self, bucket_file_path: str, fileobj: IO):
         download.download_from_bucketfs_to_fileobj(fileobj=fileobj,
-                                                   bucket_file_path=bucket_file_path,
+                                                   bucket_file_path=self.get_complete_file_path_in_bucket(
+                                                       bucket_file_path),
                                                    bucket_config=self.bucket_config)
 
     def download_from_bucketfs_to_string(self, bucket_file_path: str) -> str:
