@@ -66,6 +66,7 @@ __all__ = [
     "Service",
     "Bucket",
     "MappedBucket",
+    "BucketFsError",
     "as_bytes",
     "as_string",
     "as_file",
