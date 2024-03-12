@@ -55,7 +55,6 @@ from typing import (
     Iterator,
     Mapping,
     MutableMapping,
-    Union,
 )
 from urllib.parse import urlparse
 
