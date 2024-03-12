@@ -1,3 +1,4 @@
+import logging
 import random
 import string
 from contextlib import contextmanager
@@ -292,3 +293,18 @@ def test_ssl_verification_for_bucket_download_can_be_bypassed(httpsserver):
 
     with does_not_raise(requests.exceptions.SSLError):
         _ = as_string(bucket.download("some/other/path/file2.bin"))
+
+
+def test_any_log_message_get_emitted(httpserver, caplog):
+    caplog.set_level(logging.DEBUG)
+    httpserver.serve_content("", 200)
+
+    CREDENTIALS = {"default": {"username": "w", "password": "write"}}
+    service = Service(httpserver.url, CREDENTIALS)
+    _ = service.buckets
+
+    log_records = [
+        record for record in caplog.records if record.name == "exasol.bucketfs"
+    ]
+    # The log level DEBUG should emit at least one log message
+    assert log_records
