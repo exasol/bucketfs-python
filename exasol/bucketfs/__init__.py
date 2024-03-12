@@ -120,7 +120,7 @@ class Service:
     def __init__(
         self,
         url: str,
-        credentials: Mapping[str, Mapping[str, str]] = None,
+        credentials: Mapping[str, Mapping[str, str]] | None = None,
         verify: bool | str = True,
     ):
         """Create a new Service instance.
@@ -169,7 +169,7 @@ class Service:
     def __str__(self) -> str:
         return f"Service<{self._url}>"
 
-    def __iter__(self) -> Iterator[Bucket]:
+    def __iter__(self) -> Iterator[str]:
         yield from self.buckets
 
     def __getitem__(self, item: str) -> Bucket:
