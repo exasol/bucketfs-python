@@ -45,7 +45,6 @@ This module contains a python api to programmatically access exasol bucketfs ser
 """
 from __future__ import annotations
 
-import logging
 from collections import defaultdict
 from typing import (
     BinaryIO,
@@ -68,6 +67,7 @@ from exasol.bucketfs._convert import (
     as_string,
 )
 from exasol.bucketfs._error import BucketFsError
+from exasol.bucketfs._logging import LOGGER
 
 __all__ = [
     "Service",
@@ -79,8 +79,6 @@ __all__ = [
     "as_file",
     "as_hash",
 ]
-
-_logger = logging.getLogger("exasol.bucketfs")
 
 
 def _lines(response):
@@ -151,7 +149,7 @@ class Service:
         url = _build_url(service_url=self._url)
         response = requests.get(url, verify=self._verify)
         try:
-            _logger.info(f"Retrieving bucket list from {url}")
+            LOGGER.info(f"Retrieving bucket list from {url}")
             response.raise_for_status()
         except HTTPError as ex:
             raise BucketFsError(
@@ -225,7 +223,7 @@ class Bucket:
     @property
     def files(self) -> Iterable[str]:
         url = _build_url(service_url=self._service, bucket=self.name)
-        _logger.info(f"Retrieving bucket listing for {self.name}.")
+        LOGGER.info(f"Retrieving bucket listing for {self.name}.")
         response = requests.get(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -249,7 +247,7 @@ class Bucket:
             data: raw content of the file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        _logger.info(f"Uploading {path} to bucket {self.name}.")
+        LOGGER.info(f"Uploading {path} to bucket {self.name}.")
         response = requests.put(url, data=data, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -267,7 +265,7 @@ class Bucket:
             A BucketFsError if the operation couldn't be executed successfully.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        _logger.info(f"Deleting {path} from bucket {self.name}.")
+        LOGGER.info(f"Deleting {path} from bucket {self.name}.")
         response = requests.delete(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -286,7 +284,7 @@ class Bucket:
             An iterable of binary chunks representing the downloaded file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        _logger.info(
+        LOGGER.info(
             f"Downloading {path} using a chunk size of {chunk_size} bytes from bucket {self.name}."
         )
         with requests.get(
