@@ -8,3 +8,4 @@
    api
    developer_guide/developer_guide
    changes/changelog
+   spec/spec
