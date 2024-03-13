@@ -67,6 +67,7 @@ from exasol.bucketfs._convert import (
     as_hash,
     as_string,
 )
+from exasol.bucketfs._error import BucketFsError
 
 __all__ = [
     "Service",
@@ -80,13 +81,6 @@ __all__ = [
 ]
 
 _logger = logging.getLogger("exasol.bucketfs")
-
-
-class BucketFsError(Exception):
-    """Error occurred while interacting with the bucket fs service."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 def _lines(response):
