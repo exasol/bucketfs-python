@@ -46,6 +46,7 @@ This module contains a python api to programmatically access exasol bucketfs ser
 from __future__ import annotations
 
 import hashlib
+import logging
 from collections import defaultdict
 from pathlib import Path
 from typing import (
@@ -55,7 +56,6 @@ from typing import (
     Iterator,
     Mapping,
     MutableMapping,
-    Union,
 )
 from urllib.parse import urlparse
 
@@ -67,11 +67,14 @@ __all__ = [
     "Service",
     "Bucket",
     "MappedBucket",
+    "BucketFsError",
     "as_bytes",
     "as_string",
     "as_file",
     "as_hash",
 ]
+
+_logger = logging.getLogger("exasol.bucketfs")
 
 
 class BucketFsError(Exception):
@@ -120,7 +123,7 @@ class Service:
     def __init__(
         self,
         url: str,
-        credentials: Mapping[str, Mapping[str, str]] = None,
+        credentials: Mapping[str, Mapping[str, str]] | None = None,
         verify: bool | str = True,
     ):
         """Create a new Service instance.
@@ -149,6 +152,7 @@ class Service:
         url = _build_url(service_url=self._url)
         response = requests.get(url, verify=self._verify)
         try:
+            _logger.info(f"Retrieving bucket list from {url}")
             response.raise_for_status()
         except HTTPError as ex:
             raise BucketFsError(
@@ -169,7 +173,7 @@ class Service:
     def __str__(self) -> str:
         return f"Service<{self._url}>"
 
-    def __iter__(self) -> Iterator[Bucket]:
+    def __iter__(self) -> Iterator[str]:
         yield from self.buckets
 
     def __getitem__(self, item: str) -> Bucket:
@@ -222,6 +226,7 @@ class Bucket:
     @property
     def files(self) -> Iterable[str]:
         url = _build_url(service_url=self._service, bucket=self.name)
+        _logger.info(f"Retrieving bucket listing for {self.name}.")
         response = requests.get(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -245,6 +250,7 @@ class Bucket:
             data: raw content of the file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
+        _logger.info(f"Uploading {path} to bucket {self.name}.")
         response = requests.put(url, data=data, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -262,6 +268,7 @@ class Bucket:
             A BucketFsError if the operation couldn't be executed successfully.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
+        _logger.info(f"Deleting {path} from bucket {self.name}.")
         response = requests.delete(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -280,6 +287,9 @@ class Bucket:
             An iterable of binary chunks representing the downloaded file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
+        _logger.info(
+            f"Downloading {path} using a chunk size of {chunk_size} bytes from bucket {self.name}."
+        )
         with requests.get(
             url, stream=True, auth=self._auth, verify=self._verify
         ) as response:
