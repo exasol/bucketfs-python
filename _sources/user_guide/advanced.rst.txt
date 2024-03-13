@@ -39,3 +39,10 @@ Delete files from Bucket
    :start-after: # Expert/Mapped bucket API
 
 
+Configure logging
++++++++++++++++++
+
+.. literalinclude:: /examples/logger.py
+   :language: python3
+   :start-after: # Advanced Logging
+

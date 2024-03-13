@@ -218,6 +218,27 @@
         <article role="main">
           <section id="unreleased">
 <h1>Unreleased<a class="headerlink" href="#unreleased" title="Permalink to this heading">#</a></h1>
+<section id="added">
+<h2>Added<a class="headerlink" href="#added" title="Permalink to this heading">#</a></h2>
+<ul>
+<li><p>Added logging support
+<strong>Overview</strong></p>
+<p>The bucketfs logger can be referenced via <code class="docutils literal notranslate"><span class="pre">exasol.bucketfs</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="c1"># Get the logger for &#39;exasol.bucketfs&#39;</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;exasol.bucketfs&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For most use cases it should be sufficient to just configure the root logger, in order
+to retrieve the logs from bucketfs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
 <section id="internal">
 <h2>Internal<a class="headerlink" href="#internal" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
@@ -285,6 +306,7 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Unreleased</a><ul>
+<li><a class="reference internal" href="#added">Added</a></li>
 <li><a class="reference internal" href="#internal">Internal</a></li>
 </ul>
 </li>

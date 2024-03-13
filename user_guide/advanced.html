@@ -320,6 +320,31 @@ interactions with a bucketfs service in the background (upload, download, sync, 
 </pre></div>
 </div>
 </section>
+<section id="configure-logging">
+<h3>Configure logging<a class="headerlink" href="#configure-logging" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="c1"># Attention:</span>
+<span class="c1"># It is essential to configure the root logger at the beginning of your script.</span>
+<span class="c1"># This ensures that log messages, including those from the bucketfs are handled correctly.</span>
+<span class="c1"># Without proper configuration, log messages might not appear as expected.</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="c1"># Explicityly Configure the bucketfs logger if you need to.</span>
+<span class="c1">#</span>
+<span class="c1"># 1. Get a reference to the bucketfs logger</span>
+<span class="n">bucketfs_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;exasol.bucketfs&#39;</span><span class="p">)</span>
+
+<span class="c1"># 2. Configure the bucketfs logger as needed</span>
+<span class="c1"># Note:</span>
+<span class="c1">#   By default bucketfs logger is set to NOTSET (https://docs.python.org/3.11/library/logging.html#logging.NOTSET)</span>
+<span class="c1">#   which should be sufficient in lots of cases where the root logger is configured approriately.</span>
+<span class="n">bucketfs_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -384,6 +409,7 @@ interactions with a bucketfs service in the background (upload, download, sync, 
 <li><a class="reference internal" href="#upload-files-to-a-bucket">Upload files to a Bucket</a></li>
 <li><a class="reference internal" href="#download-files-from-a-bucket">Download files from a Bucket</a></li>
 <li><a class="reference internal" href="#delete-files-from-bucket">Delete files from Bucket</a></li>
+<li><a class="reference internal" href="#configure-logging">Configure logging</a></li>
 </ul>
 </li>
 </ul>

@@ -364,6 +364,16 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </pre></div>
 </div>
 </section>
+<section id="configure-logging">
+<h3>Configure logging<a class="headerlink" href="#configure-logging" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -436,6 +446,7 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </ul>
 </li>
 <li><a class="reference internal" href="#delete-files-from-bucket">Delete files from Bucket</a></li>
+<li><a class="reference internal" href="#configure-logging">Configure logging</a></li>
 </ul>
 </li>
 </ul>
