@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from urllib.parse import urlparse
 
 from exasol.bucketfs._error import BucketFsError
