@@ -1,10 +1,12 @@
 import logging
+
 from exasol.bucketfs import Service
 
 logging.basicConfig(level=logging.INFO)
 
 # Advanced Logging
 import logging
+
 from exasol.bucketfs import Service
 
 # Attention:
@@ -16,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 # Explicityly Configure the bucketfs logger if you need to.
 #
 # 1. Get a reference to the bucketfs logger
-bucketfs_logger = logging.getLogger('exasol.bucketfs')
+bucketfs_logger = logging.getLogger("exasol.bucketfs")
 
 # 2. Configure the bucketfs logger as needed
 # Note:
