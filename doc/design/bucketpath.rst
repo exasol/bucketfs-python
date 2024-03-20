@@ -407,7 +407,7 @@ Examples
 
     Path = PathBuilder(credentials)
 
-    # Create differnet kind's of bucketfs paths
+    # Create different kinds of bucketfs paths
     udf_path = Path("bfsl://some/local/path/file.tar.gz")
     http_bucket_path = Path("bfs://127.0.0.1:8888/service/bucket/some/file.tar.gz")
     https_bucket_path = Path("bfss://127.0.0.1:8888/service/bucket/some/file.tar.gz")
