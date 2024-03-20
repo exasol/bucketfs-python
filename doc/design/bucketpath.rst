@@ -23,7 +23,7 @@ Challenges with Current BucketFS Interactions
    Users face difficulties when switching between different operational contexts, such as external access (HTTP) versus internal access (local paths, during UDF execution). The lack of a seamless transition between contexts hinders productivity and introduces additonal code complexities.
 
 2. **Directory Operations:**
-   BucketFS inherently lacks the concept of directories as understood in traditional file systems. This absence complicates tasks like listing directory contents, making what should be simple actions cumbersome and time-consuming. Users are forced to interact with a lower-level bucket API for directory-like operations, which is not only tedious but also counterintuitive.
+   BucketFS inherently lacks the concept of directories as understood in traditional file systems. This absence complicates tasks like listing directory contents, making what should be simple actions cumbersome and time-consuming. Users are forced to interact with a lower-level BucketFS API for directory-like operations, which is not only tedious but also counterintuitive.
 
 3. **Uniform Interface Absence:**
    There is a notable absence of a uniform interface for interacting with the underlying systems (local filesystem, HTTP, etc.) behind the BucketFS paths. This inconsistency in interfaces across different backends complicates the user experience, as users must adjust their interaction patterns depending on the underlying system being accessed.
