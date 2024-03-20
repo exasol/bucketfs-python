@@ -20,7 +20,7 @@ Challenges with Current BucketFS Interactions
 +++++++++++++++++++++++++++++++++++++++++++++
 
 1. **Contextual Versatility:**
-   Users face difficulties when switching between different operational contexts, such as external access (http) versus internal access (local pahts, during UDF execution). The lack of a seamless transition between contexts hinders productivity and introduces additonal code complexities.
+   Users face difficulties when switching between different operational contexts, such as external access (HTTP) versus internal access (local paths, during UDF execution). The lack of a seamless transition between contexts hinders productivity and introduces additonal code complexities.
 
 2. **Directory Operations:**
    BucketFS inherently lacks the concept of directories as understood in traditional file systems. This absence complicates tasks like listing directory contents, making what should be simple actions cumbersome and time-consuming. Users are forced to interact with a lower-level bucket API for directory-like operations, which is not only tedious but also counterintuitive.
