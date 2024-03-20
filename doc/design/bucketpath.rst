@@ -49,7 +49,7 @@ Desgin
 
 Design Goals
 ++++++++++++
-The primary goal of this design is to create an abstraction that simplifies working with the bucketfs file system and it's usages.
+The primary goal of this design is to create an abstraction that simplifies working with the BucketFS file system and its usages.
 Additionaly we wan't to maintain compatibility with the intuitive and widely used `pathlib` interface(s) where possible.
 
 This abstraction should:
