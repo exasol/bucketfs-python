@@ -248,7 +248,7 @@ Each backend must implement the ``as_uri`` method in a way that the location is 
     # Attention: needs to provide/implment Pathlike protocol
     class BucketPath:
         """
-        Provides access to a bucket path servered via http or https.
+        Provides access to a bucket path served via http or https.
         """
         
         # uri protocol specifies associated with this class
