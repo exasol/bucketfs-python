@@ -54,7 +54,7 @@ Additionaly we wan't to maintain compatibility with the intuitive and widely use
 
 This abstraction should:
 
-- Simplify interacting with bucketfs paths, by providing implentations for common tasks.
+- Simplify interacting with BucketFS paths, by providing implentations for common tasks.
 - Provide a way to persist and/or share path information accross processes and systems.
 - Reduce the learning curve for users familiar with the `pathlib` interface.
 - Make sure the behaviour follows `pathlib` wherever possible.
