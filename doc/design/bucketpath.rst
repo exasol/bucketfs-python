@@ -5,12 +5,12 @@ Design Document Bucket Path(s)
 Problem Description
 ===================
 
-Users of the bucketfs file system need to use it in various diffrent contexts like, from the outside of the
-DB interacting with bucketfs, from within the DB when accssing bucketfs path from within udfs.
-Also common actions/tasks like listing a directory are pretty tidous when just interacting with
-the bucket api due to the fact that it does not know the concept of direcotries. So in 
+Users of the BucketFS file system need to use it in various diffrent contexts like, from the outside of the
+DB interacting with bucketfs, from within the DB when accessing BucketFS paths from within UDFs.
+Also common actions/tasks like listing a directory are pretty tedious when just interacting with
+the BucketFS API due to the fact that it does not know the concept of directories. So in 
 order to simplify and streamline frequently used path operations and also provide a uniform 
-interface accross the actual system (local path, http, ...) behind the bucketfs path we need
+interface accross the actual system (local path, http, ...) behind the BucketFS path we need
 to have an abstraction for the user.
 
 The BucketFS filesystem is an integral part of sharing and accessing data for its users.
