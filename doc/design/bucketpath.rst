@@ -197,44 +197,102 @@ Pathlike
 
         def read(chunk_size: int = 8192) -> Iterable[ByteString]:
             """
-            TBD
+            Read the content of a the file behind this path.
+
+            Only works for pathslike objects which return True for `is_file()`.
+
+            Args:
+                chunk_size: which will be yieled by the iterator.
+
+            Returns:
+                Returns an iterator which can be used to read the contents of the path in chunks.
+
+            Raises:
+                NotAFileError: if the pathlike object does not point to a file.
+                FileNotFoundError: If the file does not exist.
             """
 
         def write(data: ByteString | BinaryIO | Iterable[ByteString]):
             """
-            TBD
+            Writes data to a this path. 
+
+            After successfully writing to this path `exists` will yield true for this path.
+
+            Args:
+                data: which shall be writen to the path.
+
+
+            Raises:
+                FileExistsError: if the file already exists.
+                NotAFileError: if the pathlike object is not a file path.
+
+                Note: 
+                If you still need to write the new content, please delete the current contents first,
+                for futher details see `rm()`.
             """
 
         def rm():
             """
-            If exists() and is_file yields true for this path, the path will be deleted,
-            otherwise exception will be thrown.
+            Remove this file.
+
+            Note:
+                If `exists()` and is_file yields true for this path, the path will be deleted,
+                otherwise exception will be thrown.
+
+            Raises:
+                FileNotFoundError: If the file does not exist.
             """
 
         def rmdir(recursive: bool = False):
             """
-            TBD
+            Removes this directory.
+
+            Note: In order to stay close to the pathlib based `rmdir` the default won't delete
+                  non empty direcotries, in order to to so recus
+
+            Args:
+                recursive: if true the entrie directory and it's entire contents (files and subdirs)
+                           will be delted. If false and the directory is not empty an error will be thrown.
+
+            Raises:
+                FileNotFoundError: If the file does not exist.
+                PermissionError: If recursive is false and the directory is not empty.
             """
 
-        def joinpath(*pathsegements)
+        def joinpath(*pathsegements) -> Pathlike:
             """
-            Calling this method is equivalent to combining the path with each of the given pathsegments in turn
+            Calling this method is equivalent to combining the path with each of the given pathsegments in turn.
+
+            Returns:
+                A new pathlike object pointing the combined path.
             """
 
-        def walk():
+        def walk() -> Tuple[Pathlike, List[str], List[str]]:
             """
-            TBD
+            Generate the file names in a directory tree by walking the tree either top-down or bottom-up.
+
+            Note:
+                Try to mimik https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk as closely as possible,
+                except the functionality associated with the parameters of the `pathlib` walk.
+
+            Yields:
+                A 3-tuple of (dirpath, dirnames, filenames).
             """
 
-        def iterdir():
+        def iterdir() -> Generator[Pathlike, None, None]:
             """
-            TBD
+            When the path points to a directory, yield path objects of the directory contents.
+
+            Note:
+                For file like paths it will yield nothing.
+
+            Yields:
+                All direct childs of the pathlike object.
             """
 
         # Overload / for joining, see also joinpath or `pathlib.Path`.
         def __truediv__():
             """
-            TBD
             """
 
 
