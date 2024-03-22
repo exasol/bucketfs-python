@@ -16,6 +16,13 @@ to have an abstraction for the user.
 The BucketFS filesystem is an integral part of sharing and accessing data for its users.
 However, the current user experience with BucketFS presents several challenges, particularly in terms of versatility and ease of use across different contexts. Users interact with BucketFS both externally, from outside the database, and internally, within database operations such as accessing paths from within User-Defined Functions (UDFs). This dual mode of interaction introduces complexity and inefficiency, especially for common filesystem operations.
 
+Delimitation
+++++++++++++
+The problem to be addressed focuses on managing common access and file handling issues. The aim is to ensure that different backends
+(http, fs, etc.) are abstracted, details such as bucket types or services shall not be reflected nor handled at this scope.
+These details may be relevant for internal logic but need to be concealed from the end user.
+
+
 Challenges with Current BucketFS Interactions
 +++++++++++++++++++++++++++++++++++++++++++++
 
