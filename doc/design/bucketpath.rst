@@ -427,7 +427,7 @@ Factory & Builders
 
                 credentail_store: for accessing buckets, see Service.
 
-                Note: It is not clear yet if addition information will be required for the actual
+                Note: It is not clear yet if additional information will be required for the actual
                       implementations. If needed please add bellow.
 
                 *args: TBD
