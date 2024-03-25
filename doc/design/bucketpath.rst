@@ -248,7 +248,7 @@ Pathlike
             Removes this directory.
 
             Note: In order to stay close to the pathlib based `rmdir` the default won't delete
-                  non empty direcotries, in order to do so recus
+                  non empty direcotries.
 
             Args:
                 recursive: if true the entrie directory and it's entire contents (files and subdirs)
