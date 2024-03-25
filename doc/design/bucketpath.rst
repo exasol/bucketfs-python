@@ -252,7 +252,7 @@ Pathlike
 
             Args:
                 recursive: if true the entrie directory and it's entire contents (files and subdirs)
-                           will be delted. If false and the directory is not empty an error will be thrown.
+                           will be deleted. If false and the directory is not empty an error will be thrown.
 
             Raises:
                 FileNotFoundError: If the file does not exist.
