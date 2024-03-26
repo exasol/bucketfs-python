@@ -7,4 +7,5 @@
    user_guide/user_guide
    api
    developer_guide/developer_guide
+   design/design
    changes/changelog
