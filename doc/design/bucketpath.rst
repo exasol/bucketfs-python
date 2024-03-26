@@ -217,18 +217,13 @@ Pathlike
             Writes data to a this path. 
 
             After successfully writing to this path `exists` will yield true for this path.
+            If the file already existed it will be overwritten.
 
             Args:
                 data: which shall be writen to the path.
 
-
             Raises:
-                FileExistsError: if the file already exists.
                 NotAFileError: if the pathlike object is not a file path.
-
-                Note: 
-                If you still need to write the new content, please delete the current contents first,
-                for futher details see `rm()`.
             """
 
         def rm():
@@ -480,6 +475,23 @@ Examples
     readonly_path = Path("bfsl://some/local/path/file.tar.gz?mode=ro")
 
 
+Utilities
+---------
 
 
+.. code-block:: python
 
+    Uri = str
+
+    def as_udf_path(path: Uri | BUcketPath) -> Pathlike:
+        """
+        Convert a BucketPath to a LocalPath (UdfPath).
+
+
+        Args:
+            path: BucketPath which should be converted to a LocalPath.
+
+        Returns:
+            A LocalPath (UdfPath) object.
+        """
+    
