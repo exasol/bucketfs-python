@@ -243,7 +243,7 @@ Pathlike
             Removes this directory.
 
             Note: In order to stay close to pathlib, by default `rmdir` with `recursive`
-                  set to `False` default won't delete non empty directories.
+                  set to `False` won't delete non-empty directories.
 
             Args:
                 recursive: if true the directory itself and its entire contents (files and subdirs)
