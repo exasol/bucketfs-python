@@ -242,11 +242,11 @@ Pathlike
             """
             Removes this directory.
 
-            Note: In order to stay close to the pathlib based `rmdir` the default won't delete
-                  non empty direcotries.
+            Note: In order to stay close to pathlib, by default `rmdir` with `recursive`
+                  set to `False` default won't delete non empty directories.
 
             Args:
-                recursive: if true the entrie directory and it's entire contents (files and subdirs)
+                recursive: if true the directory itself and its entire contents (files and subdirs)
                            will be deleted. If false and the directory is not empty an error will be thrown.
 
             Raises:
@@ -279,7 +279,7 @@ Pathlike
             When the path points to a directory, yield path objects of the directory contents.
 
             Note:
-                For file like paths it will yield nothing.
+                If `path` points to a file then `iterdir()` will yield nothing.
 
             Yields:
                 All direct children of the pathlike object.
