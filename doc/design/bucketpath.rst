@@ -483,7 +483,7 @@ Utilities
 
     Uri = str
 
-    def as_udf_path(path: Uri | BUcketPath) -> Pathlike:
+    def as_udf_path(path: Uri | BucketPath) -> Pathlike:
         """
         Convert a BucketPath to a LocalPath (UdfPath).
 
