@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BucketFs Utils Python 0.3.0, released 2022-07-20" href="changes_0.3.0.html" /><link rel="prev" title="BucketFs Python 0.5.0, released 2022-10-12" href="changes_0.5.0.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Design Document Bucket Path(s)" href="bucketpath.html" /><link rel="prev" title="🛠 Developer Guide" href="../developer_guide/developer_guide.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>BucketFs Python 0.4.0, released 2022-09-28 - Bucketfs</title>
+        <title>📑 Design Documents - Bucketfs</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -168,22 +168,22 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">🧰 API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide/developer_guide.html">🛠 Developer Guide</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../design/design.html">📑 Design Documents</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../design/bucketpath.html">Design Document Bucket Path(s)</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">📑 Design Documents</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="bucketpath.html">Design Document Bucket Path(s)</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="changelog.html">📝 Changes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="unreleased.html">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.9.0.html">BucketFs Python 0.9.0, released 2024-02-16</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.8.0.html">BucketFs Python 0.8.0, released 2023-03-21</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.8.0.html#dependencies">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.7.0.html">BucketFs Python 0.7.0, released 2022-12-22</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.6.0.html">BucketFs Python 0.6.0, released 2022-11-11</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.5.0.html">BucketFs Python 0.5.0, released 2022-10-12</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">BucketFs Python 0.4.0, released 2022-09-28</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.3.0.html">BucketFs Utils Python 0.3.0, released 2022-07-20</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.2.0.html">BucketFs Utils Python 0.2.0, released 2022-04-29</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.1.0.html">BucketFs Utils Python 0.1.0, released 2022-01-18</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../changes/changelog.html">📝 Changes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changes/unreleased.html">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.9.0.html">BucketFs Python 0.9.0, released 2024-02-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html">BucketFs Python 0.8.0, released 2023-03-21</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.7.0.html">BucketFs Python 0.7.0, released 2022-12-22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.6.0.html">BucketFs Python 0.6.0, released 2022-11-11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.5.0.html">BucketFs Python 0.5.0, released 2022-10-12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.4.0.html">BucketFs Python 0.4.0, released 2022-09-28</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.3.0.html">BucketFs Utils Python 0.3.0, released 2022-07-20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.2.0.html">BucketFs Utils Python 0.2.0, released 2022-04-29</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.1.0.html">BucketFs Utils Python 0.1.0, released 2022-01-18</a></li>
 </ul>
 </li>
 </ul>
@@ -214,42 +214,19 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="bucketfs-python-0-4-0-released-2022-09-28">
-<h1>BucketFs Python 0.4.0, released 2022-09-28<a class="headerlink" href="#bucketfs-python-0-4-0-released-2022-09-28" title="Permalink to this heading">#</a></h1>
-<section id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
-<p>Prepare first pypi release.</p>
-</section>
-<section id="features-enhancements">
-<h2>Features / Enhancements<a class="headerlink" href="#features-enhancements" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>#72: Added tests for the fixed generating bucket udf path method and handled None input of the base_path as an empty string.</p></li>
-<li><p>#79: Added joinpath method to BucketFSLocations</p></li>
+          <section id="design-documents">
+<h1>📑 Design Documents<a class="headerlink" href="#design-documents" title="Permalink to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bucketpath.html">Design Document Bucket Path(s)</a></li>
 </ul>
-</section>
-<section id="bug-fixes">
-<h2>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="refactoring">
-<h2>Refactoring<a class="headerlink" href="#refactoring" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>#81: Updated poetry version for CI to 1.2.0</p></li>
-</ul>
-</section>
-<section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>#-: Updated project prerequisites</p></li>
-<li><p>#-: Adjusted project name(s) and url(s)</p></li>
-<li><p>#-: Added new contributor</p></li>
-</ul>
-</section>
+</div>
 </section>
 
         </article>
@@ -257,23 +234,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="changes_0.3.0.html">
+          <a class="next-page" href="bucketpath.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">BucketFs Utils Python 0.3.0, released 2022-07-20</div>
+                <div class="title">Design Document Bucket Path(s)</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="changes_0.5.0.html">
+          <a class="prev-page" href="../developer_guide/developer_guide.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">BucketFs Python 0.5.0, released 2022-10-12</div>
+                <div class="title">🛠 Developer Guide</div>
                 
               </div>
             </a>
@@ -295,31 +272,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">BucketFs Python 0.4.0, released 2022-09-28</a><ul>
-<li><a class="reference internal" href="#summary">Summary</a></li>
-<li><a class="reference internal" href="#features-enhancements">Features / Enhancements</a></li>
-<li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
-<li><a class="reference internal" href="#refactoring">Refactoring</a></li>
-<li><a class="reference internal" href="#documentation">Documentation</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
