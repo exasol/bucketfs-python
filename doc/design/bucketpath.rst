@@ -282,7 +282,7 @@ Pathlike
                 For file like paths it will yield nothing.
 
             Yields:
-                All direct childs of the pathlike object.
+                All direct children of the pathlike object.
             """
 
         # Overload / for joining, see also joinpath or `pathlib.Path`.
