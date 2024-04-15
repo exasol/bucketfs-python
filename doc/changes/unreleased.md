@@ -20,6 +20,10 @@
 
     logging.basicConfig(level=logging.INFO)
     ```
+  
+- Support for viewing BucketFS as a directory
+
+   Added the Pathlike protocol as described in the [design document](../design/bucketpath.rst).
 
 
 ## Internal
