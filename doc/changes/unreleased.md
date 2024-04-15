@@ -23,7 +23,7 @@
   
 - Support for viewing BucketFS as a directory
 
-   Added the Pathlike class as described in the [design document](../design/bucketpath.rst).
+   Added the Pathlike protocol as described in the [design document](../design/bucketpath.rst).
 
 
 ## Internal
