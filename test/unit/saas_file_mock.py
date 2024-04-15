@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Iterable, ByteString, BinaryIO
 from datetime import datetime
 import os

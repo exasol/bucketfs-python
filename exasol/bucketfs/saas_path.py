@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import ByteString, BinaryIO, Iterable, Optional, Generator
 from pathlib import PurePath
 import errno
@@ -54,8 +55,7 @@ def _walk_node(node: SaasFile, path: Pathlike, top_down: bool) -> \
     if node.children:
         for child in node.children:
             if not _is_file(child):
-                for paths, dirs, files in _walk_node(child, path / child.name, top_down):
-                    yield paths, dirs, files
+                yield from _walk_node(child, path / child.name, top_down)
     if not top_down:
         yield path, dir_list, file_list
 
@@ -146,7 +146,7 @@ class SaaSBucketPath:
         current_node = self._navigate()
         if current_node is None:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
-        elif not _is_file(current_node):
+        if not _is_file(current_node):
             raise IsADirectoryError(errno.EISDIR, os.strerror(errno.EISDIR), str(self._path))
         self._saas_file_api.delete_file(str(self._path))
 
@@ -154,9 +154,9 @@ class SaaSBucketPath:
         current_node = self._navigate()
         if current_node is None:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
-        elif _is_file(current_node):
+        if _is_file(current_node):
             raise NotADirectoryError(errno.ENOTDIR, os.strerror(errno.ENOTDIR), str(self._path))
-        elif not current_node.children:
+        if not current_node.children:
             self._saas_file_api.delete_folder(str(self._path))
         elif recursive:
             self._rmdir_recursive(current_node)
@@ -185,8 +185,7 @@ class SaaSBucketPath:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
 
         if not _is_file(current_node):
-            for output in _walk_node(current_node, self, top_down):
-                yield output
+            yield from _walk_node(current_node, self, top_down)
 
     def iterdir(self) -> Generator[Pathlike, None, None]:
         current_node = self._navigate()

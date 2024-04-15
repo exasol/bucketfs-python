@@ -1,6 +1,6 @@
 from pathlib import Path
-import pytest
 from itertools import chain
+import pytest
 from exasol.bucketfs.saas_path import SaaSBucketPath
 from test.unit.saas_file_mock import SaasFileApiMock
 
