@@ -24,6 +24,7 @@
 - Support for viewing BucketFS as a directory
 
    Added the Pathlike protocol as described in the [design document](../design/bucketpath.rst).
+   Created a bridge between the Pathlike protocol and the SaaS File API.
 
 
 ## Internal
