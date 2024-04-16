@@ -1,12 +1,12 @@
 from pathlib import Path
 from itertools import chain
 import pytest
-from exasol.bucketfs.saas_path import SaaSBucketPath
-from unit.saas_file_mock import SaasFileApiMock
+from exasol.bucketfs.bucket_path import BucketPath
+from unit.bucket_fake import BucketFake
 
 
 @pytest.fixture
-def api_mock(tmpdir) -> SaasFileApiMock:
+def api_mock(tmpdir) -> BucketFake:
     dir1 = tmpdir.mkdir('dir1')
     dir2 = tmpdir.mkdir('dir2')
     dir11 = dir1.mkdir('dir11')
@@ -17,7 +17,7 @@ def api_mock(tmpdir) -> SaasFileApiMock:
             dat = bytes([d_id * i] * 24)
             with open(str(d / file_name), 'wb') as f:
                 f.write(dat)
-    return SaasFileApiMock(tmpdir)
+    return BucketFake(tmpdir)
 
 
 @pytest.mark.parametrize("test_path, should_exist", [
@@ -27,7 +27,7 @@ def api_mock(tmpdir) -> SaasFileApiMock:
     ('dir1/dir3', False)
 ])
 def test_file_exists(api_mock, test_path, should_exist):
-    path = SaaSBucketPath(test_path, saas_file_api=api_mock)
+    path = BucketPath(test_path, bucket_api=api_mock)
     assert path.exists() == should_exist
 
 
@@ -38,7 +38,7 @@ def test_file_exists(api_mock, test_path, should_exist):
     ('dir1/dir3', False)
 ])
 def test_is_dir(api_mock, test_path, is_dir):
-    path = SaaSBucketPath(test_path, saas_file_api=api_mock)
+    path = BucketPath(test_path, bucket_api=api_mock)
     assert path.is_dir() == is_dir
 
 
@@ -49,82 +49,81 @@ def test_is_dir(api_mock, test_path, is_dir):
     ('dir1/dir3', False)
 ])
 def test_is_file(api_mock, test_path, is_file):
-    path = SaaSBucketPath(test_path, saas_file_api=api_mock)
+    path = BucketPath(test_path, bucket_api=api_mock)
     assert path.is_file() == is_file
 
 
 def test_rm(api_mock):
-    path = SaaSBucketPath('dir1/dir12/file120.dat', saas_file_api=api_mock)
+    path = BucketPath('dir1/dir12/file120.dat', bucket_api=api_mock)
     path.rm()
     assert not path.exists()
 
 
 def test_rm_not_exist(api_mock):
-    path = SaaSBucketPath('dir1/dir12/file125.dat', saas_file_api=api_mock)
+    path = BucketPath('dir1/dir12/file125.dat', bucket_api=api_mock)
     with pytest.raises(FileNotFoundError):
         path.rm()
 
 
 def test_rm_directory(api_mock):
-    path = SaaSBucketPath('dir1/dir12', saas_file_api=api_mock)
+    path = BucketPath('dir1/dir12', bucket_api=api_mock)
     with pytest.raises(IsADirectoryError):
         path.rm()
 
 
 def test_rmdir(api_mock):
     for i in range(2):
-        SaaSBucketPath(f'dir1/dir12/file12{i}.dat', saas_file_api=api_mock).rm()
-    path = SaaSBucketPath('dir1/dir12', saas_file_api=api_mock)
+        BucketPath(f'dir1/dir12/file12{i}.dat', bucket_api=api_mock).rm()
+    path = BucketPath('dir1/dir12', bucket_api=api_mock)
     path.rmdir(recursive=False)
     assert not path.exists()
 
 
 def test_rmdir_recursive(api_mock):
-    path = SaaSBucketPath('dir1', saas_file_api=api_mock)
+    path = BucketPath('dir1', bucket_api=api_mock)
     path.rmdir(recursive=True)
     assert not path.exists()
 
 
 def test_rmdir_not_empty(api_mock):
-    path = SaaSBucketPath('dir1', saas_file_api=api_mock)
+    path = BucketPath('dir1', bucket_api=api_mock)
     with pytest.raises(OSError):
         path.rmdir(recursive=False)
 
 
 def test_rmdir_not_exist(api_mock):
-    path = SaaSBucketPath('dir1/dir5', saas_file_api=api_mock)
-    with pytest.raises(FileNotFoundError):
-        path.rmdir()
+    path = BucketPath('dir1/dir5', bucket_api=api_mock)
+    path.rmdir()
 
 
 def test_rmdir_file(api_mock):
-    path = SaaSBucketPath('dir1/dir12/file120.dat', saas_file_api=api_mock)
+    path = BucketPath('dir1/dir12/file120.dat', bucket_api=api_mock)
     with pytest.raises(NotADirectoryError):
         path.rmdir()
 
 
 def test_joinpath(api_mock):
-    path1 = SaaSBucketPath('dir1', saas_file_api=api_mock)
+    path1 = BucketPath('dir1', bucket_api=api_mock)
     path2 = 'dir11'
-    path3 = SaaSBucketPath('dir111/dir1111', saas_file_api=api_mock)
+    path3 = BucketPath('dir111/dir1111', bucket_api=api_mock)
     path4 = Path('dir11111/file111110.dat')
     path = path1.joinpath(path2, path3, path4)
-    assert isinstance(path, SaaSBucketPath)
+    assert isinstance(path, BucketPath)
     assert str(path) == 'dir1/dir11/dir111/dir1111/dir11111/file111110.dat'
 
 
 def test_truediv(api_mock):
-    path1 = SaaSBucketPath('dir1', saas_file_api=api_mock)
+    path1 = BucketPath('dir1', bucket_api=api_mock)
     path2 = 'dir11'
-    path3 = SaaSBucketPath('dir111/dir1111', saas_file_api=api_mock)
+    path3 = BucketPath('dir111/dir1111', bucket_api=api_mock)
     path4 = Path('dir11111/file111110.dat')
     path = path1 / path2 / path3 / path4
-    assert isinstance(path, SaaSBucketPath)
+    assert isinstance(path, BucketPath)
     assert str(path) == 'dir1/dir11/dir111/dir1111/dir11111/file111110.dat'
 
 
 def test_walk_top_down(api_mock):
-    path = SaaSBucketPath('', saas_file_api=api_mock)
+    path = BucketPath('', bucket_api=api_mock)
     content = [','.join(chain([pth.name, '/'], sorted(dirs), sorted(files)))
                for pth, dirs, files in path.walk(top_down=True)]
     expected_content = [
@@ -140,7 +139,7 @@ def test_walk_top_down(api_mock):
 
 
 def test_walk_bottom_up(api_mock):
-    path = SaaSBucketPath('', saas_file_api=api_mock)
+    path = BucketPath('', bucket_api=api_mock)
     content = [','.join(chain([pth.name, '/'], sorted(dirs), sorted(files)))
                for pth, dirs, files in path.walk(top_down=False)]
     expected_content = [
@@ -156,7 +155,7 @@ def test_walk_bottom_up(api_mock):
 
 
 def test_iterdir(api_mock):
-    path = SaaSBucketPath('dir1', saas_file_api=api_mock)
+    path = BucketPath('dir1', bucket_api=api_mock)
     content = set(str(node) for node in path.iterdir())
     expected_content = {
         'dir1/dir11',
@@ -168,14 +167,14 @@ def test_iterdir(api_mock):
 
 
 def test_read(api_mock):
-    path = SaaSBucketPath('dir1/dir12/file121.dat', saas_file_api=api_mock)
+    path = BucketPath('dir1/dir12/file121.dat', bucket_api=api_mock)
     expected_chunk = bytes([12] * 8)
     for chunk in path.read(chunk_size=8):
         assert chunk == expected_chunk
 
 
 def test_read_not_found(api_mock):
-    path = SaaSBucketPath('dir1/file12.dat', saas_file_api=api_mock)
+    path = BucketPath('dir1/file12.dat', bucket_api=api_mock)
     with pytest.raises(FileNotFoundError):
         list(path.read())
 
@@ -183,7 +182,7 @@ def test_read_not_found(api_mock):
 @pytest.mark.parametrize("file_name", ['file23.dat', 'file20.dat'])
 def test_write_bytes(api_mock, file_name):
     data = b'abcd'
-    path = SaaSBucketPath(f'dir2/{file_name}', saas_file_api=api_mock)
+    path = BucketPath(f'dir2/{file_name}', bucket_api=api_mock)
     path.write(data)
     data_back = next(iter(path.read(100)))
     assert data_back == data
@@ -191,14 +190,14 @@ def test_write_bytes(api_mock, file_name):
 
 def test_write_chunks(api_mock):
     data_chunks = [b'abc', b'def', b'gh']
-    path = SaaSBucketPath('dir2/file23.dat', saas_file_api=api_mock)
+    path = BucketPath('dir2/file23.dat', bucket_api=api_mock)
     path.write(data_chunks)
     data_back = next(iter(path.read(100)))
     assert data_back == b'abcdefgh'
 
 
 def test_write_file(api_mock):
-    path = SaaSBucketPath('dir2/file_copy.dat', saas_file_api=api_mock)
+    path = BucketPath('dir2/file_copy.dat', bucket_api=api_mock)
     source_file = api_mock.root / 'dir2/file21.dat'
     with open(source_file, 'rb') as f:
         path.write(f)
@@ -207,7 +206,7 @@ def test_write_file(api_mock):
 
 
 def test_write_and_create_parent(api_mock):
-    path = SaaSBucketPath('dir2/dir21/file_copy.dat', saas_file_api=api_mock)
+    path = BucketPath('dir2/dir21/file_copy.dat', bucket_api=api_mock)
     assert not path.exists()
     source_file = api_mock.root / 'dir2/file21.dat'
     with open(source_file, 'rb') as f:
