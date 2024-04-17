@@ -240,9 +240,13 @@ to retrieve the logs from bucketfs.</p>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 </pre></div>
 </div>
-</li>
+<ul>
 <li><p>Support for viewing BucketFS as a directory</p>
-<p>Added the Pathlike protocol as described in the <a class="reference internal" href="../design/bucketpath.html"><span class="doc std std-doc">design document</span></a>.</p>
+<p>Added the PathLike protocol as described in the <a class="reference internal" href="../design/bucketpath.html"><span class="doc std std-doc">design document</span></a>.
+Extracted bucket interface into BucketLike protocol.
+Implemented PathLike for buckets based on BucketLike protocol.</p>
+</li>
+</ul>
 </li>
 </ul>
 </section>
