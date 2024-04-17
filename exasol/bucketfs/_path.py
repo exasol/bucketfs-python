@@ -1,11 +1,158 @@
 from __future__ import annotations
-from typing import ByteString, BinaryIO, Iterable, Optional, Generator
+from typing import Protocol, ByteString, BinaryIO, Iterable, Generator, Optional
 from pathlib import PurePath, PureWindowsPath
 import errno
 import os
 from io import IOBase
-from exasol.bucketfs.bucket_api import BucketApi
-from exasol.bucketfs._pathlike import Pathlike
+from exasol.bucketfs._buckets import BucketLike
+
+
+class PathLike(Protocol):
+    """
+    Definition of the PathLike view of the files in a Bucket.
+    """
+
+    @property
+    def name(self) -> str:
+        """
+        A string representing the final path component, excluding the drive and root, if any.
+        """
+
+    @property
+    def suffix(self) -> str:
+        """
+        The file extension of the final component, if any.
+        """
+
+    @property
+    def root(self) -> str:
+        """
+        A string representing the root, if any.
+        """
+
+    @property
+    def parent(self) -> str:
+        """
+        The logical parent of this path.
+        """
+
+    def as_uri(self) -> str:
+        """
+        Represent the path as a file URI. Can be used to reconstruct the location/path.
+        """
+
+    def exists(self) -> bool:
+        """
+        Return True if the path points to an existing file or directory.
+        """
+
+    def is_dir(self) -> bool:
+        """
+        Return True if the path points to a directory, False if it points to another kind of file.
+        """
+
+    def is_file(self) -> bool:
+        """
+        Return True if the path points to a regular file, False if it points to another kind of file.
+        """
+
+    def read(self, chunk_size: int = 8192) -> Iterable[ByteString]:
+        """
+        Read the content of the file behind this path.
+
+        Only works for PathLike objects which return True for `is_file()`.
+
+        Args:
+            chunk_size: which will be yielded by the iterator.
+
+        Returns:
+            Returns an iterator which can be used to read the contents of the path in chunks.
+
+        Raises:
+            FileNotFoundError: If the file does not exist.
+            IsADirectoryError: if the pathlike object points to a directory.
+        """
+
+    def write(self, data: ByteString | BinaryIO | Iterable[ByteString]):
+        """
+        Writes data to this path.
+
+        Q. Should it create the parent directory if it doesn't exit?
+        A. Yes, it should.
+
+        After successfully writing to this path `exists` will yield true for this path.
+        If the file already existed it will be overwritten.
+
+        Args:
+            data: which shall be writen to the path.
+
+        Raises:
+            NotAFileError: if the pathlike object is not a file path.
+        """
+
+    def rm(self):
+        """
+        Remove this file.
+
+        Note:
+            If `exists()` and is_file yields true for this path, the path will be deleted,
+            otherwise exception will be thrown.
+
+        Raises:
+            FileNotFoundError: If the file does not exist.
+        """
+
+    def rmdir(self, recursive: bool = False):
+        """
+        Removes this directory.
+
+        Note: In order to stay close to pathlib, by default `rmdir` with `recursive`
+              set to `False` won't delete non-empty directories.
+
+        Args:
+            recursive: if true the directory itself and its entire contents (files and subdirs)
+                       will be deleted. If false and the directory is not empty an error will be thrown.
+
+        Raises:
+            FileNotFoundError: If the file does not exist.
+            PermissionError: If recursive is false and the directory is not empty.
+        """
+
+    def joinpath(self, *path_segments) -> "PathLike":
+        """
+        Calling this method is equivalent to combining the path with each of the given path segments in turn.
+
+        Returns:
+            A new pathlike object pointing the combined path.
+        """
+
+    def walk(self) -> Generator[tuple["PathLike", list[str], list[str]], None, None]:
+        """
+        Generate the file names in a directory tree by walking the tree either top-down or bottom-up.
+
+        Note:
+            Try to mimik https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk as closely as possible,
+            except the functionality associated with the parameters of the `pathlib` walk.
+
+        Yields:
+            A 3-tuple of (dirpath, dirnames, filenames).
+        """
+
+    def iterdir(self) -> Generator["PathLike", None, None]:
+        """
+        When the path points to a directory, yield path objects of the directory contents.
+
+        Note:
+            If `path` points to a file then `iterdir()` will yield nothing.
+
+        Yields:
+            All direct children of the pathlike object.
+        """
+
+    def __truediv__(self, other):
+        """
+        Overload / for joining, see also joinpath or `pathlib.Path`.
+        """
 
 
 class _BucketFile:
@@ -57,17 +204,17 @@ class _BucketFile:
 
 class BucketPath:
     """
-    Implementation of the Pathlike view for files in a bucket.
+    Implementation of the PathLike view for files in a bucket.
     """
 
-    def __init__(self, path: str | PurePath, bucket_api: BucketApi):
+    def __init__(self, path: str | PurePath, bucket_api: BucketLike):
         """
         :param path:        A pure path of a file or directory. The path is assumed to
                             be relative to the bucket. It is also permissible to have
                             this path in an absolute form, e.g. '/dir1/...'
                             or '\\\\abc\\...\\'.
 
-                            All Pure Path methods of the Pathlike protocol will be
+                            All Pure Path methods of the PathLike protocol will be
                             delegated to this object.
 
         :param bucket_api:  An object supporting the Bucket API protocol.
@@ -157,7 +304,7 @@ class BucketPath:
         current_node = self._navigate()
         if current_node is None:
             # There is no such thing as an empty directory. So, for the sake of
-            # compatibility with the Pathlike, any directory that doesn't exist
+            # compatibility with the PathLike, any directory that doesn't exist
             # is considered empty.
             return
         if not current_node.is_dir:
@@ -173,14 +320,14 @@ class BucketPath:
         if node.is_file:
             self._bucket_api.delete(node.path)
 
-    def joinpath(self, *path_segments) -> "Pathlike":
+    def joinpath(self, *path_segments) -> "PathLike":
         # The path segments can be of either this type or an os.PathLike.
         cls = type(self)
         seg_paths = [seg._path if isinstance(seg, cls) else seg for seg in path_segments]
         new_path = self._path.joinpath(*seg_paths)
         return cls(new_path, self._bucket_api)
 
-    def walk(self, top_down: bool = True) -> Generator[tuple[Pathlike, list[str], list[str]], None, None]:
+    def walk(self, top_down: bool = True) -> Generator[tuple[PathLike, list[str], list[str]], None, None]:
         current_node = self._navigate()
         if current_node is None:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
@@ -189,7 +336,7 @@ class BucketPath:
             yield from self._walk_recursive(current_node, top_down)
 
     def _walk_recursive(self, node: _BucketFile, top_down: bool) -> \
-            Generator[tuple[Pathlike, list[str], list[str]], None, None]:
+            Generator[tuple[PathLike, list[str], list[str]], None, None]:
 
         bucket_path = BucketPath(node.path, self._bucket_api)
         dir_list: list[str] = []
@@ -211,7 +358,7 @@ class BucketPath:
         if not top_down:
             yield bucket_path, dir_list, file_list
 
-    def iterdir(self) -> Generator[Pathlike, None, None]:
+    def iterdir(self) -> Generator[PathLike, None, None]:
         current_node = self._navigate()
         if current_node is None:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
