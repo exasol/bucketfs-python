@@ -7,6 +7,9 @@ from typing import (
     Iterator,
     Protocol,
 )
+import os
+import errno
+from pathlib import Path
 
 import requests
 from requests import HTTPError
@@ -26,6 +29,12 @@ class BucketLike(Protocol):
     Definition of the Bucket interface.
     It is compatible with both on-premises an SaaS BucketFS systems.
     """
+
+    @property
+    def name(self) -> str:
+        """
+        Returns the bucket name.
+        """
 
     @property
     def files(self) -> Iterable[str]:
@@ -221,6 +230,82 @@ class Bucket:
                 raise BucketFsError(f"Couldn't download: {path}") from ex
 
             yield from response.iter_content(chunk_size=chunk_size)
+
+
+class SaaSBucket:
+
+    def __init__(self, url: str, account_id: str, database_id: str, pat: str) -> None:
+        self._url = url
+        self._account_id = account_id
+        self.database_id = database_id
+        self._pat = pat
+
+    def name(self) -> str:
+        # TODO: Find out the name of the bucket in SaaS
+        return 'default'
+
+    def files(self) -> Iterable[str]:
+        """To be provided"""
+        raise NotImplementedError()
+
+    def delete(self, path: str) -> None:
+        """To be provided"""
+        raise NotImplementedError()
+
+    def upload(self, path: str, data: ByteString | BinaryIO) -> None:
+        """To be provided"""
+        raise NotImplementedError()
+
+    def download(self, path: str, chunk_size: int = 8192) -> Iterable[ByteString]:
+        """To be provided"""
+        raise NotImplementedError()
+
+
+class MountedBucket:
+    """
+    Implementation of the Bucket interface backed by a normal file system in read-only mode.
+    The targeted use case is the read-only access to the BucketFS files from a UDF.
+
+    Q. What exception should be raised when the user attempts to download non-existing file?
+    A.
+
+    Q. What exception should be raised if the user tries to delete or upload a file?
+    A.
+    """
+
+    def __init__(self,
+                 service_name: str,
+                 bucket_name: str):
+        self._name = bucket_name
+        self.root = Path(service_name) / bucket_name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def files(self) -> list[str]:
+        root_length = len(str(self.root))
+        if self.root != self.root.root:
+            root_length += 1
+        return [str(pth)[root_length:] for pth in self.root.rglob('*.*')]
+
+    def delete(self, path: str) -> None:
+        raise PermissionError('File deletion is not allowed.')
+
+    def upload(self, path: str, data: ByteString | BinaryIO) -> None:
+        raise PermissionError('Uploading a file is not allowed.')
+
+    def download(self, path: str, chunk_size: int) -> Iterable[ByteString]:
+        full_path = self.root / path
+        if (not full_path.exists()) or (not full_path.is_file()):
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(path))
+        with full_path.open('rb') as f:
+            while True:
+                data = f.read(chunk_size)
+                if not data:
+                    break
+                yield data
 
 
 class MappedBucket:

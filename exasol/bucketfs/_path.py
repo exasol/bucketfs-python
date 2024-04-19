@@ -4,7 +4,12 @@ from pathlib import PurePath, PureWindowsPath
 import errno
 import os
 from io import IOBase
-from exasol.bucketfs._buckets import BucketLike
+from exasol.bucketfs._buckets import BucketLike, SaaSBucket, MountedBucket
+from exasol.bucketfs._service import Service
+
+SYSTEM_TYPE_ONPREM = 'onprem'
+SYSTEM_TYPE_SAAS = 'saas'
+SYSTEM_TYPE_MOUNTED = 'mounted'
 
 
 class PathLike(Protocol):
@@ -73,7 +78,7 @@ class PathLike(Protocol):
             IsADirectoryError: if the pathlike object points to a directory.
         """
 
-    def write(self, data: ByteString | BinaryIO | Iterable[ByteString]):
+    def write(self, data: ByteString | BinaryIO | Iterable[ByteString]) -> None:
         """
         Writes data to this path.
 
@@ -90,7 +95,7 @@ class PathLike(Protocol):
             NotAFileError: if the pathlike object is not a file path.
         """
 
-    def rm(self):
+    def rm(self) -> None:
         """
         Remove this file.
 
@@ -102,7 +107,7 @@ class PathLike(Protocol):
             FileNotFoundError: If the file does not exist.
         """
 
-    def rmdir(self, recursive: bool = False):
+    def rmdir(self, recursive: bool = False) -> None:
         """
         Removes this directory.
 
@@ -126,7 +131,7 @@ class PathLike(Protocol):
             A new pathlike object pointing the combined path.
         """
 
-    def walk(self) -> Generator[tuple["PathLike", list[str], list[str]], None, None]:
+    def walk(self, top_down: bool = True) -> Generator[tuple["PathLike", list[str], list[str]], None, None]:
         """
         Generate the file names in a directory tree by walking the tree either top-down or bottom-up.
 
@@ -320,7 +325,7 @@ class BucketPath:
         if node.is_file:
             self._bucket_api.delete(node.path)
 
-    def joinpath(self, *path_segments) -> "PathLike":
+    def joinpath(self, *path_segments) -> PathLike:
         # The path segments can be of either this type or an os.PathLike.
         cls = type(self)
         seg_paths = [seg._path if isinstance(seg, cls) else seg for seg in path_segments]
@@ -376,3 +381,79 @@ class BucketPath:
 
     def __str__(self):
         return str(self._path)
+
+
+def create_onprem_bucket(**kwargs) -> BucketLike:
+    """
+    Creates an on-prem bucket using the arguments in kwargs.
+
+    Q. What exception should be thrown if an essential argument is missing?
+    A.
+
+    Q. Do any default username and password make any sense?
+    A.
+    """
+    url = kwargs.get('url')
+    if url is None:
+        raise ValueError('BucketFS service url is not specified')
+    verify_ca = bool(kwargs.get('verify_ca', True))
+    username = kwargs.get('user') or kwargs.get('username')
+    password = kwargs.get('password')
+    if (not username) or (not password):
+        raise ValueError('BucketFS credentials are not provided')
+    bucket_name = kwargs.get('bucket', 'default')
+    credentials = {bucket_name: {'username': username, 'password': password}}
+    service = Service(url, credentials, verify_ca)
+    buckets = service.buckets
+    if bucket_name not in buckets:
+        raise ValueError(f'Bucket {bucket_name} does not exist.')
+    return buckets[bucket_name]
+
+
+def create_saas_bucket(**kwargs) -> BucketLike:
+    """
+    Creates an on-prem bucket using the arguments in kwargs.
+
+    Q. What exception should be thrown if an essential argument is missing?
+    A.
+    """
+    url = kwargs.get('url', 'https://cloud.exasol.com')
+    account_id = kwargs.get('account_id')
+    if account_id is None:
+        raise ValueError('account_id is not specified.')
+    database_id = kwargs.get('database_id')
+    if database_id is None:
+        raise ValueError('database_id is not specified.')
+    pat = kwargs.get('pat')
+    if pat is None:
+        raise ValueError('pat (Personal Access Token) is not provided.')
+    return SaaSBucket(url=url, account_id=account_id, database_id=database_id, pat=pat)
+
+
+def create_mounted_bucket(**kwargs) -> BucketLike:
+    """
+    Creates a bucket mounted to a UDF
+
+    Q. Should we check that the service and bucket exist?
+    A.
+    """
+    service_name = kwargs.get('service', 'bfsdefault')
+    bucket_name = kwargs.get('bucket', 'default')
+    return MountedBucket(service_name, bucket_name)
+
+
+def build_path(**kwargs) -> PathLike:
+
+    system_type = kwargs.get('system', SYSTEM_TYPE_ONPREM).lower()
+    if system_type == SYSTEM_TYPE_ONPREM:
+        bucket = create_onprem_bucket(**kwargs)
+    elif system_type == SYSTEM_TYPE_SAAS:
+        bucket = create_saas_bucket(**kwargs)
+    elif system_type == SYSTEM_TYPE_MOUNTED:
+        bucket = create_mounted_bucket(**kwargs)
+    else:
+        raise ValueError(f'Unknown BucketFS system type {system_type}. '
+                         'Valid values are: '
+                         f'"{SYSTEM_TYPE_ONPREM}", "{SYSTEM_TYPE_SAAS}", "{SYSTEM_TYPE_MOUNTED}".')
+    path = kwargs.get('path', '')
+    return BucketPath(path, bucket)

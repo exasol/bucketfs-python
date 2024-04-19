@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable, ByteString, BinaryIO
+from typing import ByteString, BinaryIO
 import os
 from io import IOBase
 import shutil
@@ -7,35 +7,29 @@ import errno
 from pathlib import Path
 import pytest
 
+from exasol.bucketfs._buckets import MountedBucket
 
-class BucketFake:
+
+class BucketFake(MountedBucket):
     """
     Implementation of the Bucket API backed by the normal file system.
     """
 
-    def __init__(self, root: str):
-        self.root = Path(root)
+    def __init__(self, base_dir: str):
+        super().__init__('', '')
+        self.root = Path(base_dir)
         if not self.root.is_dir():
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(root))
-
-    def _get_full_path(self, path: str | Path):
-        return self.root / path
-
-    @property
-    def files(self) -> list[str]:
-        root_length = len(str(self.root))
-        if self.root != self.root.root:
-            root_length += 1
-        return [str(pth)[root_length:] for pth in self.root.rglob('*.*')]
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self.root))
 
     def delete(self, path: str) -> None:
         try:
-            self._get_full_path(path).unlink(missing_ok=True)
+            full_path = self.root / path
+            full_path.unlink(missing_ok=True)
         except IsADirectoryError:
             pass
 
     def upload(self, path: str, data: ByteString | BinaryIO) -> None:
-        full_path = self._get_full_path(path)
+        full_path = self.root / path
         if not full_path.parent.exists():
             full_path.parent.mkdir(parents=True)
         with full_path.open('wb') as f:
@@ -46,17 +40,6 @@ class BucketFake:
             else:
                 raise ValueError('upload_file called with unrecognised data type. ' 
                                  'A valid data should be either ByteString or BinaryIO')
-
-    def download(self, path: str, chunk_size: int) -> Iterable[ByteString]:
-        full_path = self._get_full_path(path)
-        if (not full_path.exists()) or (not full_path.is_file()):
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(path))
-        with full_path.open('rb') as f:
-            while True:
-                data = f.read(chunk_size)
-                if not data:
-                    break
-                yield data
 
 
 @pytest.fixture
