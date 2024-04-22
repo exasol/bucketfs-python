@@ -35,7 +35,7 @@ def _collect_all_names(path: PathLike) -> set[str]:
 
 def test_write_read_back_onprem(test_config, children_poem):
 
-    base_path = build_path(system=SystemType.onprem, url=test_config.url,
+    base_path = build_path(system=SystemType.onprem, url=test_config.url, verify_ca=False,
                            username=test_config.username, password=test_config.password)
     file_name = 'my_poems/children/little_star.txt'
     poem_path = base_path / file_name
@@ -46,20 +46,19 @@ def test_write_read_back_onprem(test_config, children_poem):
         assert data_back == children_poem
     finally:
         # cleanup
-        pass
-    #    delete_file(
-    #        test_config.url,
-    #        'default',
-    #        test_config.username,
-    #        test_config.password,
-    #        file_name
-    #    )
+        delete_file(
+            test_config.url,
+            'default',
+            test_config.username,
+            test_config.password,
+            file_name
+        )
 
 
 def test_write_list_files_onprem(test_config, children_poem, classic_poem):
 
     base_path = build_path(system=SystemType.onprem, url=test_config.url, path='my_poems',
-                           username=test_config.username, password=test_config.password)
+                           verify_ca=False, username=test_config.username, password=test_config.password)
     poem_path1 = base_path / 'children/little_star.txt'
     poem_path2 = base_path / 'classic/highlands.txt'
 
@@ -70,20 +69,19 @@ def test_write_list_files_onprem(test_config, children_poem, classic_poem):
         assert _collect_all_names(base_path) == expected_names
     finally:
         # cleanup
-        pass
-        # for poem_path in [poem_path1, poem_path2]:
-        #    delete_file(
-        #        test_config.url,
-        #        'default',
-        #        test_config.username,
-        #        test_config.password,
-        #        str(poem_path)
-        #    )
+        for poem_path in [poem_path1, poem_path2]:
+            delete_file(
+                test_config.url,
+                'default',
+                test_config.username,
+                test_config.password,
+                str(poem_path)
+            )
 
 
 def test_write_delete_onprem(test_config, children_poem, classic_poem):
 
-    base_path = build_path(system=SystemType.onprem, url=test_config.url,
+    base_path = build_path(system=SystemType.onprem, url=test_config.url, verify_ca=False,
                            username=test_config.username, password=test_config.password)
     poems_root = base_path / 'my_poems'
     poem_path1 = poems_root / 'children/little_star.txt'
@@ -97,12 +95,11 @@ def test_write_delete_onprem(test_config, children_poem, classic_poem):
         assert _collect_all_names(poems_root) == expected_names
     finally:
         # cleanup
-        pass
-        # for poem_path in [poem_path1, poem_path2]:
-        #     delete_file(
-        #         test_config.url,
-        #         'default',
-        #         test_config.username,
-        #         test_config.password,
-        #         str(poem_path)
-        #     )
+        for poem_path in [poem_path1, poem_path2]:
+            delete_file(
+                test_config.url,
+                'default',
+                test_config.username,
+                test_config.password,
+                str(poem_path)
+            )

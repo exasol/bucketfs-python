@@ -7,6 +7,7 @@ from typing import (
     Tuple,
     Union,
 )
+from exasol.bucketfs._shared import _build_url
 
 import pytest
 import requests
@@ -32,7 +33,7 @@ def delete_file(
     service: str, bucket: str, username: str, password: str, filename: str
 ) -> Tuple[str, str]:
     auth = HTTPBasicAuth(username, password)
-    url = f"{service.rstrip('/')}/{bucket}/{filename}"
+    url = _build_url(service_url=service, bucket=bucket, path=filename)
     response = requests.delete(url, auth=auth)
     response.raise_for_status()
     return filename, url
