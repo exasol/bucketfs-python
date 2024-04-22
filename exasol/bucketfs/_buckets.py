@@ -277,7 +277,7 @@ class MountedBucket:
                  service_name: str,
                  bucket_name: str):
         self._name = bucket_name
-        self.root = Path(service_name) / bucket_name
+        self.root = Path('buckets') / service_name / bucket_name
 
     @property
     def name(self) -> str:
@@ -285,10 +285,7 @@ class MountedBucket:
 
     @property
     def files(self) -> list[str]:
-        root_length = len(str(self.root))
-        if self.root != self.root.root:
-            root_length += 1
-        return [str(pth)[root_length:] for pth in self.root.rglob('*.*')]
+        return [str(pth.relative_to(self.root)) for pth in self.root.rglob('*.*')]
 
     def delete(self, path: str) -> None:
         raise PermissionError('File deletion is not allowed.')

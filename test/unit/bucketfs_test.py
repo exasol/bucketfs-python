@@ -233,3 +233,20 @@ def test_dunder_str_of_mapped_bucket():
     )
     expected = "MappedBucket<Bucket<foobar | on: https://127.0.0.1:6666>>"
     assert f"{bucket}" == expected
+
+
+def test_mounted_bucket_files(bucket_fake):
+    content = set(bucket_fake.files)
+    expected_content = {
+        'file00.dat',
+        'file01.dat',
+        'dir1/file10.dat',
+        'dir1/file11.dat',
+        'dir1/dir11/file110.dat',
+        'dir1/dir11/file111.dat',
+        'dir1/dir12/file120.dat',
+        'dir1/dir12/file121.dat',
+        'dir2/file20.dat',
+        'dir2/file21.dat'
+    }
+    assert content == expected_content
