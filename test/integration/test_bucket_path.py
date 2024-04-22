@@ -83,7 +83,7 @@ def test_write_delete_onprem(test_config, children_poem, classic_poem):
 
     base_path = build_path(system=SystemType.onprem, url=test_config.url,
                            username=test_config.username, password=test_config.password)
-    poems_root = base_path / 'my_poems'
+    poems_root = base_path / 'my_new_poems'
     poem_path1 = poems_root / 'children/little_star.txt'
     poem_path2 = poems_root / 'classic/highlands.txt'
 

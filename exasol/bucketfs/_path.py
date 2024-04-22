@@ -7,6 +7,7 @@ import os
 from io import IOBase
 from exasol.bucketfs._buckets import BucketLike, SaaSBucket, MountedBucket
 from exasol.bucketfs._service import Service
+from exasol.bucketfs._error import BucketFsError
 
 
 class SystemType(Enum):
@@ -390,8 +391,8 @@ def _create_onprem_bucket(url: str,
                           username: str,
                           password: str,
                           bucket_name: str = 'default',
-                          verify_ca: bool = True,
-                          **kwargs) -> BucketLike:
+                          verify_ca: bool = True
+                          ) -> BucketLike:
     """
     Creates an on-prem bucket.
     """
@@ -399,15 +400,15 @@ def _create_onprem_bucket(url: str,
     service = Service(url, credentials, verify_ca)
     buckets = service.buckets
     if bucket_name not in buckets:
-        raise ValueError(f'Bucket {bucket_name} does not exist.')
+        raise BucketFsError(f'Bucket {bucket_name} does not exist.')
     return buckets[bucket_name]
 
 
 def _create_saas_bucket(account_id: str,
                         database_id: str,
                         pat: str,
-                        url: str = 'https://cloud.exasol.com',
-                        **kwargs) -> BucketLike:
+                        url: str = 'https://cloud.exasol.com'
+                        ) -> BucketLike:
     """
     Creates a SaaS bucket.
     """
@@ -416,16 +417,21 @@ def _create_saas_bucket(account_id: str,
 
 def _create_mounted_bucket(service_name: str = 'bfsdefault',
                            bucket_name: str = 'default',
-                           **kwargs) -> BucketLike:
+                           ) -> BucketLike:
     """
     Creates a bucket mounted to a UDF.
     """
-    return MountedBucket(service_name, bucket_name)
+    bucket = MountedBucket(service_name, bucket_name)
+    if not bucket.root.exists():
+        raise BucketFsError(f'Bucket {bucket_name} does not exist.')
+    return bucket
 
 
 def build_path(**kwargs) -> PathLike:
 
-    system_type = kwargs.get('system', SystemType.onprem)
+    system_type = kwargs.pop('system', SystemType.onprem)
+    path = kwargs.pop('path') if 'path' in kwargs else ''
+
     if isinstance(system_type, str):
         system_type = SystemType[system_type.lower()]
     if system_type == SystemType.onprem:
@@ -434,5 +440,5 @@ def build_path(**kwargs) -> PathLike:
         bucket = _create_saas_bucket(**kwargs)
     else:
         bucket = _create_mounted_bucket(**kwargs)
-    path = kwargs.get('path', '')
+
     return BucketPath(path, bucket)
