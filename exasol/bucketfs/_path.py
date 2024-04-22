@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Protocol, ByteString, BinaryIO, Iterable, Generator, Optional
+from enum import Enum, auto
 from pathlib import PurePath, PureWindowsPath
 import errno
 import os
@@ -7,9 +8,11 @@ from io import IOBase
 from exasol.bucketfs._buckets import BucketLike, SaaSBucket, MountedBucket
 from exasol.bucketfs._service import Service
 
-SYSTEM_TYPE_ONPREM = 'onprem'
-SYSTEM_TYPE_SAAS = 'saas'
-SYSTEM_TYPE_MOUNTED = 'mounted'
+
+class SystemType(Enum):
+    onprem = auto()
+    saas = auto()
+    mounted = ()
 
 
 class PathLike(Protocol):
@@ -383,25 +386,15 @@ class BucketPath:
         return str(self._path)
 
 
-def create_onprem_bucket(**kwargs) -> BucketLike:
+def _create_onprem_bucket(url: str,
+                          username: str,
+                          password: str,
+                          bucket_name: str = 'default',
+                          verify_ca: bool = True,
+                          **kwargs) -> BucketLike:
     """
-    Creates an on-prem bucket using the arguments in kwargs.
-
-    Q. What exception should be thrown if an essential argument is missing?
-    A.
-
-    Q. Do any default username and password make any sense?
-    A.
+    Creates an on-prem bucket.
     """
-    url = kwargs.get('url')
-    if url is None:
-        raise ValueError('BucketFS service url is not specified')
-    verify_ca = bool(kwargs.get('verify_ca', True))
-    username = kwargs.get('user') or kwargs.get('username')
-    password = kwargs.get('password')
-    if (not username) or (not password):
-        raise ValueError('BucketFS credentials are not provided')
-    bucket_name = kwargs.get('bucket', 'default')
     credentials = {bucket_name: {'username': username, 'password': password}}
     service = Service(url, credentials, verify_ca)
     buckets = service.buckets
@@ -410,50 +403,36 @@ def create_onprem_bucket(**kwargs) -> BucketLike:
     return buckets[bucket_name]
 
 
-def create_saas_bucket(**kwargs) -> BucketLike:
+def _create_saas_bucket(account_id: str,
+                        database_id: str,
+                        pat: str,
+                        url: str = 'https://cloud.exasol.com',
+                        **kwargs) -> BucketLike:
     """
-    Creates an on-prem bucket using the arguments in kwargs.
-
-    Q. What exception should be thrown if an essential argument is missing?
-    A.
+    Creates a SaaS bucket.
     """
-    url = kwargs.get('url', 'https://cloud.exasol.com')
-    account_id = kwargs.get('account_id')
-    if account_id is None:
-        raise ValueError('account_id is not specified.')
-    database_id = kwargs.get('database_id')
-    if database_id is None:
-        raise ValueError('database_id is not specified.')
-    pat = kwargs.get('pat')
-    if pat is None:
-        raise ValueError('pat (Personal Access Token) is not provided.')
     return SaaSBucket(url=url, account_id=account_id, database_id=database_id, pat=pat)
 
 
-def create_mounted_bucket(**kwargs) -> BucketLike:
+def _create_mounted_bucket(service_name: str = 'bfsdefault',
+                           bucket_name: str = 'default',
+                           **kwargs) -> BucketLike:
     """
-    Creates a bucket mounted to a UDF
-
-    Q. Should we check that the service and bucket exist?
-    A.
+    Creates a bucket mounted to a UDF.
     """
-    service_name = kwargs.get('service', 'bfsdefault')
-    bucket_name = kwargs.get('bucket', 'default')
     return MountedBucket(service_name, bucket_name)
 
 
 def build_path(**kwargs) -> PathLike:
 
-    system_type = kwargs.get('system', SYSTEM_TYPE_ONPREM).lower()
-    if system_type == SYSTEM_TYPE_ONPREM:
-        bucket = create_onprem_bucket(**kwargs)
-    elif system_type == SYSTEM_TYPE_SAAS:
-        bucket = create_saas_bucket(**kwargs)
-    elif system_type == SYSTEM_TYPE_MOUNTED:
-        bucket = create_mounted_bucket(**kwargs)
+    system_type = kwargs.get('system', SystemType.onprem)
+    if isinstance(system_type, str):
+        system_type = SystemType[system_type.lower()]
+    if system_type == SystemType.onprem:
+        bucket = _create_onprem_bucket(**kwargs)
+    elif system_type == SystemType.saas:
+        bucket = _create_saas_bucket(**kwargs)
     else:
-        raise ValueError(f'Unknown BucketFS system type {system_type}. '
-                         'Valid values are: '
-                         f'"{SYSTEM_TYPE_ONPREM}", "{SYSTEM_TYPE_SAAS}", "{SYSTEM_TYPE_MOUNTED}".')
+        bucket = _create_mounted_bucket(**kwargs)
     path = kwargs.get('path', '')
     return BucketPath(path, bucket)
