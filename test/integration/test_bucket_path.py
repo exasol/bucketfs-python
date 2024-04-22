@@ -46,13 +46,14 @@ def test_write_read_back_onprem(test_config, children_poem):
         assert data_back == children_poem
     finally:
         # cleanup
-        delete_file(
-            test_config.url,
-            'default',
-            test_config.username,
-            test_config.password,
-            file_name
-        )
+        pass
+    #    delete_file(
+    #        test_config.url,
+    #        'default',
+    #        test_config.username,
+    #        test_config.password,
+    #        file_name
+    #    )
 
 
 def test_write_list_files_onprem(test_config, children_poem, classic_poem):
@@ -69,21 +70,22 @@ def test_write_list_files_onprem(test_config, children_poem, classic_poem):
         assert _collect_all_names(base_path) == expected_names
     finally:
         # cleanup
-        for poem_path in [poem_path1, poem_path2]:
-            delete_file(
-                test_config.url,
-                'default',
-                test_config.username,
-                test_config.password,
-                str(poem_path)
-            )
+        pass
+        # for poem_path in [poem_path1, poem_path2]:
+        #    delete_file(
+        #        test_config.url,
+        #        'default',
+        #        test_config.username,
+        #        test_config.password,
+        #        str(poem_path)
+        #    )
 
 
 def test_write_delete_onprem(test_config, children_poem, classic_poem):
 
     base_path = build_path(system=SystemType.onprem, url=test_config.url,
                            username=test_config.username, password=test_config.password)
-    poems_root = base_path / 'my_new_poems'
+    poems_root = base_path / 'my_poems'
     poem_path1 = poems_root / 'children/little_star.txt'
     poem_path2 = poems_root / 'classic/highlands.txt'
 
@@ -95,11 +97,12 @@ def test_write_delete_onprem(test_config, children_poem, classic_poem):
         assert _collect_all_names(poems_root) == expected_names
     finally:
         # cleanup
-        for poem_path in [poem_path1, poem_path2]:
-            delete_file(
-                test_config.url,
-                'default',
-                test_config.username,
-                test_config.password,
-                str(poem_path)
-            )
+        pass
+        # for poem_path in [poem_path1, poem_path2]:
+        #     delete_file(
+        #         test_config.url,
+        #         'default',
+        #         test_config.username,
+        #         test_config.password,
+        #         str(poem_path)
+        #     )
