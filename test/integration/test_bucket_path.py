@@ -37,7 +37,7 @@ def test_write_read_back_onprem(test_config, children_poem):
 
     base_path = build_path(system=SystemType.onprem, url=test_config.url,
                            username=test_config.username, password=test_config.password)
-    file_name = 'my_poems/little_star.txt'
+    file_name = 'my_poems/children/little_star.txt'
     poem_path = base_path / file_name
 
     try:

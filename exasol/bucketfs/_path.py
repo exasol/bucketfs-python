@@ -423,7 +423,7 @@ def _create_mounted_bucket(service_name: str = 'bfsdefault',
     """
     bucket = MountedBucket(service_name, bucket_name)
     if not bucket.root.exists():
-        raise BucketFsError(f'Bucket {bucket_name} does not exist.')
+        raise BucketFsError(f'Service {service_name} or bucket {bucket_name} do not exist.')
     return bucket
 
 

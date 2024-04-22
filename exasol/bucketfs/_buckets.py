@@ -15,7 +15,7 @@ import requests
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
 
-from exasol.bucketfs._error import BucketFsError
+from exasol.bucketfs._error import BucketFsError, MountedBucketFsError
 from exasol.bucketfs._logging import LOGGER
 from exasol.bucketfs._shared import (
     _build_url,
@@ -265,12 +265,6 @@ class MountedBucket:
     """
     Implementation of the Bucket interface backed by a normal file system in read-only mode.
     The targeted use case is the read-only access to the BucketFS files from a UDF.
-
-    Q. What exception should be raised when the user attempts to download non-existing file?
-    A.
-
-    Q. What exception should be raised if the user tries to delete or upload a file?
-    A.
     """
 
     def __init__(self,
@@ -288,10 +282,12 @@ class MountedBucket:
         return [str(pth.relative_to(self.root)) for pth in self.root.rglob('*.*')]
 
     def delete(self, path: str) -> None:
-        raise PermissionError('File deletion is not allowed.')
+        raise MountedBucketFsError('File deletion in a BucketFS '
+                                   'mounted as a directory is not allowed.')
 
     def upload(self, path: str, data: ByteString | BinaryIO) -> None:
-        raise PermissionError('Uploading a file is not allowed.')
+        raise MountedBucketFsError('Uploading a file to a BucketFS '
+                                   'mounted as a directory is not allowed.')
 
     def download(self, path: str, chunk_size: int) -> Iterable[ByteString]:
         full_path = self.root / path
