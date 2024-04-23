@@ -56,11 +56,7 @@ from exasol.bucketfs._convert import (
     as_hash,
     as_string,
 )
-from exasol.bucketfs._path import (
-    PathLike,
-    StorageBackend,
-    build_path
-)
+from exasol.bucketfs import _path as path
 from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._service import Service
 
@@ -70,9 +66,7 @@ __all__ = [
     "Bucket",
     "MappedBucket",
     "BucketFsError",
-    "PathLike",
-    "StorageBackend",
-    "build_path",
+    "path",
     "as_bytes",
     "as_string",
     "as_file",
