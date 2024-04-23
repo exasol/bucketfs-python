@@ -18,7 +18,7 @@ import requests
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
 
-from exasol.bucketfs._error import BucketFsError, MountedBucketFsError
+from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._logging import LOGGER
 from exasol.bucketfs._shared import (
     _build_url,
