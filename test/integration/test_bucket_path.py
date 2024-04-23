@@ -35,7 +35,7 @@ def _collect_all_names(path: PathLike) -> set[str]:
 
 def test_write_read_back_onprem(test_config, children_poem):
 
-    base_path = build_path(system=StorageBackend.onprem, url=test_config.url, verify=False,
+    base_path = build_path(backend=StorageBackend.onprem, url=test_config.url, verify=False,
                            username=test_config.username, password=test_config.password)
     file_name = 'my_poems/little_star.txt'
     poem_path = base_path / file_name
@@ -57,7 +57,7 @@ def test_write_read_back_onprem(test_config, children_poem):
 
 def test_write_list_files_onprem(test_config, children_poem, classic_poem):
 
-    base_path = build_path(system=StorageBackend.onprem, url=test_config.url, path='my_poems',
+    base_path = build_path(backend=StorageBackend.onprem, url=test_config.url, path='my_poems',
                            verify=False, username=test_config.username, password=test_config.password)
     poem_path1 = base_path / 'children/little_star.txt'
     poem_path2 = base_path / 'classic/highlands.txt'
@@ -81,7 +81,7 @@ def test_write_list_files_onprem(test_config, children_poem, classic_poem):
 
 def test_write_delete_onprem(test_config, children_poem, classic_poem):
 
-    base_path = build_path(system=StorageBackend.onprem, url=test_config.url, verify=False,
+    base_path = build_path(backend=StorageBackend.onprem, url=test_config.url, verify=False,
                            username=test_config.username, password=test_config.password)
     poems_root = base_path / 'my_other_poems'
     poem_path1 = poems_root / 'children/little_star.txt'
