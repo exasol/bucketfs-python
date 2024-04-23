@@ -391,13 +391,13 @@ def _create_onprem_bucket(url: str,
                           username: str,
                           password: str,
                           bucket_name: str = 'default',
-                          verify_ca: bool = True
+                          verify: bool | str = True
                           ) -> BucketLike:
     """
     Creates an on-prem bucket.
     """
     credentials = {bucket_name: {'username': username, 'password': password}}
-    service = Service(url, credentials, verify_ca)
+    service = Service(url, credentials, verify)
     buckets = service.buckets
     if bucket_name not in buckets:
         raise BucketFsError(f'Bucket {bucket_name} does not exist.')
@@ -428,6 +428,59 @@ def _create_mounted_bucket(service_name: str = 'bfsdefault',
 
 
 def build_path(**kwargs) -> PathLike:
+    """
+    Creates a PathLike object based on a bucket in one of the BucketFS systems.
+    It provides the same interface for the following BucketFS implementations:
+        - On-Premises
+        - SaaS
+        - BucketFS files mounted as read-only directory in a UDF.
+
+    Arguments:
+        system:
+            This is a mandatory parameter that indicates the type of the BucketFS system.
+            It can be provided either as a string or as the SystemType enumeration.
+        path:
+            Optional parameter that selects a path within the bucket. If not provided
+            the returned PathLike objects corresponds to the root of the bucket. Hence,
+            an alternative way of creating a PathLike pointing to a particular file or
+            directory is as in the code below.
+            path = build_path(...) / "the_desired_path"
+
+    The rest of the arguments a system specific.
+
+    On-prem arguments:
+        url:
+            Url of the BucketFS service, e.g. `http(s)://127.0.0.1:2580`.
+        username:
+            BucketFS username (generally, different from the DB username).
+        password:
+            BucketFS user password.
+        bucket_name:
+            Name of the bucket. Currently, a PathLike cannot span multiple buckets.
+        verify:
+            Either a boolean, in which case it controls whether we verify the server's
+            TLS certificate, or a string, in which case it must be a path to a CA bundle
+            to use. Defaults to ``True``.
+
+    SaaS arguments:
+        url:
+            Url of the Exasol SaaS. Defaults to 'https://cloud.exasol.com'.
+        account_id:
+            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5'
+            (given example is not a valid ID of an existing account).
+        database_id:
+            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy'
+            (given example is not a valid ID of an existing database).
+        pat:
+            Personal Access Token, e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A'
+            (given example is not a valid PAT).
+
+    Mounted BucketFS directory arguments:
+        service_name:
+            Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
+        bucket_name:
+            Name of the bucket. Currently, a PathLike cannot span multiple buckets.
+    """
 
     system_type = kwargs.pop('system', SystemType.onprem)
     path = kwargs.pop('path') if 'path' in kwargs else ''

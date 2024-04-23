@@ -265,11 +265,20 @@ class MountedBucket:
     """
     Implementation of the Bucket interface backed by a normal file system in read-only mode.
     The targeted use case is the read-only access to the BucketFS files from a UDF.
+
+    Arguments:
+        service_name:
+            Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
+        bucket_name:
+            Name of the bucket. Defaults to 'default'.
+
+    Raises MountedBucketFsError on attempt to call a BucketLike method that would require
+    a write permission.
     """
 
     def __init__(self,
-                 service_name: str,
-                 bucket_name: str):
+                 service_name: str = 'bfsdefault',
+                 bucket_name: str = 'default'):
         self._name = bucket_name
         self.root = Path('buckets') / service_name / bucket_name
 
