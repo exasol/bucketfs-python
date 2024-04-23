@@ -61,7 +61,7 @@ from exasol.bucketfs._path import (
     StorageBackend,
     build_path
 )
-from exasol.bucketfs._error import BucketFsError, MountedBucketFsError
+from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._service import Service
 
 __all__ = [
@@ -70,7 +70,6 @@ __all__ = [
     "Bucket",
     "MappedBucket",
     "BucketFsError",
-    "MountedBucketFsError",
     "PathLike",
     "StorageBackend",
     "build_path",
