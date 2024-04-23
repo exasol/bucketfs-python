@@ -10,7 +10,7 @@ from exasol.bucketfs._service import Service
 from exasol.bucketfs._error import BucketFsError
 
 
-class SystemType(Enum):
+class StorageBackend(Enum):
     onprem = auto()
     saas = auto()
     mounted = ()
@@ -391,13 +391,14 @@ def _create_onprem_bucket(url: str,
                           username: str,
                           password: str,
                           bucket_name: str = 'default',
-                          verify: bool | str = True
+                          verify: bool | str = True,
+                          service_name: Optional[str] = None
                           ) -> BucketLike:
     """
     Creates an on-prem bucket.
     """
     credentials = {bucket_name: {'username': username, 'password': password}}
-    service = Service(url, credentials, verify)
+    service = Service(url, credentials, verify, service_name)
     buckets = service.buckets
     if bucket_name not in buckets:
         raise BucketFsError(f'Bucket {bucket_name} does not exist.')
@@ -417,11 +418,12 @@ def _create_saas_bucket(account_id: str,
 
 def _create_mounted_bucket(service_name: str = 'bfsdefault',
                            bucket_name: str = 'default',
+                           base_path: Optional[str] = None
                            ) -> BucketLike:
     """
     Creates a bucket mounted to a UDF.
     """
-    bucket = MountedBucket(service_name, bucket_name)
+    bucket = MountedBucket(service_name, bucket_name, base_path)
     if not bucket.root.exists():
         raise BucketFsError(f'Service {service_name} or bucket {bucket_name} do not exist.')
     return bucket
@@ -429,16 +431,16 @@ def _create_mounted_bucket(service_name: str = 'bfsdefault',
 
 def build_path(**kwargs) -> PathLike:
     """
-    Creates a PathLike object based on a bucket in one of the BucketFS systems.
+    Creates a PathLike object based on a bucket in one of the BucketFS storage backends.
     It provides the same interface for the following BucketFS implementations:
         - On-Premises
         - SaaS
         - BucketFS files mounted as read-only directory in a UDF.
 
     Arguments:
-        system:
-            This is a mandatory parameter that indicates the type of the BucketFS system.
-            It can be provided either as a string or as the SystemType enumeration.
+        backend:
+            This is a mandatory parameter that indicates the BucketFS storage backend.
+            It can be provided either as a string or as the StorageBackend enumeration.
         path:
             Optional parameter that selects a path within the bucket. If not provided
             the returned PathLike objects corresponds to the root of the bucket. Hence,
@@ -446,7 +448,7 @@ def build_path(**kwargs) -> PathLike:
             directory is as in the code below.
             path = build_path(...) / "the_desired_path"
 
-    The rest of the arguments a system specific.
+    The rest of the arguments a backend specific.
 
     On-prem arguments:
         url:
@@ -461,6 +463,8 @@ def build_path(**kwargs) -> PathLike:
             Either a boolean, in which case it controls whether we verify the server's
             TLS certificate, or a string, in which case it must be a path to a CA bundle
             to use. Defaults to ``True``.
+        service_name:
+            Optional name of the BucketFS service.
 
     SaaS arguments:
         url:
@@ -480,16 +484,19 @@ def build_path(**kwargs) -> PathLike:
             Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
         bucket_name:
             Name of the bucket. Currently, a PathLike cannot span multiple buckets.
+        base_path:
+            Explicitly specified root path in a file system. This is an alternative to
+            providing the service_name and the bucket_name.
     """
 
-    system_type = kwargs.pop('system', SystemType.onprem)
+    backend = kwargs.pop('backend', StorageBackend.onprem)
     path = kwargs.pop('path') if 'path' in kwargs else ''
 
-    if isinstance(system_type, str):
-        system_type = SystemType[system_type.lower()]
-    if system_type == SystemType.onprem:
+    if isinstance(backend, str):
+        backend = StorageBackend[backend.lower()]
+    if backend == StorageBackend.onprem:
         bucket = _create_onprem_bucket(**kwargs)
-    elif system_type == SystemType.saas:
+    elif backend == StorageBackend.saas:
         bucket = _create_saas_bucket(**kwargs)
     else:
         bucket = _create_mounted_bucket(**kwargs)

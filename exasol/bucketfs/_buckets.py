@@ -6,8 +6,11 @@ from typing import (
     Iterable,
     Iterator,
     Protocol,
+    Optional,
 )
 import os
+from io import IOBase
+import shutil
 import errno
 from pathlib import Path
 
@@ -29,6 +32,12 @@ class BucketLike(Protocol):
     Definition of the Bucket interface.
     It is compatible with both on-premises an SaaS BucketFS systems.
     """
+
+    @property
+    def service_name(self) -> Optional[str]:
+        """
+        Returns the name of the BucketFS service, if known.
+        """
 
     @property
     def name(self) -> str:
@@ -119,6 +128,7 @@ class Bucket:
         username: str,
         password: str,
         verify: bool | str = True,
+        service_name: Optional[str] = None
     ):
         """
         Create a new bucket instance.
@@ -136,15 +146,21 @@ class Bucket:
                 Either a boolean, in which case it controls whether we verify
                 the server's TLS certificate, or a string, in which case it must be a path
                 to a CA bundle to use. Defaults to ``True``.
+            service_name:
+                Optional name of the BucketFS service.
         """
         self._name = name
         self._service = _parse_service_url(service)
         self._username = username
         self._password = password
         self._verify = verify
+        self._service_name = service_name
 
     def __str__(self):
         return f"Bucket<{self.name} | on: {self._service}>"
+
+    def service_name(self) -> Optional[str]:
+        return self._service_name
 
     @property
     def name(self) -> str:
@@ -240,6 +256,10 @@ class SaaSBucket:
         self.database_id = database_id
         self._pat = pat
 
+    def service_name(self) -> str:
+        # TODO: Find out the name of the service in SaaS
+        return 'bfsdefault'
+
     def name(self) -> str:
         # TODO: Find out the name of the bucket in SaaS
         return 'default'
@@ -260,27 +280,42 @@ class SaaSBucket:
         """To be provided"""
         raise NotImplementedError()
 
+    def __str__(self):
+        return f"SaaSBucket<{self.name} | on: {self._url}>"
+
 
 class MountedBucket:
     """
-    Implementation of the Bucket interface backed by a normal file system in read-only mode.
-    The targeted use case is the read-only access to the BucketFS files from a UDF.
+    Implementation of the Bucket interface backed by a normal file system.
+    The targeted use case is the access to the BucketFS files from a UDF.
 
     Arguments:
         service_name:
             Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
         bucket_name:
             Name of the bucket. Defaults to 'default'.
-
-    Raises MountedBucketFsError on attempt to call a BucketLike method that would require
-    a write permission.
+        base_path:
+            Instead of specifying the names of the service and the bucket, one can provide
+            a full path to the root directory. This can be a useful option for testing when
+            the backend is a local file system.
+            If this parameter is not provided the root directory is set to
+            buckets/<service_name>/<bucket_name>.
     """
 
     def __init__(self,
                  service_name: str = 'bfsdefault',
-                 bucket_name: str = 'default'):
+                 bucket_name: str = 'default',
+                 base_path: Optional[str] = None):
+        self._service_name = service_name
         self._name = bucket_name
-        self.root = Path('buckets') / service_name / bucket_name
+        if base_path:
+            self.root = Path(base_path)
+        else:
+            self.root = Path('buckets') / service_name / bucket_name
+
+    @property
+    def service_name(self) -> str:
+        return self._service_name
 
     @property
     def name(self) -> str:
@@ -291,12 +326,24 @@ class MountedBucket:
         return [str(pth.relative_to(self.root)) for pth in self.root.rglob('*.*')]
 
     def delete(self, path: str) -> None:
-        raise MountedBucketFsError('File deletion in a BucketFS '
-                                   'mounted as a directory is not allowed.')
+        try:
+            full_path = self.root / path
+            full_path.unlink(missing_ok=True)
+        except IsADirectoryError:
+            pass
 
     def upload(self, path: str, data: ByteString | BinaryIO) -> None:
-        raise MountedBucketFsError('Uploading a file to a BucketFS '
-                                   'mounted as a directory is not allowed.')
+        full_path = self.root / path
+        if not full_path.parent.exists():
+            full_path.parent.mkdir(parents=True)
+        with full_path.open('wb') as f:
+            if isinstance(data, IOBase):
+                shutil.copyfileobj(data, f)
+            elif isinstance(data, ByteString):
+                f.write(data)
+            else:
+                raise ValueError('upload called with unrecognised data type. ' 
+                                 'A valid data should be either ByteString or BinaryIO')
 
     def download(self, path: str, chunk_size: int) -> Iterable[ByteString]:
         full_path = self.root / path
@@ -308,6 +355,9 @@ class MountedBucket:
                 if not data:
                     break
                 yield data
+
+    def __str__(self):
+        return f"MountedBucket<{self.name} | on: {self._service_name}>"
 
 
 class MappedBucket:

@@ -58,7 +58,7 @@ from exasol.bucketfs._convert import (
 )
 from exasol.bucketfs._path import (
     PathLike,
-    SystemType,
+    StorageBackend,
     build_path
 )
 from exasol.bucketfs._error import BucketFsError, MountedBucketFsError
@@ -72,7 +72,7 @@ __all__ = [
     "BucketFsError",
     "MountedBucketFsError",
     "PathLike",
-    "SystemType",
+    "StorageBackend",
     "build_path",
     "as_bytes",
     "as_string",

@@ -5,6 +5,7 @@ from typing import (
     Iterator,
     Mapping,
     MutableMapping,
+    Optional,
 )
 
 import requests
@@ -32,6 +33,7 @@ class Service:
         url: str,
         credentials: Mapping[str, Mapping[str, str]] | None = None,
         verify: bool | str = True,
+        service_name: Optional[str] = None
     ):
         """Create a new Service instance.
 
@@ -45,6 +47,8 @@ class Service:
                 Either a boolean, in which case it controls whether we verify
                 the server's TLS certificate, or a string, in which case it must be a path
                 to a CA bundle to use. Defaults to ``True``.
+            service_name:
+                Optional name of the bucketfs service.
         """
         self._url = _parse_service_url(url)
         self._authenticator = defaultdict(
@@ -52,6 +56,7 @@ class Service:
             credentials if credentials is not None else {},
         )
         self._verify = verify
+        self._service_name = service_name
 
     @property
     def buckets(self) -> MutableMapping[str, Bucket]:
@@ -73,6 +78,7 @@ class Service:
                 service=self._url,
                 username=self._authenticator[name]["username"],
                 password=self._authenticator[name]["password"],
+                service_name=self._service_name
             )
             for name in buckets
         }
