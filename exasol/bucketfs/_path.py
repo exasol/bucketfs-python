@@ -1,10 +1,19 @@
 from __future__ import annotations
 from typing import Protocol, ByteString, BinaryIO, Iterable, Generator, Optional
+from enum import Enum, auto
 from pathlib import PurePath, PureWindowsPath
 import errno
 import os
 from io import IOBase
-from exasol.bucketfs._buckets import BucketLike
+from exasol.bucketfs._buckets import BucketLike, SaaSBucket, MountedBucket
+from exasol.bucketfs._service import Service
+from exasol.bucketfs._error import BucketFsError
+
+
+class StorageBackend(Enum):
+    onprem = auto()
+    saas = auto()
+    mounted = ()
 
 
 class PathLike(Protocol):
@@ -41,6 +50,12 @@ class PathLike(Protocol):
         Represent the path as a file URI. Can be used to reconstruct the location/path.
         """
 
+    def as_udf_path(self) -> str:
+        """
+        This method is specific to a BucketFS flavour of the PathLike.
+        It returns a corresponding path, as it's seen from a UDF.
+        """
+
     def exists(self) -> bool:
         """
         Return True if the path points to an existing file or directory.
@@ -73,7 +88,7 @@ class PathLike(Protocol):
             IsADirectoryError: if the pathlike object points to a directory.
         """
 
-    def write(self, data: ByteString | BinaryIO | Iterable[ByteString]):
+    def write(self, data: ByteString | BinaryIO | Iterable[ByteString]) -> None:
         """
         Writes data to this path.
 
@@ -90,7 +105,7 @@ class PathLike(Protocol):
             NotAFileError: if the pathlike object is not a file path.
         """
 
-    def rm(self):
+    def rm(self) -> None:
         """
         Remove this file.
 
@@ -102,7 +117,7 @@ class PathLike(Protocol):
             FileNotFoundError: If the file does not exist.
         """
 
-    def rmdir(self, recursive: bool = False):
+    def rmdir(self, recursive: bool = False) -> None:
         """
         Removes this directory.
 
@@ -126,7 +141,7 @@ class PathLike(Protocol):
             A new pathlike object pointing the combined path.
         """
 
-    def walk(self) -> Generator[tuple["PathLike", list[str], list[str]], None, None]:
+    def walk(self, top_down: bool = True) -> Generator[tuple["PathLike", list[str], list[str]], None, None]:
         """
         Generate the file names in a directory tree by walking the tree either top-down or bottom-up.
 
@@ -272,6 +287,9 @@ class BucketPath:
     def as_uri(self) -> str:
         return self._path.as_uri()
 
+    def as_udf_path(self) -> str:
+        return str(PurePath(self._bucket_api.udf_path) / self._path)
+
     def exists(self) -> bool:
         return self._navigate() is not None
 
@@ -320,7 +338,7 @@ class BucketPath:
         if node.is_file:
             self._bucket_api.delete(node.path)
 
-    def joinpath(self, *path_segments) -> "PathLike":
+    def joinpath(self, *path_segments) -> PathLike:
         # The path segments can be of either this type or an os.PathLike.
         cls = type(self)
         seg_paths = [seg._path if isinstance(seg, cls) else seg for seg in path_segments]
@@ -376,3 +394,120 @@ class BucketPath:
 
     def __str__(self):
         return str(self._path)
+
+
+def _create_onprem_bucket(url: str,
+                          username: str,
+                          password: str,
+                          bucket_name: str = 'default',
+                          verify: bool | str = True,
+                          service_name: Optional[str] = None
+                          ) -> BucketLike:
+    """
+    Creates an on-prem bucket.
+    """
+    credentials = {bucket_name: {'username': username, 'password': password}}
+    service = Service(url, credentials, verify, service_name)
+    buckets = service.buckets
+    if bucket_name not in buckets:
+        raise BucketFsError(f'Bucket {bucket_name} does not exist.')
+    return buckets[bucket_name]
+
+
+def _create_saas_bucket(account_id: str,
+                        database_id: str,
+                        pat: str,
+                        url: str = 'https://cloud.exasol.com'
+                        ) -> BucketLike:
+    """
+    Creates a SaaS bucket.
+    """
+    return SaaSBucket(url=url, account_id=account_id, database_id=database_id, pat=pat)
+
+
+def _create_mounted_bucket(service_name: str = 'bfsdefault',
+                           bucket_name: str = 'default',
+                           base_path: Optional[str] = None
+                           ) -> BucketLike:
+    """
+    Creates a bucket mounted to a UDF.
+    """
+    bucket = MountedBucket(service_name, bucket_name, base_path)
+    if not bucket.root.exists():
+        raise BucketFsError(f'Service {service_name} or bucket {bucket_name} do not exist.')
+    return bucket
+
+
+def build_path(**kwargs) -> PathLike:
+    """
+    Creates a PathLike object based on a bucket in one of the BucketFS storage backends.
+    It provides the same interface for the following BucketFS implementations:
+        - On-Premises
+        - SaaS
+        - BucketFS files mounted as read-only directory in a UDF.
+
+    Arguments:
+        backend:
+            This is a mandatory parameter that indicates the BucketFS storage backend.
+            It can be provided either as a string or as the StorageBackend enumeration.
+        path:
+            Optional parameter that selects a path within the bucket. If not provided
+            the returned PathLike objects corresponds to the root of the bucket. Hence,
+            an alternative way of creating a PathLike pointing to a particular file or
+            directory is as in the code below.
+            path = build_path(...) / "the_desired_path"
+
+    The rest of the arguments a backend specific.
+
+    On-prem arguments:
+        url:
+            Url of the BucketFS service, e.g. `http(s)://127.0.0.1:2580`.
+        username:
+            BucketFS username (generally, different from the DB username).
+        password:
+            BucketFS user password.
+        bucket_name:
+            Name of the bucket. Currently, a PathLike cannot span multiple buckets.
+        verify:
+            Either a boolean, in which case it controls whether we verify the server's
+            TLS certificate, or a string, in which case it must be a path to a CA bundle
+            to use. Defaults to ``True``.
+        service_name:
+            Optional name of the BucketFS service.
+
+    SaaS arguments:
+        url:
+            Url of the Exasol SaaS. Defaults to 'https://cloud.exasol.com'.
+        account_id:
+            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5'
+            (given example is not a valid ID of an existing account).
+        database_id:
+            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy'
+            (given example is not a valid ID of an existing database).
+        pat:
+            Personal Access Token, e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A'
+            (given example is not a valid PAT).
+
+    Mounted BucketFS directory arguments:
+        service_name:
+            Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
+        bucket_name:
+            Name of the bucket. Currently, a PathLike cannot span multiple buckets.
+        base_path:
+            Explicitly specified root path in a file system. This is an alternative to
+            providing the service_name and the bucket_name.
+    """
+
+    backend = kwargs.pop('backend', StorageBackend.onprem)
+    path = kwargs.pop('path') if 'path' in kwargs else ''
+
+    if isinstance(backend, str):
+        backend = StorageBackend[backend.lower()]
+    if backend == StorageBackend.onprem:
+        bucket = _create_onprem_bucket(**kwargs)
+    elif backend == StorageBackend.saas:
+        bucket = _create_saas_bucket(**kwargs)
+    else:
+        bucket = _create_mounted_bucket(**kwargs)
+
+    return BucketPath(path, bucket)

@@ -6,7 +6,13 @@ from typing import (
     Iterable,
     Iterator,
     Protocol,
+    Optional,
 )
+import os
+from io import IOBase
+import shutil
+import errno
+from pathlib import Path
 
 import requests
 from requests import HTTPError
@@ -26,6 +32,18 @@ class BucketLike(Protocol):
     Definition of the Bucket interface.
     It is compatible with both on-premises an SaaS BucketFS systems.
     """
+
+    @property
+    def name(self) -> str:
+        """
+        Returns the bucket name.
+        """
+
+    @property
+    def udf_path(self) -> str:
+        """
+        Returns the path to the bucket's base directory, as it's seen from a UDF.
+        """
 
     @property
     def files(self) -> Iterable[str]:
@@ -110,6 +128,7 @@ class Bucket:
         username: str,
         password: str,
         verify: bool | str = True,
+        service_name: Optional[str] = None
     ):
         """
         Create a new bucket instance.
@@ -127,12 +146,15 @@ class Bucket:
                 Either a boolean, in which case it controls whether we verify
                 the server's TLS certificate, or a string, in which case it must be a path
                 to a CA bundle to use. Defaults to ``True``.
+            service_name:
+                Optional name of the BucketFS service.
         """
         self._name = name
         self._service = _parse_service_url(service)
         self._username = username
         self._password = password
         self._verify = verify
+        self._service_name = service_name
 
     def __str__(self):
         return f"Bucket<{self.name} | on: {self._service}>"
@@ -140,6 +162,13 @@ class Bucket:
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def udf_path(self) -> str:
+        if self._service_name is None:
+            raise BucketFsError('The bucket cannot provide its udf_path '
+                                'as the service name is unknown.')
+        return f'/buckets/{self._service_name}/{self._name}'
 
     @property
     def _auth(self) -> HTTPBasicAuth:
@@ -221,6 +250,117 @@ class Bucket:
                 raise BucketFsError(f"Couldn't download: {path}") from ex
 
             yield from response.iter_content(chunk_size=chunk_size)
+
+
+class SaaSBucket:
+
+    def __init__(self, url: str, account_id: str, database_id: str, pat: str) -> None:
+        self._url = url
+        self._account_id = account_id
+        self.database_id = database_id
+        self._pat = pat
+
+    @property
+    def name(self) -> str:
+        return 'default'
+
+    @property
+    def udf_path(self) -> str:
+        return f'/buckets/uploads/{self.name}'
+
+    def files(self) -> Iterable[str]:
+        """To be provided"""
+        raise NotImplementedError()
+
+    def delete(self, path: str) -> None:
+        """To be provided"""
+        raise NotImplementedError()
+
+    def upload(self, path: str, data: ByteString | BinaryIO) -> None:
+        """To be provided"""
+        raise NotImplementedError()
+
+    def download(self, path: str, chunk_size: int = 8192) -> Iterable[ByteString]:
+        """To be provided"""
+        raise NotImplementedError()
+
+    def __str__(self):
+        return f"SaaSBucket<{self.name} | on: {self._url}>"
+
+
+class MountedBucket:
+    """
+    Implementation of the Bucket interface backed by a normal file system.
+    The targeted use case is the access to the BucketFS files from a UDF.
+
+    Arguments:
+        service_name:
+            Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
+        bucket_name:
+            Name of the bucket. Defaults to 'default'.
+        base_path:
+            Instead of specifying the names of the service and the bucket, one can provide
+            a full path to the root directory. This can be a useful option for testing when
+            the backend is a local file system.
+            If this parameter is not provided the root directory is set to
+            buckets/<service_name>/<bucket_name>.
+    """
+
+    def __init__(self,
+                 service_name: str = 'bfsdefault',
+                 bucket_name: str = 'default',
+                 base_path: Optional[str] = None):
+        self._name = bucket_name
+        if base_path:
+            self.root = Path(base_path)
+        else:
+            self.root = Path('/buckets') / service_name / bucket_name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def udf_path(self) -> str:
+        return str(self.root)
+
+    @property
+    def files(self) -> list[str]:
+        return [str(pth.relative_to(self.root)) for pth in self.root.rglob('*.*')]
+
+    def delete(self, path: str) -> None:
+        try:
+            full_path = self.root / path
+            full_path.unlink(missing_ok=True)
+        except IsADirectoryError:
+            pass
+
+    def upload(self, path: str, data: ByteString | BinaryIO) -> None:
+        full_path = self.root / path
+        if not full_path.parent.exists():
+            full_path.parent.mkdir(parents=True)
+        with full_path.open('wb') as f:
+            if isinstance(data, IOBase):
+                shutil.copyfileobj(data, f)
+            elif isinstance(data, ByteString):
+                f.write(data)
+            else:
+                raise ValueError('upload called with unrecognised data type. ' 
+                                 'A valid data should be either ByteString or BinaryIO')
+
+    def download(self, path: str, chunk_size: int) -> Iterable[ByteString]:
+        full_path = self.root / path
+        if (not full_path.exists()) or (not full_path.is_file()):
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(path))
+        with full_path.open('rb') as f:
+            while True:
+                data = f.read(chunk_size)
+                if not data:
+                    break
+                yield data
+
+    def __str__(self):
+        return f"MountedBucket<{self.name} | on: {self._service_name}>"
 
 
 class MappedBucket:

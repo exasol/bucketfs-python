@@ -46,6 +46,7 @@ This module contains a python api to programmatically access exasol bucketfs ser
 from __future__ import annotations
 
 from exasol.bucketfs._buckets import (
+    BucketLike,
     Bucket,
     MappedBucket,
 )
@@ -55,14 +56,17 @@ from exasol.bucketfs._convert import (
     as_hash,
     as_string,
 )
+from exasol.bucketfs import _path as path
 from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._service import Service
 
 __all__ = [
     "Service",
+    "BucketLike",
     "Bucket",
     "MappedBucket",
     "BucketFsError",
+    "path",
     "as_bytes",
     "as_string",
     "as_file",

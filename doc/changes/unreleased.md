@@ -26,6 +26,7 @@
     Added the PathLike protocol as described in the [design document](../design/bucketpath.rst).
     Extracted bucket interface into BucketLike protocol.
     Implemented PathLike for buckets based on BucketLike protocol.
+    Added a path factory function.
 
 
 ## Internal
