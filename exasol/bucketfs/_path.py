@@ -50,6 +50,12 @@ class PathLike(Protocol):
         Represent the path as a file URI. Can be used to reconstruct the location/path.
         """
 
+    def as_udf_path(self) -> str:
+        """
+        This method is specific to a BucketFS flavour of the PathLike.
+        It returns a corresponding path, as it's seen from a UDF.
+        """
+
     def exists(self) -> bool:
         """
         Return True if the path points to an existing file or directory.
@@ -280,6 +286,9 @@ class BucketPath:
 
     def as_uri(self) -> str:
         return self._path.as_uri()
+
+    def as_udf_path(self) -> str:
+        return self._bucket_api.udf_path
 
     def exists(self) -> bool:
         return self._navigate() is not None

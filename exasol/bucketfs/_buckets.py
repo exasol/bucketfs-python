@@ -34,15 +34,15 @@ class BucketLike(Protocol):
     """
 
     @property
-    def service_name(self) -> Optional[str]:
-        """
-        Returns the name of the BucketFS service, if known.
-        """
-
-    @property
     def name(self) -> str:
         """
         Returns the bucket name.
+        """
+
+    @property
+    def udf_path(self) -> str:
+        """
+        Returns the path to the bucket's base directory, as it's seen from a UDF.
         """
 
     @property
@@ -159,12 +159,16 @@ class Bucket:
     def __str__(self):
         return f"Bucket<{self.name} | on: {self._service}>"
 
-    def service_name(self) -> Optional[str]:
-        return self._service_name
-
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def udf_path(self) -> str:
+        if self._service_name is None:
+            raise BucketFsError('The bucket cannot provide its udf_path '
+                                'as the service name is unknown.')
+        return f'buckets/{self._service_name}/{self._name}'
 
     @property
     def _auth(self) -> HTTPBasicAuth:
@@ -256,13 +260,16 @@ class SaaSBucket:
         self.database_id = database_id
         self._pat = pat
 
-    def service_name(self) -> str:
-        # TODO: Find out the name of the service in SaaS
-        return 'bfsdefault'
-
+    @property
     def name(self) -> str:
         # TODO: Find out the name of the bucket in SaaS
         return 'default'
+
+    @property
+    def udf_path(self) -> str:
+        # TODO: Find out the name of the service in SaaS
+        # and how the udf path is constructed. Below is just a guess.
+        return f'buckets/bfsdefault/{self.name}'
 
     def files(self) -> Iterable[str]:
         """To be provided"""
@@ -306,7 +313,6 @@ class MountedBucket:
                  service_name: str = 'bfsdefault',
                  bucket_name: str = 'default',
                  base_path: Optional[str] = None):
-        self._service_name = service_name
         self._name = bucket_name
         if base_path:
             self.root = Path(base_path)
@@ -314,12 +320,12 @@ class MountedBucket:
             self.root = Path('buckets') / service_name / bucket_name
 
     @property
-    def service_name(self) -> str:
-        return self._service_name
-
-    @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def udf_path(self) -> str:
+        return str(self.root)
 
     @property
     def files(self) -> list[str]:
