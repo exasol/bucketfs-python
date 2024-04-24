@@ -168,7 +168,7 @@ class Bucket:
         if self._service_name is None:
             raise BucketFsError('The bucket cannot provide its udf_path '
                                 'as the service name is unknown.')
-        return f'buckets/{self._service_name}/{self._name}'
+        return f'/buckets/{self._service_name}/{self._name}'
 
     @property
     def _auth(self) -> HTTPBasicAuth:
@@ -262,14 +262,11 @@ class SaaSBucket:
 
     @property
     def name(self) -> str:
-        # TODO: Find out the name of the bucket in SaaS
         return 'default'
 
     @property
     def udf_path(self) -> str:
-        # TODO: Find out the name of the service in SaaS
-        # and how the udf path is constructed. Below is just a guess.
-        return f'buckets/bfsdefault/{self.name}'
+        return f'/buckets/uploads/{self.name}'
 
     def files(self) -> Iterable[str]:
         """To be provided"""
@@ -317,7 +314,7 @@ class MountedBucket:
         if base_path:
             self.root = Path(base_path)
         else:
-            self.root = Path('buckets') / service_name / bucket_name
+            self.root = Path('/buckets') / service_name / bucket_name
 
     @property
     def name(self) -> str:

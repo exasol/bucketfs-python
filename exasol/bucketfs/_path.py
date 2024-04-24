@@ -288,7 +288,7 @@ class BucketPath:
         return self._path.as_uri()
 
     def as_udf_path(self) -> str:
-        return self._bucket_api.udf_path
+        return str(PurePath(self._bucket_api.udf_path) / self._path)
 
     def exists(self) -> bool:
         return self._navigate() is not None
