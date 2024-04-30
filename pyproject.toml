@@ -34,6 +34,8 @@ requests = ">=2.24.0"
 joblib=">=1.0.1"
 typeguard = "4.0.0"
 saas-api=">=0.2.0"
+# Temp.fix
+httpx=">=0.27.0"
 
 
 [tool.poetry.dev-dependencies]
