@@ -36,6 +36,7 @@ typeguard = "4.0.0"
 saas-api=">=0.2.0"
 # Temp.fix
 httpx=">=0.27.0"
+attrs=">=23.2.0"
 
 
 [tool.poetry.dev-dependencies]
