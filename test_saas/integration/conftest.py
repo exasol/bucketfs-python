@@ -88,9 +88,6 @@ def saas_test_database_id(saas_test_service_url, saas_test_token, saas_test_acco
                 raise RuntimeError(f'Test SaaS database status is {db.status} '
                                    f'after {max_wait_time} seconds.')
             yield db.id
-        except Exception as ex:
-            raise RuntimeError(f'Failed to create a database at {saas_test_service_url}. '
-                               f'Got an exception {ex}')
         finally:
             if db is not None:
                 delete_saas_database(
