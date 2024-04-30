@@ -37,7 +37,7 @@ def create_saas_test_database(account_id, client):
 
 @pytest.fixture(scope='session')
 def saas_test_service_url() -> str:
-    return os.environ["SAAS_HOST"]
+    return f'https://{os.environ["SAAS_HOST"]}'
 
 
 @pytest.fixture(scope='session')
