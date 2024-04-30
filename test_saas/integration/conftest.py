@@ -43,7 +43,7 @@ def create_saas_test_database(account_id: str,
 
 @pytest.fixture(scope='session')
 def saas_test_service_url() -> str:
-    return f'https://{os.environ["SAAS_HOST"]}'
+    return os.environ["SAAS_HOST"]
 
 
 @pytest.fixture(scope='session')
@@ -85,11 +85,11 @@ def saas_test_database_id(saas_test_service_url, saas_test_token, saas_test_acco
                     break
                 sleep_time = 30
             else:
-                raise RuntimeError(f'Test SaaS database status is {db.status} ' 
+                raise RuntimeError(f'Test SaaS database status is {db.status} '
                                    f'after {max_wait_time} seconds.')
             yield db.id
         except Exception as ex:
-            raise RuntimeError(f'Failed to create a database at {saas_test_service_url}. ' 
+            raise RuntimeError(f'Failed to create a database at {saas_test_service_url}. '
                                f'Got an exception {ex}')
         finally:
             if db is not None:

@@ -28,16 +28,6 @@ jobs:
         python-version: ["3.8", "3.9", "3.10"]
 
     steps:
-      - name: Check Environment
-        run: |
-          echo A = $($SECRET_A | base64)
-          echo SAAS_HOST = $(echo $SAAS_HOST | base64)
-        env:
-          SECRET_A: ${{ secrets.SECRET_A }}
-          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
-          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
-          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
-
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v5
         with:
@@ -48,6 +38,13 @@ jobs:
 
       - name: Install Project
         run: poetry install
+
+      - name: Run SaaS Tests
+        env:
+          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
+          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
+          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
+        run: poetry run pytest test_saas
 
       - name: Checkout ITDE
         run: git clone https://github.com/exasol/integration-test-docker-environment.git
@@ -60,9 +57,3 @@ jobs:
       - name: Run Tests
         run: poetry run pytest tests
 
-      - name: Run SaaS Tests
-        env:
-          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
-          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
-          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
-        run: poetry run pytest test_saas
