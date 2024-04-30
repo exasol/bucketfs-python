@@ -1,3 +1,4 @@
+from typing import Optional
 import os
 import time
 
@@ -9,7 +10,10 @@ from exasol.saas.client.openapi.api.databases.get_database import sync as get_sa
 from exasol.saas.client.openapi.models.status import Status as SaasStatus
 
 
-def create_saas_test_client(url: str, token: str, raise_on_unexpected_status: bool = True):
+def create_saas_test_client(url: str,
+                            token: str,
+                            raise_on_unexpected_status: bool = True
+                            ) -> openapi.AuthenticatedClient:
     return openapi.AuthenticatedClient(
             base_url=url,
             token=token,
@@ -17,7 +21,9 @@ def create_saas_test_client(url: str, token: str, raise_on_unexpected_status: bo
     )
 
 
-def create_saas_test_database(account_id, client):
+def create_saas_test_database(account_id: str,
+                              client: openapi.AuthenticatedClient
+                              ) -> Optional[openapi.models.database.Database]:
     cluster_spec = openapi.models.CreateCluster(
         name="my-cluster",
         size="XS",
@@ -52,16 +58,17 @@ def saas_test_account_id() -> str:
 
 @pytest.fixture(scope='session')
 def saas_test_database_id(saas_test_service_url, saas_test_token, saas_test_account_id) -> str:
+
     with create_saas_test_client(
             url=saas_test_service_url,
             token=saas_test_token
     ) as client:
+        db: Optional[openapi.models.database.Database] = None
         try:
             db = create_saas_test_database(
                 account_id=saas_test_account_id,
                 client=client
             )
-
             # Wait till the database gets to the running state.
             sleep_time = 600
             small_interval = 20
@@ -81,6 +88,9 @@ def saas_test_database_id(saas_test_service_url, saas_test_token, saas_test_acco
                 raise RuntimeError(f'Test SaaS database status is {db.status} ' 
                                    f'after {max_wait_time} seconds.')
             yield db.id
+        except Exception as ex:
+            raise RuntimeError(f'Failed to create a database at {saas_test_service_url}. ' 
+                               f'Got an exception {ex}')
         finally:
             if db is not None:
                 delete_saas_database(
