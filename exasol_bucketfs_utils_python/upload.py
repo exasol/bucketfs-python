@@ -52,7 +52,8 @@ def upload_fileobj_to_bucketfs(
         raise ValueError("bucket_file_path can't be None")
     url = generate_bucket_http_url(bucket_config, bucket_file_path)
     auth = bucketfs_utils.create_auth_object(bucket_config)
-    response = requests.put(url.geturl(), data=fileobj, auth=auth)
+    verify = bucket_config.bucketfs_config.connection_config.verify
+    response = requests.put(url.geturl(), data=fileobj, auth=auth, verify=verify)
     response.raise_for_status()
     path = generate_bucket_udf_path(bucket_config, bucket_file_path)
     return url, path
@@ -73,7 +74,8 @@ def upload_string_to_bucketfs(
         raise ValueError("bucket_file_path can't be None")
     url = generate_bucket_http_url(bucket_config, bucket_file_path)
     auth = bucketfs_utils.create_auth_object(bucket_config)
-    response = requests.put(url.geturl(), data=string.encode("UTF-8"), auth=auth)
+    verify = bucket_config.bucketfs_config.connection_config.verify
+    response = requests.put(url.geturl(), data=string.encode("UTF-8"), auth=auth, verify=verify)
     response.raise_for_status()
     path = generate_bucket_udf_path(bucket_config, bucket_file_path)
     return url, path

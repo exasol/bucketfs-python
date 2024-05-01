@@ -28,6 +28,8 @@
     Implemented PathLike for buckets based on BucketLike protocol.
     Added a path factory function.
 
+  - `verify` parameter to the old interface. 
+
 
 ## Internal
 - Relock dependencies
