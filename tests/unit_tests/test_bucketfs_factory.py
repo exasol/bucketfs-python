@@ -47,3 +47,24 @@ def test_create_real_bucketfs_location():
         == user
         and bucketfs_location.bucket_config.bucketfs_config.connection_config.pwd == pwd
     )
+
+
+def test_verify_false(default_bucket_config):
+    bfs_config = default_bucket_config.bucketfs_config
+    conn_config = bfs_config.connection_config
+    url = f'http://{conn_config.host}:{conn_config.port}/{default_bucket_config.bucket_name}/'\
+          f'base_dir;{bfs_config.bucketfs_name}#false'
+    bfs_location = BucketFSFactory().create_bucketfs_location(url=url, user=conn_config.user,
+                                                              pwd=conn_config.pwd)
+    assert not bfs_location.bucket_config.bucketfs_config.connection_config.verify
+
+
+def test_verify_ca(default_bucket_config):
+    bfs_config = default_bucket_config.bucketfs_config
+    conn_config = bfs_config.connection_config
+    ca_path = '/home/tmp/ca.cert'
+    url = f'http://{conn_config.host}:{conn_config.port}/{default_bucket_config.bucket_name}/'\
+          f'base_dir;{bfs_config.bucketfs_name}#{ca_path}'
+    bfs_location = BucketFSFactory().create_bucketfs_location(url=url, user=conn_config.user,
+                                                              pwd=conn_config.pwd)
+    assert bfs_location.bucket_config.bucketfs_config.connection_config.verify == ca_path

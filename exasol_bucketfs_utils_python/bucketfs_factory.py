@@ -1,3 +1,4 @@
+from __future__ import annotations
 import urllib.parse
 from pathlib import PurePosixPath
 from typing import Optional
@@ -29,6 +30,13 @@ class BucketFSFactory:
         you also need to provide the bucketfs-name via an url parameter. An url
         would look like the following:
         http[s]://<host>:<port>/<bucket_name>/<path_in_bucket>;<bucketfs_name>
+        Optionally, one can specify the server's TLS certificate verification option.
+        This can be provided in the fragment field of the URL. The value can be
+        either true/false or a path to the CA bundle. By default, the verification
+        is on for https and off for http. In the example below the verification
+        is switched off.
+        https://<host>:<port>/<bucket_name>/<path_in_bucket>;<bucketfs_name>#False
+
         :param url:
         :param user:
         :param pwd:
@@ -38,12 +46,20 @@ class BucketFSFactory:
         parsed_url = urllib.parse.urlparse(url)
         if parsed_url.scheme == "http" or parsed_url.scheme == "https":
             is_https = parsed_url.scheme == "https"
+            verify: str | bool = parsed_url.fragment
+            if verify.lower() == 'true':
+                verify = True
+            elif verify.lower() == 'false':
+                verify = False
+            elif not verify:
+                verify = is_https
             connection_config = BucketFSConnectionConfig(
                 host=parsed_url.hostname,
                 port=parsed_url.port,
                 user=user,
                 pwd=pwd,
                 is_https=is_https,
+                verify=verify
             )
             url_path = PurePosixPath(parsed_url.path)
             bucket_name = url_path.parts[1]
