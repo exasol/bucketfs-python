@@ -30,6 +30,8 @@
 
   - `verify` parameter to the old interface. 
 
+## Bug Fixing
+- Fixed a bug with the propagation of the verify flag from a Service object to the Buckets.
 
 ## Internal
 - Relock dependencies
