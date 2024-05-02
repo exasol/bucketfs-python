@@ -7,30 +7,32 @@ from integration.conftest import delete_file
 
 @pytest.fixture
 def children_poem() -> ByteString:
-    poem_text = \
-        b"Twinkle twinkle little star." \
-        b"How I wonder what you are." \
-        b"Up above the world so high." \
+    poem_text = (
+        b"Twinkle twinkle little star."
+        b"How I wonder what you are."
+        b"Up above the world so high."
         b"Like a diamond in the sky."
+    )
     return poem_text
 
 
 @pytest.fixture
 def classic_poem() -> ByteString:
-    poem_text = \
-        b"My heart's in the Highlands, my heart is not here," \
-        b"My heart's in the Highlands, a-chasing the deer;" \
-        b"Chasing the wild-deer, and following the roe," \
+    poem_text = (
+        b"My heart's in the Highlands, my heart is not here,"
+        b"My heart's in the Highlands, a-chasing the deer;"
+        b"Chasing the wild-deer, and following the roe,"
         b"My heart's in the Highlands, wherever I go."
+    )
     return poem_text
 
 
 def _collect_all_names(path: bfs.path.PathLike) -> set[str]:
-    all_names = []
+    all_names = set()
     for _, dirs, files in path.walk():
-        all_names.extend(dirs)
-        all_names.extend(files)
-    return set(all_names)
+        all_names.update(dirs)
+        all_names.update(files)
+    return all_names
 
 
 def test_write_read_back_onprem(test_config, children_poem):
