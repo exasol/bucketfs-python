@@ -48,6 +48,8 @@ from __future__ import annotations
 from exasol.bucketfs._buckets import (
     BucketLike,
     Bucket,
+    SaaSBucket,
+    MountedBucket,
     MappedBucket,
 )
 from exasol.bucketfs._convert import (
@@ -64,6 +66,8 @@ __all__ = [
     "Service",
     "BucketLike",
     "Bucket",
+    "SaaSBucket",
+    "MountedBucket",
     "MappedBucket",
     "BucketFsError",
     "path",

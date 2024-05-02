@@ -27,6 +27,7 @@
     Extracted bucket interface into BucketLike protocol.
     Implemented PathLike for buckets based on BucketLike protocol.
     Added a path factory function.
+    Added implementation of the BucketLike for the SaaS BucketFS.
 
   - `verify` parameter to the old interface. 
 
