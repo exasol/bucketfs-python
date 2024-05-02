@@ -185,7 +185,7 @@ class Bucket:
     @property
     def files(self) -> Iterable[str]:
         url = _build_url(service_url=self._service, bucket=self.name)
-        LOGGER.info("Retrieving bucket listing for {0}.", self.name)
+        LOGGER.info("Retrieving bucket listing for %s.", self.name)
         response = requests.get(url, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -209,7 +209,7 @@ class Bucket:
             data: raw content of the file.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        LOGGER.info("Uploading {0} to bucket {1}.", path, self.name)
+        LOGGER.info("Uploading %s to bucket %s.", path, self.name)
         response = requests.put(url, data=data, auth=self._auth, verify=self._verify)
         try:
             response.raise_for_status()
@@ -227,7 +227,7 @@ class Bucket:
             A BucketFsError if the operation couldn't be executed successfully.
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
-        LOGGER.info("Deleting {0} from bucket {1}.", path, self.name)
+        LOGGER.info("Deleting %s from bucket %s.", path, self.name)
         response = requests.delete(url, auth=self._auth, verify=self._verify)
 
         try:
@@ -248,7 +248,7 @@ class Bucket:
         """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
         LOGGER.info(
-            "Downloading {0} using a chunk size of {1} bytes from bucket {2}.",
+            "Downloading %s using a chunk size of %d bytes from bucket %s.",
             path, chunk_size, self.name
         )
         with requests.get(
@@ -303,7 +303,7 @@ class SaaSBucket:
         return file_list
 
     def delete(self, path: str) -> None:
-        LOGGER.info("Deleting {0} from the bucket.", path)
+        LOGGER.info("Deleting %s from the bucket.", path)
         with SaasAuthenticatedClient(base_url=self._url,
                                      token=self._pat,
                                      raise_on_unexpected_status=True) as client:
@@ -313,7 +313,7 @@ class SaaSBucket:
                              client=client)
 
     def upload(self, path: str, data: ByteString | BinaryIO) -> None:
-        LOGGER.info("Uploading {0} to the bucket.", path)
+        LOGGER.info("Uploading %s to the bucket.", path)
         # Q. The service can handle any characters in the path.
         #    Do we need to check this path for presence of characters deemed
         #    invalid in the BucketLike protocol?
@@ -334,7 +334,7 @@ class SaaSBucket:
         response.raise_for_status()
 
     def download(self, path: str, chunk_size: int = 8192) -> Iterable[ByteString]:
-        LOGGER.info("Downloading {0} from the bucket.", path)
+        LOGGER.info("Downloading %s from the bucket.", path)
         with SaasAuthenticatedClient(base_url=self._url,
                                      token=self._pat,
                                      raise_on_unexpected_status=False) as client:
