@@ -22,7 +22,8 @@ def list_files_in_bucketfs(
         raise ValueError("bucket_file_path can't be None")
     url = generate_bucket_http_url(bucket_config, "")
     auth = bucketfs_utils.create_auth_object(bucket_config)
-    response = requests.get(url.geturl(), auth=auth)
+    verify = bucket_config.bucketfs_config.connection_config.verify
+    response = requests.get(url.geturl(), auth=auth, verify=verify)
     response.raise_for_status()
 
     bucket_file_path_parts = Path(bucket_file_path).parts

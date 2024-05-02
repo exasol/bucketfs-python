@@ -45,7 +45,8 @@ def download_from_bucketfs_to_fileobj(
         raise ValueError("bucket_file_path can't be None")
     url = generate_bucket_http_url(bucket_config, bucket_file_path)
     auth = bucketfs_utils.create_auth_object(bucket_config)
-    with requests.get(url.geturl(), stream=True, auth=auth) as response:
+    verify = bucket_config.bucketfs_config.connection_config.verify
+    with requests.get(url.geturl(), stream=True, auth=auth, verify=verify) as response:
         response.raise_for_status()
         for chunk in response.iter_content(chunk_size=8192):
             fileobj.write(chunk)
@@ -65,7 +66,8 @@ def download_from_bucketfs_to_string(
         raise ValueError("bucket_file_path can't be None")
     url = generate_bucket_http_url(bucket_config, bucket_file_path)
     auth = bucketfs_utils.create_auth_object(bucket_config)
-    response = requests.get(url.geturl(), auth=auth)
+    verify = bucket_config.bucketfs_config.connection_config.verify
+    response = requests.get(url.geturl(), auth=auth, verify=verify)
     response.raise_for_status()
     return response.text
 

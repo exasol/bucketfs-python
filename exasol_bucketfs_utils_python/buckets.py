@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Iterator
 
 import requests
@@ -9,6 +10,7 @@ def list_buckets(
     base_url: str,
     path: str = "",
     port: int = 2580,
+    verify: bool | str = True,
 ) -> Iterator[str]:
     """
     List all buckets for a specific bucketfs service.
@@ -19,6 +21,9 @@ def list_buckets(
     :param path: if the service root is hidden behind a sub-path, the default "" should work in most cases.
     :param port: the bucketfs service is listening on (default: 2580).
                  In case of error make sure the correct port is used.
+    :param verify: either a boolean, in which case it controls whether we verify the server's
+                   TLS certificate, or a string, in which case it must be a path to a CA bundle
+                   to use. Defaults to ``True``.
 
     :raises BucketFsError:
 
@@ -26,7 +31,7 @@ def list_buckets(
     """
     url = f"{base_url}:{port}/{path}"
     try:
-        response = requests.get(url)
+        response = requests.get(url, verify=verify)
         response.raise_for_status()
     except Exception as ex:
         raise BucketFsError from ex

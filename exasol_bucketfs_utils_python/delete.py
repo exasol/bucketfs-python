@@ -19,5 +19,6 @@ def delete_file_in_bucketfs(
 
     url = generate_bucket_http_url(bucket_config, bucket_file_path)
     auth = bucketfs_utils.create_auth_object(bucket_config)
-    response = requests.delete(url.geturl(), auth=auth)
+    verify = bucket_config.bucketfs_config.connection_config.verify
+    response = requests.delete(url.geturl(), auth=auth, verify=verify)
     response.raise_for_status()

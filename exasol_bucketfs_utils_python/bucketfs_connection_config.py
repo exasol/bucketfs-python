@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typeguard import typechecked
 
 
@@ -9,7 +10,7 @@ class BucketFSConnectionConfig:
 
     @typechecked()
     def __init__(
-        self, host: str, port: int, user: str, pwd: str, is_https: bool = False
+        self, host: str, port: int, user: str, pwd: str, is_https: bool = False, verify: bool | str = True
     ):
         self._is_https = is_https
         if host == "":
@@ -28,6 +29,7 @@ class BucketFSConnectionConfig:
         if pwd == "":
             raise ValueError("Password can't be an empty string")
         self._pwd = pwd
+        self._verify = verify
 
     @property
     def is_https(self) -> bool:
@@ -48,3 +50,7 @@ class BucketFSConnectionConfig:
     @property
     def pwd(self) -> str:
         return self._pwd
+
+    @property
+    def verify(self) -> bool | str:
+        return self._verify
