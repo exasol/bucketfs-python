@@ -19,5 +19,11 @@ def test_factory_http_not_verify(default_bucket_config):
     assert file_name in bfs_location.list_files_in_bucketfs('')
     content_back = bfs_location.download_from_bucketfs_to_string(file_name)
     assert content_back == content
+
+    # In order to test the deletion we need to create another file,
+    # otherwise, deleting the only file invalidates the location.
+    file_name_copy = 'test_factory_http_default/geography_copy.fact'
+    bfs_location.upload_string_to_bucketfs(file_name_copy, content)
     bfs_location.delete_file_in_bucketfs(file_name)
     assert file_name not in bfs_location.list_files_in_bucketfs('')
+    bfs_location.delete_file_in_bucketfs(file_name_copy)
