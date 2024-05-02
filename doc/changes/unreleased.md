@@ -28,6 +28,8 @@
     Implemented PathLike for buckets based on BucketLike protocol.
     Added a path factory function.
 
+## Bug Fixing
+- Fixed a bug with the propagation of the verify flag from a Service object to the Buckets.
 
 ## Internal
 - Relock dependencies

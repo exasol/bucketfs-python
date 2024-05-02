@@ -78,7 +78,8 @@ class Service:
                 service=self._url,
                 username=self._authenticator[name]["username"],
                 password=self._authenticator[name]["password"],
-                service_name=self._service_name
+                service_name=self._service_name,
+                verify=self._verify
             )
             for name in buckets
         }
