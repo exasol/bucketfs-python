@@ -238,6 +238,14 @@
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">HTTPError</span>
 <span class="kn">from</span> <span class="nn">requests.auth</span> <span class="kn">import</span> <span class="n">HTTPBasicAuth</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">quote_plus</span>
+
+<span class="kn">from</span> <span class="nn">exasol.saas.client.openapi.client</span> <span class="kn">import</span> <span class="n">AuthenticatedClient</span> <span class="k">as</span> <span class="n">SaasAuthenticatedClient</span>
+<span class="kn">from</span> <span class="nn">exasol.saas.client.openapi.models.file</span> <span class="kn">import</span> <span class="n">File</span> <span class="k">as</span> <span class="n">SaasFile</span>
+<span class="kn">from</span> <span class="nn">exasol.saas.client.openapi.api.files.list_files</span> <span class="kn">import</span> <span class="n">sync</span> <span class="k">as</span> <span class="n">saas_list_files</span>
+<span class="kn">from</span> <span class="nn">exasol.saas.client.openapi.api.files.delete_file</span> <span class="kn">import</span> <span class="n">sync_detailed</span> <span class="k">as</span> <span class="n">saas_delete_file</span>
+<span class="kn">from</span> <span class="nn">exasol.saas.client.openapi.api.files.upload_file</span> <span class="kn">import</span> <span class="n">sync_detailed</span> <span class="k">as</span> <span class="n">saas_upload_file</span>
+<span class="kn">from</span> <span class="nn">exasol.saas.client.openapi.api.files.download_file</span> <span class="kn">import</span> <span class="n">sync_detailed</span> <span class="k">as</span> <span class="n">saas_download_file</span>
 
 <span class="kn">from</span> <span class="nn">exasol.bucketfs._error</span> <span class="kn">import</span> <span class="n">BucketFsError</span>
 <span class="kn">from</span> <span class="nn">exasol.bucketfs._logging</span> <span class="kn">import</span> <span class="n">LOGGER</span>
@@ -398,7 +406,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieving bucket listing for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Retrieving bucket listing for </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verify</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
@@ -422,7 +430,7 @@
 <span class="sd">            data: raw content of the file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uploading </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> to bucket </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploading </span><span class="si">%s</span><span class="s2"> to bucket </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verify</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
@@ -440,8 +448,9 @@
 <span class="sd">            A BucketFsError if the operation couldn&#39;t be executed successfully.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deleting </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> from bucket </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deleting </span><span class="si">%s</span><span class="s2"> from bucket </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verify</span><span class="p">)</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
         <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
@@ -460,7 +469,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Downloading </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> using a chunk size of </span><span class="si">{</span><span class="n">chunk_size</span><span class="si">}</span><span class="s2"> bytes from bucket </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2"> using a chunk size of </span><span class="si">%d</span><span class="s2"> bytes from bucket </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="n">path</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="p">)</span>
         <span class="k">with</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verify</span>
@@ -478,7 +488,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pat</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span> <span class="o">=</span> <span class="n">account_id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">database_id</span> <span class="o">=</span> <span class="n">database_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span> <span class="o">=</span> <span class="n">database_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pat</span> <span class="o">=</span> <span class="n">pat</span>
 
     <span class="nd">@property</span>
@@ -489,24 +499,86 @@
     <span class="k">def</span> <span class="nf">udf_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;/buckets/uploads/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
 
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;To be provided&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Retrieving the bucket listing.&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">SaasAuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span>
+                                     <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pat</span><span class="p">,</span>
+                                     <span class="n">raise_on_unexpected_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">saas_list_files</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="p">,</span>
+                                      <span class="n">database_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="p">,</span>
+                                      <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+
+        <span class="n">file_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">recursive_file_collector</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">SaasFile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                    <span class="n">recursive_file_collector</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">file_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">root_node</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="n">recursive_file_collector</span><span class="p">(</span><span class="n">root_node</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">file_list</span>
 
     <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;To be provided&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deleting </span><span class="si">%s</span><span class="s2"> from the bucket.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">SaasAuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span>
+                                     <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pat</span><span class="p">,</span>
+                                     <span class="n">raise_on_unexpected_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="n">saas_delete_file</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="p">,</span>
+                             <span class="n">database_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="p">,</span>
+                             <span class="n">key</span><span class="o">=</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
+                             <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;To be provided&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploading </span><span class="si">%s</span><span class="s2"> to the bucket.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="c1"># Q. The service can handle any characters in the path.</span>
+        <span class="c1">#    Do we need to check this path for presence of characters deemed</span>
+        <span class="c1">#    invalid in the BucketLike protocol?</span>
+        <span class="k">with</span> <span class="n">SaasAuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span>
+                                     <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pat</span><span class="p">,</span>
+                                     <span class="n">raise_on_unexpected_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">saas_upload_file</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="p">,</span>
+                                        <span class="n">database_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="p">,</span>
+                                        <span class="n">key</span><span class="o">=</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
+                                        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">400</span><span class="p">:</span>
+                <span class="c1"># Q. Is it the right type of exception?</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Request for a presigned url to upload the file </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                   <span class="sa">f</span><span class="s1">&#39;failed with the status code </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">upload_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">parsed</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\u0026&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">upload_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;To be provided&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2"> from the bucket.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">SaasAuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span>
+                                     <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pat</span><span class="p">,</span>
+                                     <span class="n">raise_on_unexpected_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">saas_download_file</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="p">,</span>
+                                          <span class="n">database_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="p">,</span>
+                                          <span class="n">key</span><span class="o">=</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
+                                          <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="s2">&quot;The file </span><span class="si">{path}</span><span class="s2"> doesn&#39;t exist in the SaaS BucketFs.&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">400</span><span class="p">:</span>
+                <span class="c1"># Q. Is it the right type of exception?</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Request for a presigned url to download the file </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                   <span class="sa">f</span><span class="s1">&#39;failed with the status code </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">download_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">parsed</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\u0026&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">download_url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">chunk</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SaaSBucket&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | on: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SaaSBucket&lt;account id: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="si">}</span><span class="s2">, database id: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
 
 
 <span class="k">class</span> <span class="nc">MountedBucket</span><span class="p">:</span>
