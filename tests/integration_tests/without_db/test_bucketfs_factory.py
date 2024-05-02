@@ -14,11 +14,10 @@ def test_factory_http_default(default_bucket_config):
     bfs_location = BucketFSFactory().create_bucketfs_location(url=url, user=conn_config.user,
                                                               pwd=conn_config.pwd)
 
-    return
-
     file_name = 'test_factory_http_default/geography.fact'
     content = 'Munich is the capital of Bavaria'
     bfs_location.upload_string_to_bucketfs(file_name, content)
+    return
     assert file_name in bfs_location.list_files_in_bucketfs()
     content_back = bfs_location.download_from_bucketfs_to_string(file_name)
     assert content_back == content
