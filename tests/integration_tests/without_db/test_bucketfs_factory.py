@@ -58,8 +58,6 @@ def test_factory_https_not_verify(default_bucket_config):
     bfs_location = BucketFSFactory().create_bucketfs_location(url=url, user=conn_config.user,
                                                               pwd=conn_config.pwd)
 
-    return
-
     file_name = 'test_factory_https_not_verify/geography.fact'
     content = 'Munich is the capital of Bavaria'
     bfs_location.upload_string_to_bucketfs(file_name, content)
