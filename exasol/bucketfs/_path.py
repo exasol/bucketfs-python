@@ -13,7 +13,7 @@ from exasol.bucketfs._error import BucketFsError
 class StorageBackend(Enum):
     onprem = auto()
     saas = auto()
-    mounted = ()
+    mounted = auto()
 
 
 class PathLike(Protocol):
@@ -449,7 +449,10 @@ def build_path(**kwargs) -> PathLike:
     Arguments:
         backend:
             This is a mandatory parameter that indicates the BucketFS storage backend.
-            It can be provided either as a string or as the StorageBackend enumeration.
+            The available backends are defined in the StorageBackend enumeration,
+            Currently, these are "onprem", "saas" and "mounted". The parameter value
+            can be provided either as a string, e.g. "onprem", or as an enum, e.g.
+            StorageBackend.onprem.
         path:
             Optional parameter that selects a path within the bucket. If not provided
             the returned PathLike objects corresponds to the root of the bucket. Hence,
@@ -457,7 +460,7 @@ def build_path(**kwargs) -> PathLike:
             directory is as in the code below.
             path = build_path(...) / "the_desired_path"
 
-    The rest of the arguments a backend specific.
+    The rest of the arguments are backend specific.
 
     On-prem arguments:
         url:
