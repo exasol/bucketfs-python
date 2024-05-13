@@ -40,3 +40,4 @@
 - Update actions/setup-python from `v2` to `v5`
 - Added build system section to project `pyproject.toml`
 - Restructure internals of bucketfs package
+- Updated the SLC base flavour to python3.10
