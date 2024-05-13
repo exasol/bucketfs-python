@@ -39,14 +39,6 @@ jobs:
       - name: Install Project
         run: poetry install
 
-      - name: Run SaaS Tests
-        if: "contains(github.event.head_commit.message, '[run-saas-tests]') && (matrix.python-version == '3.10')"
-        env:
-          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
-          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
-          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
-        run: poetry run pytest test_saas
-
       - name: Checkout ITDE
         run: git clone https://github.com/exasol/integration-test-docker-environment.git
         working-directory: ..
@@ -57,4 +49,18 @@ jobs:
 
       - name: Run Tests
         run: poetry run pytest tests
+
+      - name: Fail, if SaaS tests are not activated
+        if: "!contains(github.event.head_commit.message, '[run-saas-tests]') && (matrix.python-version == '3.10')"
+        run: |
+          echo "Failed because the SaaS tests are not activated"
+          exit 1
+
+      - name: Run SaaS Tests
+        if: "contains(github.event.head_commit.message, '[run-saas-tests]') && (matrix.python-version == '3.10')"
+        env:
+          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
+          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
+          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
+        run: poetry run pytest test_saas
 
