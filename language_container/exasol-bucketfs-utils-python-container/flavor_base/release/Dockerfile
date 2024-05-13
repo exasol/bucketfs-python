@@ -1,4 +1,4 @@
-FROM exasol/script-language-container:template-Exasol-all-python-3.10_release_QPAFQSHIVTUIPZW5OZKXKUK2C4PGNYPC3E2WFD72HONLVRPLUXIA
+FROM exasol/script-language-container:template-Exasol-all-python-3.10-release_QPAFQSHIVTUIPZW5OZKXKUK2C4PGNYPC3E2WFD72HONLVRPLUXIA
 COPY release/dist /project
 RUN pip install /project/*.whl
 
