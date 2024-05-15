@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BucketFs Python 0.6.0, released 2022-11-11" href="changes_0.6.0.html" /><link rel="prev" title="BucketFs Python 0.8.0, released 2023-03-21" href="changes_0.8.0.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="BucketFs Python 0.9.0, released 2024-02-16" href="changes_0.9.0.html" /><link rel="prev" title="Unreleased" href="unreleased.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>BucketFs Python 0.7.0, released 2022-12-22 - Bucketfs</title>
+        <title>BucketFs Python 0.10.0, released 2024-05-15 - Bucketfs</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -174,11 +174,11 @@
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="changelog.html">📝 Changes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="unreleased.html">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changes_0.10.0.html">BucketFs Python 0.10.0, released 2024-05-15</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">BucketFs Python 0.10.0, released 2024-05-15</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes_0.9.0.html">BucketFs Python 0.9.0, released 2024-02-16</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes_0.8.0.html">BucketFs Python 0.8.0, released 2023-03-21</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes_0.8.0.html#dependencies">Dependencies</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">BucketFs Python 0.7.0, released 2022-12-22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes_0.7.0.html">BucketFs Python 0.7.0, released 2022-12-22</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes_0.6.0.html">BucketFs Python 0.6.0, released 2022-11-11</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes_0.5.0.html">BucketFs Python 0.5.0, released 2022-10-12</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes_0.4.0.html">BucketFs Python 0.4.0, released 2022-09-28</a></li>
@@ -221,26 +221,54 @@
           </label>
         </div>
         <article role="main">
-          <section id="bucketfs-python-0-7-0-released-2022-12-22">
-<h1>BucketFs Python 0.7.0, released 2022-12-22<a class="headerlink" href="#bucketfs-python-0-7-0-released-2022-12-22" title="Permalink to this heading">#</a></h1>
-<section id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
-<p>Updated documentation and added support for exasol toolbox.</p>
-</section>
-<section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Fix invalid command in developer guide</p></li>
-<li><p>Update code example in basic user guide</p></li>
+          <section id="bucketfs-python-0-10-0-released-2024-05-15">
+<h1>BucketFs Python 0.10.0, released 2024-05-15<a class="headerlink" href="#bucketfs-python-0-10-0-released-2024-05-15" title="Permalink to this heading">#</a></h1>
+<section id="feature">
+<h2>Feature<a class="headerlink" href="#feature" title="Permalink to this heading">#</a></h2>
+<ul>
+<li><p>Added logging support
+<strong>Overview</strong></p>
+<p>The bucketfs logger can be referenced via <code class="docutils literal notranslate"><span class="pre">exasol.bucketfs</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="c1"># Get the logger for &#39;exasol.bucketfs&#39;</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;exasol.bucketfs&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For most use cases it should be sufficient to just configure the root logger, in order
+to retrieve the logs from bucketfs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Support for viewing BucketFS as a directory</p>
+<p>Added the PathLike protocol as described in the <a class="reference internal" href="../design/bucketpath.html"><span class="doc std std-doc">design document</span></a>.
+Extracted bucket interface into BucketLike protocol.
+Implemented PathLike for buckets based on BucketLike protocol.
+Added a path factory function.
+Added implementation of the BucketLike for the SaaS BucketFS.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verify</span></code> parameter to the old interface.</p></li>
+</ul>
+</li>
 </ul>
 </section>
-<section id="changes">
-<h2>Changes<a class="headerlink" href="#changes" title="Permalink to this heading">#</a></h2>
+<section id="bug-fixing">
+<h2>Bug Fixing<a class="headerlink" href="#bug-fixing" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Add project setup section to developer guide</p></li>
-<li><p>Add support exasol-toolbox</p></li>
-<li><p>Add support for pre commit hooks</p></li>
-<li><p>Update dependencies</p></li>
+<li><p>Fixed a bug with the propagation of the verify flag from a Service object to the Buckets.</p></li>
+</ul>
+</section>
+<section id="internal">
+<h2>Internal<a class="headerlink" href="#internal" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Relock dependencies</p></li>
+<li><p>Update abatilo/actions-poetry from <code class="docutils literal notranslate"><span class="pre">v2.1.4</span></code> to <code class="docutils literal notranslate"><span class="pre">v3.0.0</span></code></p></li>
+<li><p>Update actions/setup-python from <code class="docutils literal notranslate"><span class="pre">v2</span></code> to <code class="docutils literal notranslate"><span class="pre">v5</span></code></p></li>
+<li><p>Added build system section to project <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></li>
+<li><p>Restructure internals of bucketfs package</p></li>
+<li><p>Updated the SLC base flavour to python3.10</p></li>
 </ul>
 </section>
 </section>
@@ -250,23 +278,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="changes_0.6.0.html">
+          <a class="next-page" href="changes_0.9.0.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">BucketFs Python 0.6.0, released 2022-11-11</div>
+                <div class="title">BucketFs Python 0.9.0, released 2024-02-16</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="changes_0.8.0.html">
+          <a class="prev-page" href="unreleased.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">BucketFs Python 0.8.0, released 2023-03-21</div>
+                <div class="title">Unreleased</div>
                 
               </div>
             </a>
@@ -300,10 +328,10 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">BucketFs Python 0.7.0, released 2022-12-22</a><ul>
-<li><a class="reference internal" href="#summary">Summary</a></li>
-<li><a class="reference internal" href="#documentation">Documentation</a></li>
-<li><a class="reference internal" href="#changes">Changes</a></li>
+<li><a class="reference internal" href="#">BucketFs Python 0.10.0, released 2024-05-15</a><ul>
+<li><a class="reference internal" href="#feature">Feature</a></li>
+<li><a class="reference internal" href="#bug-fixing">Bug Fixing</a></li>
+<li><a class="reference internal" href="#internal">Internal</a></li>
 </ul>
 </li>
 </ul>
