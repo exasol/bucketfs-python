@@ -10,7 +10,7 @@ packages  = [
     {include = "exasol"},
     {include = "exasol_bucketfs_utils_python"}
 ]
-version = "0.9.0"
+version = "0.10.0"
 description = "BucketFS utilities for the Python programming language"
 
 license = "MIT"

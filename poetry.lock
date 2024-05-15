@@ -549,13 +549,13 @@ files = [
 
 [[package]]
 name = "exasol-saas-api"
-version = "0.3.0"
+version = "0.4.0"
 description = "API enabling Python applications connecting to Exasol database SaaS instances and using their SaaS services"
 optional = false
 python-versions = "<4.0,>=3.8.0"
 files = [
-    {file = "exasol_saas_api-0.3.0-py3-none-any.whl", hash = "sha256:1364627f6eeac369759086dac828a716580ae912e38beb0b4f86daa555a3ec31"},
-    {file = "exasol_saas_api-0.3.0.tar.gz", hash = "sha256:6d78b68cf710fd68c4a6067244bf891f52bd37bae892e7194e6180cd611bdf48"},
+    {file = "exasol_saas_api-0.4.0-py3-none-any.whl", hash = "sha256:c4a6d56bbc2b21fbb9df6c2a589e330c491104c092f462553e59b04a7968200c"},
+    {file = "exasol_saas_api-0.4.0.tar.gz", hash = "sha256:959569a276ea7a79a15327d447fdc402b73a105c7487ab282cd4a2978d772298"},
 ]
 
 [package.dependencies]
@@ -1212,13 +1212,13 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.2.1"
+version = "4.2.2"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "platformdirs-4.2.1-py3-none-any.whl", hash = "sha256:17d5a1161b3fd67b390023cb2d3b026bbd40abde6fdb052dfbd3a29c3ba22ee1"},
-    {file = "platformdirs-4.2.1.tar.gz", hash = "sha256:031cd18d4ec63ec53e82dceaac0417d218a6863f7745dfcc9efe7793b7039bdf"},
+    {file = "platformdirs-4.2.2-py3-none-any.whl", hash = "sha256:2d7a1657e36a80ea911db832a8a6ece5ee53d8de21edd5cc5879af6530b1bfee"},
+    {file = "platformdirs-4.2.2.tar.gz", hash = "sha256:38b7b51f512eed9e84a22788b4bce1de17c0adb134d6becb09836e37d8654cd3"},
 ]
 
 [package.extras]

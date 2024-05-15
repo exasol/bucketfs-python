@@ -1,6 +1,6 @@
-# Unreleased
+# BucketFs Python 0.10.0, released 2024-05-15
 
-## Added 
+## Feature 
 - Added logging support
     **Overview**
 
