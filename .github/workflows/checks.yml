@@ -18,7 +18,7 @@ jobs:
         uses: exasol/python-toolbox/.github/actions/python-environment@0.10.0
 
       - name: Check Version(s)
-        run: poetry run version-check  <<Add path to version.py file>> 
+        run: poetry run version-check  exasol/bucketfs/version.py
 
   build-documentation-job:
     name: Build Documentation
