@@ -10,7 +10,15 @@ jobs:
 
   ci-job:
     name: Checks
-    uses: exasol/python-toolbox/.github/workflows/checks.yml@0.3.0
+    uses: ./.github/workflows/checks.yml
+
+  publish-docs:
+    name: Publish Documentation
+    uses: ./.github/workflows/gh-pages.yml
+
+  metrics:
+    needs: [ ci-job ]
+    uses: ./.github/workflows/report.yml
 
   tests-job:
     name: Tests (Python-${{ matrix.python-version }})
@@ -43,6 +51,3 @@ jobs:
       - name: Run Tests
         run: poetry run pytest tests
 
-  publish-docs:
-    name: Publish Documentation
-    uses: exasol/python-toolbox/.github/workflows/gh-pages.yml@0.3.0

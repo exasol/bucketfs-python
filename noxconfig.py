@@ -9,25 +9,13 @@ from typing import (
     MutableMapping,
 )
 
+from exasol.toolbox.nox.plugin import hookimpl
 from nox import Session
 
 
-@dataclass(frozen=True)
-class Config:
-    root: Path = Path(__file__).parent
-    doc: Path = Path(__file__).parent / "doc"
-    version_file: Path = Path(__file__).parent / "exasol" / "bucketfs" / "version.py"
-    path_filters: Iterable[str] = (
-        "dist",
-        ".eggs",
-        "venv",
-    )
-
-    @staticmethod
-    def pre_integration_tests_hook(
-        session: Session, _config: Config, _context: MutableMapping[str, Any]
-    ) -> bool:
-        """Implement if project specific behaviour is required"""
+class IntegrationTestsPlugin:
+    @hookimpl
+    def pre_integration_tests_hook(self, session, config, context):
         with TemporaryDirectory() as tmp_dir:
             tmp_dir = Path(tmp_dir)
             checkout_name = "ITDE"
@@ -51,15 +39,24 @@ class Config:
                     "--db-mem-size",
                     "4GB",
                 )
-        return True
 
-    @staticmethod
-    def post_integration_tests_hook(
-        session: Session, _config: Config, _context: MutableMapping[str, Any]
-    ) -> bool:
-        """Implement if project specific behaviour is required"""
+    @hookimpl
+    def post_integration_tests_hook(self, session, config, context):
         session.run("docker", "kill", "db_container_test", external=True)
-        return True
+
+
+@dataclass(frozen=True)
+class Config:
+    root: Path = Path(__file__).parent
+    doc: Path = Path(__file__).parent / "doc"
+    version_file: Path = Path(__file__).parent / "exasol" / "bucketfs" / "version.py"
+    path_filters: Iterable[str] = (
+        "dist",
+        ".eggs",
+        "venv",
+    )
+
+    plugins = [IntegrationTestsPlugin]
 
 
 PROJECT_CONFIG = Config()
