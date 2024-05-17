@@ -28,9 +28,6 @@ Setup pre-commit hook(s)
 Creating a Release
 *******************
 
-Creating a Release
-++++++++++++++++++
-
 Prepare the Release
 -------------------
 
