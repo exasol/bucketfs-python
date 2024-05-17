@@ -45,7 +45,7 @@ dill = "^0.3.4"
 exasol-udf-mock-python = "^0.1.0"
 toml = ">=0.10.2"
 sphinx-copybutton = "^0.5.0"
-exasol-toolbox = ">=0.10.0"
+exasol-toolbox = ">=0.12.0"
 pytest-localserver = "^0.8.1"
 
 [tool.coverage.run]
