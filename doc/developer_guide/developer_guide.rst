@@ -52,6 +52,11 @@ Once the PR is successfully merged, the release can be triggered (see next secti
 Triggering the Release
 ----------------------
 
+.. warning::
+
+    Before creating a tag for a release, make sure you have pulled in the latest changes
+    from **master/main** (:code:`git pull`).
+
 To trigger a release, a new tag must be pushed to GitHub. For further details, see `.github/workflows/ci-cd.yml`.
 
 1. Create a local tag with the appropriate version number:
