@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Python & Poetry Environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@0.10.0
+        uses: exasol/python-toolbox/.github/actions/python-environment@0.12.0
 
       - name: Download Artifacts
         uses: actions/download-artifact@v3
@@ -31,9 +31,8 @@ jobs:
       - name: Copy Artifacts into Root Folder
         working-directory: ./artifacts
         run: |
-          ls -al 
-          cp .artifacts/.coverage ../
-          cp .artifacts/.lint.txt ../
+          cp .coverage/.coverage ../
+          cp .lint.txt/.lint.txt ../
 
       - name: Generate Report
         run: poetry run nox -s report -- -- --format json | tee metrics.json
