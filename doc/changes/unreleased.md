@@ -2,4 +2,4 @@
 
 ## Internal
 - Updated lockfile
-- Update workflows based on workflow templates of exasol-toolbox 0.10.
+- Update workflows to align with used exasol-toolbox version (0.12.0)
