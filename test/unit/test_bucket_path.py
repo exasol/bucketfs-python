@@ -198,3 +198,8 @@ def test_write_and_create_parent(bucket_fake):
     assert path.exists()
     with open(source_file, 'rb') as f:
         assert next(iter(path.read(100))) == f.read()
+
+
+def test_archive_as_udf_path(bucket_fake):
+    path = bfs.path.BucketPath('container/my_container.tar.gz', bucket_api=bucket_fake)
+    assert path.as_udf_path().endswith('container/my_container')

@@ -9,6 +9,8 @@ from exasol.bucketfs._buckets import BucketLike, SaaSBucket, MountedBucket
 from exasol.bucketfs._service import Service
 from exasol.bucketfs._error import BucketFsError
 
+ARCHIVE_SUFFIXES = [".tar", ".gz", ".tgz", ".zip", ".tar"]
+
 
 class StorageBackend(Enum):
     onprem = auto()
@@ -170,6 +172,12 @@ class PathLike(Protocol):
         """
 
 
+def _remove_archive_suffix(path: PurePath) -> PurePath:
+    while path.suffix in ARCHIVE_SUFFIXES:
+        path = path.with_suffix('')
+    return path
+
+
 class _BucketFile:
     """
     A node in a perceived file structure of a bucket.
@@ -288,7 +296,8 @@ class BucketPath:
         return self._path.as_uri()
 
     def as_udf_path(self) -> str:
-        return str(PurePath(self._bucket_api.udf_path) / self._path)
+        return str(PurePath(self._bucket_api.udf_path) /
+                   _remove_archive_suffix(self._path))
 
     def exists(self) -> bool:
         return self._navigate() is not None
