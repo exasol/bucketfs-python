@@ -38,7 +38,6 @@ exasol-saas-api=">=0.3.0"
 httpx=">=0.27.0"
 attrs=">=23.2.0"
 
-
 [tool.poetry.dev-dependencies]
 pyexasol = "^0.25.2"
 dill = "^0.3.4"
@@ -47,6 +46,7 @@ toml = ">=0.10.2"
 sphinx-copybutton = "^0.5.0"
 exasol-toolbox = ">=0.12.0"
 pytest-localserver = "^0.8.1"
+pytest-exasol-saas = ">=0.2.1"
 
 [tool.coverage.run]
 source = [

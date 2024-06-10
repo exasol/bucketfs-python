@@ -34,15 +34,15 @@ def _collect_all_names(path: bfs.path.PathLike) -> set[str]:
     return all_names
 
 
-def test_write_read_back_saas(saas_test_service_url, saas_test_token,
-                              saas_test_account_id, saas_test_database_id,
+def test_write_read_back_saas(saas_host, saas_pat,
+                              saas_account_id, operational_saas_database_id,
                               children_poem):
 
     base_path = bfs.path.build_path(backend=bfs.path.StorageBackend.saas,
-                                    url=saas_test_service_url,
-                                    account_id=saas_test_account_id,
-                                    database_id=saas_test_database_id,
-                                    pat=saas_test_token)
+                                    url=saas_host,
+                                    account_id=saas_account_id,
+                                    database_id=operational_saas_database_id,
+                                    pat=saas_pat)
     file_name = 'test_bucket_path/test_write_read_back_saas/little_star.txt'
     poem_path = base_path / file_name
 
@@ -51,15 +51,15 @@ def test_write_read_back_saas(saas_test_service_url, saas_test_token,
     assert data_back == children_poem
 
 
-def test_write_list_files_saas(saas_test_service_url, saas_test_token,
-                               saas_test_account_id, saas_test_database_id,
+def test_write_list_files_saas(saas_host, saas_pat,
+                               saas_account_id, operational_saas_database_id,
                                children_poem, classic_poem):
 
     base_path = bfs.path.build_path(backend=bfs.path.StorageBackend.saas,
-                                    url=saas_test_service_url,
-                                    account_id=saas_test_account_id,
-                                    database_id=saas_test_database_id,
-                                    pat=saas_test_token,
+                                    url=saas_host,
+                                    account_id=saas_account_id,
+                                    database_id=operational_saas_database_id,
+                                    pat=saas_pat,
                                     path='test_bucket_path/test_write_list_files_saas')
     poem_path1 = base_path / 'children/little_star.txt'
     poem_path2 = base_path / 'classic/highlands.txt'
@@ -70,15 +70,15 @@ def test_write_list_files_saas(saas_test_service_url, saas_test_token,
     assert _collect_all_names(base_path) == expected_names
 
 
-def test_write_delete_saas(saas_test_service_url, saas_test_token,
-                           saas_test_account_id, saas_test_database_id,
+def test_write_delete_saas(saas_host, saas_pat,
+                           saas_account_id, operational_saas_database_id,
                            children_poem, classic_poem):
 
     base_path = bfs.path.build_path(backend=bfs.path.StorageBackend.saas,
-                                    url=saas_test_service_url,
-                                    account_id=saas_test_account_id,
-                                    database_id=saas_test_database_id,
-                                    pat=saas_test_token)
+                                    url=saas_host,
+                                    account_id=saas_account_id,
+                                    database_id=operational_saas_database_id,
+                                    pat=saas_pat)
     poems_root = base_path / 'test_bucket_path/test_write_delete_saas'
     poem_path1 = poems_root / 'children/little_star.txt'
     poem_path2 = poems_root / 'classic/highlands.txt'
