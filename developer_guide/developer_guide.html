@@ -308,6 +308,62 @@
 </div>
 </section>
 </section>
+<section id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h2>
+<section id="pytest-plugins">
+<h3>Pytest Plugins<a class="headerlink" href="#pytest-plugins" title="Permalink to this heading">¶</a></h3>
+<p>BFSPY declares a dependency to pytest plugin <code class="docutils literal notranslate"><span class="pre">pytest-exasol-saas</span></code> which is
+maintained in GitHub repository <a class="reference external" href="https://github.com/exasol/pytest-plugins/tree/main/pytest-saas/">pytest-plugins/pytest_saas</a>.  This
+plugin makes additional fixtures available that are used in the saas
+integration tests of BFSPY, see files in folder <a class="reference external" href="https://github.com/exasol/bucketfs-python/tree/main/test_saas/integration/">test_saas/integration</a>.</p>
+</section>
+<section id="running-tests-in-ci-builds">
+<h3>Running Tests in CI Builds<a class="headerlink" href="#running-tests-in-ci-builds" title="Permalink to this heading">¶</a></h3>
+<p>The test cases in BFSPY are separated in two groups.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Group</p></th>
+<th class="head"><p>Execution</p></th>
+<th class="head"><p>Name of gating GitHub workflow</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>G1) Fast and cheap tests</p></td>
+<td><p>On each push to your development branch</p></td>
+<td><p>Gate 1 - Regular CI</p></td>
+</tr>
+<tr class="row-odd"><td><p>G2) Slow or expensive tests</p></td>
+<td><p>Only on manual approval, see below</p></td>
+<td><p>Gate 2 - Allow Merge</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This enables fast development cycles while still protecting the main branch
+against build failures.</p>
+<p>For BFSPY group G2 particularly contains the tests involving Exasol SaaS
+infrastructure which are creating costs for the database instances temporarily
+created during test execution.</p>
+<p>Group G2 is guarded by a dedicated <a class="reference external" href="https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#required-reviewers">GitHub Enviroment</a>
+requiring <strong>manual approval</strong> before these tests are executed.</p>
+<p>Each of the groups results in a final gating GitHub workflow job that is added to the branch protection of branch <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p>
+<p>So in order to merge a branch to <code class="docutils literal notranslate"><span class="pre">main</span></code> branch, the tests of both groups need to be executed and to have terminated succesfully.</p>
+<section id="approving-slow-tests">
+<h4>Approving Slow Tests<a class="headerlink" href="#approving-slow-tests" title="Permalink to this heading">¶</a></h4>
+<p>To approve executing the tests in group G2</p>
+<ul class="simple">
+<li><p>Open your pull request in GitHub</p></li>
+<li><p>Scroll to section “Checks”</p></li>
+<li><p>Locate pending tasks, e.g. “Ask if Slow or Expensive Tests (e.g. SaaS) Should be Run”</p></li>
+<li><p>Click the link “Details” on the right-hand side</p></li>
+<li><p>Click “Review pending Deplopyments”</p></li>
+<li><p>Select the checkbox “slow-tests”</p></li>
+<li><p>Click the green button “Approve and deploy”</p></li>
+</ul>
+</section>
+</section>
+</section>
 <section id="creating-a-release">
 <h2>Creating a Release<a class="headerlink" href="#creating-a-release" title="Permalink to this heading">¶</a></h2>
 <section id="prepare-the-release">
@@ -450,6 +506,14 @@ from <strong>master/main</strong> (<code class="code docutils literal notranslat
 <li><a class="reference internal" href="#checkout-the-project">Checkout the Project</a></li>
 <li><a class="reference internal" href="#install-project-dependencies">Install project dependencies</a></li>
 <li><a class="reference internal" href="#setup-pre-commit-hook-s">Setup pre-commit hook(s)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests">Tests</a><ul>
+<li><a class="reference internal" href="#pytest-plugins">Pytest Plugins</a></li>
+<li><a class="reference internal" href="#running-tests-in-ci-builds">Running Tests in CI Builds</a><ul>
+<li><a class="reference internal" href="#approving-slow-tests">Approving Slow Tests</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#creating-a-release">Creating a Release</a><ul>
