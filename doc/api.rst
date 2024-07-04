@@ -17,21 +17,21 @@ exasol.bucketfs.Bucket
    :show-inheritance:
 
 exasol.bucketfs.SaaSBucket
------------------------
+--------------------------
 .. autoclass:: exasol.bucketfs.Bucket
    :members:
    :undoc-members:
    :show-inheritance:
 
 exasol.bucketfs.path.PathLike
------------------------
+-----------------------------
 .. autoclass:: exasol.bucketfs.path.PathLike
    :members:
    :undoc-members:
    :show-inheritance:
 
 exasol.bucketfs.path.build_path
-------------------------
+-------------------------------
 .. autofunction:: exasol.bucketfs.path.build_path
 
 exasol.bucketfs.as_bytes

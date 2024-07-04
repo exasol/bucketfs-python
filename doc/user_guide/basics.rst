@@ -23,7 +23,7 @@ Get a Bucket reference
 
 
 Bucket class
--------------
+------------
 A Bucket contains a set of files which may be restricted, depending on the credentials of the requester.
 The Bucket class for an On-Prem database is :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.Bucket>`.
 The correspondent class for a SaaS database is :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.SaaSBucket>`.
@@ -80,17 +80,17 @@ Delete files from Bucket
    :end-before: # Expert/Mapped bucket API
 
 Create bucket object in SaaS
-++++++++++++++++++++++++
+++++++++++++++++++++++++++++
 
 .. literalinclude:: /examples/bucket_saas.py
    :language: python3
 
 PathLike interface
--------------
+------------------
 A PathLike is an interface similar to the pathlib.Path and should feel familiar to most users.
 
 Using the PathLike interface
-++++++++++++++++++++++++
+++++++++++++++++++++++++++++
 
 .. literalinclude:: /examples/path_like.py
    :language: python3
