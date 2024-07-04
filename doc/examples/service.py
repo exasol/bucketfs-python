@@ -1,3 +1,7 @@
+"""
+This tutorial is relevant for the On-Prem Exasol database.
+"""
+
 # List buckets
 from exasol.bucketfs import Service
 

@@ -3,8 +3,8 @@ Basic's
 
 The Bucketfs Service
 --------------------
-A single bucketfs service can host multiple buckets. In order to interact with a bucketfs service one
-can use the :ref:`exasol.bucketfs.Service <api:exasol.bucketfs.Service>` class.
+In the On-Prem database, a single bucketfs service can host multiple buckets. In order to interact with a
+bucketfs service one can use the :ref:`exasol.bucketfs.Service <api:exasol.bucketfs.Service>` class.
 
 List buckets
 ++++++++++++
@@ -25,8 +25,14 @@ Get a Bucket reference
 Bucket class
 -------------
 A Bucket contains a set of files which may be restricted, depending on the credentials of the requester.
-Using :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.Bucket>` class the user can interact (download, upload, list and delete) files.
-with the files in the bucket.
+The Bucket class for an On-Prem database is :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.Bucket>`.
+The correspondent class for a SaaS database is :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.SaaSBucket>`.
+Using these classes the user can interact with the files in the bucket (download, upload, list and delete them).
+
+Most of the examples below are based on the On-Prem implementation of the BucketFS. In the SaaS implementation
+there is only one BucketFS service, providing a single bucket. To access the BucketFS in SaaS the Bucket
+object should be created directly, as it is demonstrated in the last example. The interface of the Bucket
+object for the SaaS database is identical to that of the On-Prem database.
 
 List files in a Bucket
 ++++++++++++++++++++++
@@ -73,6 +79,21 @@ Delete files from Bucket
    :language: python3
    :end-before: # Expert/Mapped bucket API
 
+Create bucket object in SaaS
+++++++++++++++++++++++++
+
+.. literalinclude:: /examples/bucket_saas.py
+   :language: python3
+
+PathLike interface
+-------------
+A PathLike is an interface similar to the pathlib.Path and should feel familiar to most users.
+
+Using the PathLike interface
+++++++++++++++++++++++++
+
+.. literalinclude:: /examples/path_like.py
+   :language: python3
 
 Configure logging
 +++++++++++++++++

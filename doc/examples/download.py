@@ -1,3 +1,6 @@
+"""
+This tutorial is relevant for the On-Prem Exasol database.
+"""
 from exasol.bucketfs import (
     Service,
     as_bytes,
