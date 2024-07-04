@@ -451,9 +451,9 @@ def build_path(**kwargs) -> PathLike:
     """
     Creates a PathLike object based on a bucket in one of the BucketFS storage backends.
     It provides the same interface for the following BucketFS implementations:
-        - On-Premises
-        - SaaS
-        - BucketFS files mounted as read-only directory in a UDF.
+    - On-Premises
+    - SaaS
+    - BucketFS files mounted as read-only directory in a UDF.
 
     Arguments:
         backend:

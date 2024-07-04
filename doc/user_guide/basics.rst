@@ -26,7 +26,7 @@ Bucket class
 ------------
 A Bucket contains a set of files which may be restricted, depending on the credentials of the requester.
 The Bucket class for an On-Prem database is :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.Bucket>`.
-The correspondent class for a SaaS database is :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.SaaSBucket>`.
+The correspondent class for a SaaS database is exasol.bucketfs.SaaSBucket.
 Using these classes the user can interact with the files in the bucket (download, upload, list and delete them).
 
 Most of the examples below are based on the On-Prem implementation of the BucketFS. In the SaaS implementation
