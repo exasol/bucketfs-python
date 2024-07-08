@@ -1,6 +1,6 @@
 """
-We will demonstrate the usage of the PathLike interface with an example of handling
-customer reviews.
+In this tutorial we will demonstrate the usage of the PathLike interface
+with an example of handling customer reviews.
 """
 from typing import ByteString
 import tempfile
@@ -69,7 +69,7 @@ david_w_review.write(
     b'I will definitely be using their services again in the future.'
 )
 
-# Now let's write same bad reviews into a different subdirectory.
+# Now let's write some bad reviews in a different subdirectory.
 bad_reviews = reviews / 'bad'
 
 # Previously we provided content as a ByteString. But we can also use a file object,
@@ -124,7 +124,7 @@ for review in all_reviews:
 
 # A file can be deleted using the rm() method. Please note that once the file is
 # deleted it won't be possible to write another file to the same path for a certain
-# period of time, due to internal internode synchronisation procedure.
+# time, due to internal internode synchronisation procedure.
 mike_s_review.rm()
 
 # A directory can be deleted using the rmdir() method. If it is not empty we need
@@ -134,5 +134,7 @@ good_reviews.rmdir(recursive=True)
 # Now all reviews should be deleted.
 print('Are any reviews left?', reviews.exists())
 
-# In BucketFS a directory doesn't exist as a physical object. Therefore, the
-# exists() function called on a path for an empty directory returns False.
+# It may look surprising why a call to the review.exists() returns False, since we
+# have not deleted the base directory. In BucketFS a directory doesn't exist as a
+# distinct entity. Therefore, the exists() function called on a path for an empty
+# directory returns False.

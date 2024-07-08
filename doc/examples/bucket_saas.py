@@ -1,5 +1,5 @@
 """
-This tutorial is relevant for the Exasol SaaS database.
+This example is relevant for the Exasol SaaS database.
 It demonstrates the creation of a bucket object for a SaaS database.
 """
 import os

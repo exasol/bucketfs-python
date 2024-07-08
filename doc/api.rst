@@ -9,9 +9,30 @@ exasol.bucketfs.Service
    :undoc-members:
    :show-inheritance:
 
+exasol.bucketfs.BucketLike
+--------------------------
+.. autoclass:: exasol.bucketfs.BucketLike
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 exasol.bucketfs.Bucket
 -----------------------
 .. autoclass:: exasol.bucketfs.Bucket
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+exasol.bucketfs.SaaSBucket
+--------------------------
+.. autoclass:: exasol.bucketfs.SaaSBucket
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+exasol.bucketfs.MountedBucket
+-----------------------------
+.. autoclass:: exasol.bucketfs.MountedBucket
    :members:
    :undoc-members:
    :show-inheritance:

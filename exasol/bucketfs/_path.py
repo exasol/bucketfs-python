@@ -469,9 +469,9 @@ def build_path(**kwargs) -> PathLike:
             directory is as in the code below.
             path = build_path(...) / "the_desired_path"
 
-    The rest of the arguments are backend specific.
+            The rest of the arguments are backend specific.
 
-    On-prem arguments:
+            On-prem arguments:
         url:
             Url of the BucketFS service, e.g. `http(s)://127.0.0.1:2580`.
         username:
@@ -487,7 +487,7 @@ def build_path(**kwargs) -> PathLike:
         service_name:
             Optional name of the BucketFS service.
 
-    SaaS arguments:
+            SaaS arguments:
         url:
             Url of the Exasol SaaS. Defaults to 'https://cloud.exasol.com'.
         account_id:
@@ -500,7 +500,7 @@ def build_path(**kwargs) -> PathLike:
             Personal Access Token, e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A'
             (given example is not a valid PAT).
 
-    Mounted BucketFS directory arguments:
+            Mounted BucketFS directory arguments:
         service_name:
             Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
         bucket_name:

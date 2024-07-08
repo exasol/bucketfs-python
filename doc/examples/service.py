@@ -1,5 +1,5 @@
 """
-This tutorial is relevant for the On-Prem Exasol database.
+These examples are relevant for the On-Prem Exasol database.
 """
 
 # List buckets
