@@ -1,3 +1,6 @@
+"""
+These examples are relevant for the On-Prem Exasol database.
+"""
 from exasol.bucketfs import Service
 
 URL = "http://localhost:6666"

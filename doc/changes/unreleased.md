@@ -20,3 +20,4 @@ However, the release ignores vulnerability CVE-2024-35195 in dependency `request
 ## Documentation
 
 * #144: Added comment on using fixtures from pytest-plugin `pytest-exasol-saas`
+* #147: Added documentation for the SaaS and the PathLike interface.

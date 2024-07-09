@@ -78,7 +78,7 @@ class BucketLike(Protocol):
 
         Q. What happens if the path points to a directory?
         A. Same. There are no directories as such in the BucketFS, hence
-           a directory path is just a non-existent file.
+        a directory path is just a non-existent file.
         """
 
     def upload(self, path: str, data: ByteString | BinaryIO) -> None:
@@ -90,20 +90,20 @@ class BucketLike(Protocol):
 
         Q. What happens if the parent is missing?
         A. The bucket doesn't care about the structure of the file's path. Looking from the prospective
-           of a file system, the bucket will create the missing parent, but in reality it will just
-           store the data indexed by the provided path.
+        of a file system, the bucket will create the missing parent, but in reality it will just
+        store the data indexed by the provided path.
 
         Q. What happens if the path points to an existing file?
         A. That's fine, the file will be updated.
 
         Q. What happens if the path points to an existing directory?
         A. The bucket doesn't care about the structure of the file's path. Looking from the prospective
-           of a file system, there will exist a file and directory with the same name.
+        of a file system, there will exist a file and directory with the same name.
 
         Q. How should the path look like?
         A. It should look like a POSIX path, but it should not contain any of the NTFS invalid characters.
-           It can have the leading and/or ending backslashes, which will be subsequently removed.
-           If the path doesn't conform to this format an BucketFsError will be raised.
+        It can have the leading and/or ending backslashes, which will be subsequently removed.
+        If the path doesn't conform to this format an BucketFsError will be raised.
         """
 
     def download(self, path: str, chunk_size: int = 8192) -> Iterable[ByteString]:
@@ -126,7 +126,23 @@ class BucketLike(Protocol):
 
 class Bucket:
     """
-    Implementation of the On-Premises bucket.
+    Implementation of the BucketLike interface for the BucketFS in Exasol On-Premises database.
+
+    Args:
+        name:
+            Name of the bucket.
+        service:
+            Url where this bucket is hosted on.
+        username:
+            Username used for authentication.
+        password:
+            Password used for authentication.
+        verify:
+            Either a boolean, in which case it controls whether we verify
+            the server's TLS certificate, or a string, in which case it must be a path
+            to a CA bundle to use. Defaults to ``True``.
+        service_name:
+            Optional name of the BucketFS service.
     """
 
     def __init__(
@@ -138,25 +154,6 @@ class Bucket:
         verify: bool | str = True,
         service_name: Optional[str] = None
     ):
-        """
-        Create a new bucket instance.
-
-        Args:
-            name:
-                Name of the bucket.
-            service:
-                Url where this bucket is hosted on.
-            username:
-                Username used for authentication.
-            password:
-                Password used for authentication.
-            verify:
-                Either a boolean, in which case it controls whether we verify
-                the server's TLS certificate, or a string, in which case it must be a path
-                to a CA bundle to use. Defaults to ``True``.
-            service_name:
-                Optional name of the BucketFS service.
-        """
         self._name = name
         self._service = _parse_service_url(service)
         self._username = username
@@ -201,13 +198,6 @@ class Bucket:
     def upload(
         self, path: str, data: ByteString | BinaryIO | Iterable[ByteString]
     ) -> None:
-        """
-        Uploads a file onto this bucket
-
-        Args:
-            path: in the bucket the file shall be associated with.
-            data: raw content of the file.
-        """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
         LOGGER.info("Uploading %s to bucket %s.", path, self.name)
         response = requests.put(url, data=data, auth=self._auth, verify=self._verify)
@@ -217,15 +207,6 @@ class Bucket:
             raise BucketFsError(f"Couldn't upload file: {path}") from ex
 
     def delete(self, path) -> None:
-        """
-        Deletes a specific file in this bucket.
-
-        Args:
-            path: points to the file which shall be deleted.
-
-        Raises:
-            A BucketFsError if the operation couldn't be executed successfully.
-        """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
         LOGGER.info("Deleting %s from bucket %s.", path, self.name)
         response = requests.delete(url, auth=self._auth, verify=self._verify)
@@ -236,16 +217,6 @@ class Bucket:
             raise BucketFsError(f"Couldn't delete: {path}") from ex
 
     def download(self, path: str, chunk_size: int = 8192) -> Iterable[ByteString]:
-        """
-        Downloads a specific file of this bucket.
-
-        Args:
-            path: which shall be downloaded.
-            chunk_size: which shall be used for downloading.
-
-        Returns:
-            An iterable of binary chunks representing the downloaded file.
-        """
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
         LOGGER.info(
             "Downloading %s using a chunk size of %d bytes from bucket %s.",
@@ -263,6 +234,19 @@ class Bucket:
 
 
 class SaaSBucket:
+    """
+    Implementation of the BucketLike interface for the BucketFS in Exasol SaaS.
+
+    Arguments:
+        url:
+            Url of the Exasol SaaS service.
+        account_id:
+            SaaS user account ID.
+        database_id:
+            SaaS database ID.
+        pat:
+            Personal Access Token
+    """
 
     def __init__(self, url: str, account_id: str, database_id: str, pat: str) -> None:
         self._url = url
@@ -362,7 +346,7 @@ class SaaSBucket:
 
 class MountedBucket:
     """
-    Implementation of the Bucket interface backed by a normal file system.
+    Implementation of the BucketLike interface backed by a normal file system.
     The targeted use case is the access to the BucketFS files from a UDF.
 
     Arguments:
