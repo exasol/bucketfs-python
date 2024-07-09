@@ -11,3 +11,4 @@ The current release adds a dependency to plugin `pytest_exasol_saas` and replace
 ## Documentation
 
 * #144: Added comment on using fixtures from pytest-plugin `pytest-exasol-saas`
+* #147: Added documentation for the SaaS and the PathLike interface.

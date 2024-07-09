@@ -280,18 +280,14 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#U"><strong>U</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#W"><strong>W</strong></a></div>
 </section>
 <section id="_" class="genindex-section">
   <h2>_</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api.html#exasol.bucketfs.Bucket.__init__">__init__() (exasol.bucketfs.Bucket method)</a>
-
-        <ul>
-          <li><a href="api.html#exasol.bucketfs.MappedBucket.__init__">(exasol.bucketfs.MappedBucket method)</a>
+        <li><a href="api.html#exasol.bucketfs.MappedBucket.__init__">__init__() (exasol.bucketfs.MappedBucket method)</a>
 </li>
-        </ul></li>
     </ul></td>
   </tr></table>
 </section>
@@ -304,11 +300,15 @@
 </li>
         <li><a href="api.html#exasol.bucketfs.as_file">as_file() (in module exasol.bucketfs)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.as_hash">as_hash() (in module exasol.bucketfs)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.as_string">as_string() (in module exasol.bucketfs)</a>
+</li>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.as_udf_path">as_udf_path() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.as_uri">as_uri() (exasol.bucketfs._path.PathLike method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -320,9 +320,13 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.Bucket">Bucket (class in exasol.bucketfs)</a>
 </li>
+        <li><a href="api.html#exasol.bucketfs.BucketFsError">BucketFsError</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api.html#exasol.bucketfs.BucketFsError">BucketFsError</a>
+        <li><a href="api.html#exasol.bucketfs.BucketLike">BucketLike (class in exasol.bucketfs)</a>
+</li>
+        <li><a href="api.html#exasol.bucketfs._path.build_path">build_path() (in module exasol.bucketfs._path)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -343,10 +347,36 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.Bucket.delete">delete() (exasol.bucketfs.Bucket method)</a>
+
+        <ul>
+          <li><a href="api.html#exasol.bucketfs.BucketLike.delete">(exasol.bucketfs.BucketLike method)</a>
 </li>
+          <li><a href="api.html#exasol.bucketfs.MountedBucket.delete">(exasol.bucketfs.MountedBucket method)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.SaaSBucket.delete">(exasol.bucketfs.SaaSBucket method)</a>
+</li>
+        </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.Bucket.download">download() (exasol.bucketfs.Bucket method)</a>
+
+        <ul>
+          <li><a href="api.html#exasol.bucketfs.BucketLike.download">(exasol.bucketfs.BucketLike method)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.MountedBucket.download">(exasol.bucketfs.MountedBucket method)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.SaaSBucket.download">(exasol.bucketfs.SaaSBucket method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.exists">exists() (exasol.bucketfs._path.PathLike method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -357,6 +387,40 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.Bucket.files">files (exasol.bucketfs.Bucket property)</a>
+
+        <ul>
+          <li><a href="api.html#exasol.bucketfs.BucketLike.files">(exasol.bucketfs.BucketLike property)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.MountedBucket.files">(exasol.bucketfs.MountedBucket property)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.SaaSBucket.files">(exasol.bucketfs.SaaSBucket property)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.is_dir">is_dir() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.is_file">is_file() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.iterdir">iterdir() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="J" class="genindex-section">
+  <h2>J</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.joinpath">joinpath() (exasol.bucketfs._path.PathLike method)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -369,6 +433,10 @@
         <li><a href="api.html#exasol.bucketfs.MappedBucket">MappedBucket (class in exasol.bucketfs)</a>
 </li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs.MountedBucket">MountedBucket (class in exasol.bucketfs)</a>
+</li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -376,7 +444,63 @@
   <h2>N</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api.html#exasol.bucketfs.Bucket.name">name (exasol.bucketfs.Bucket property)</a>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.name">name (exasol.bucketfs._path.PathLike property)</a>
+
+        <ul>
+          <li><a href="api.html#exasol.bucketfs.Bucket.name">(exasol.bucketfs.Bucket property)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.BucketLike.name">(exasol.bucketfs.BucketLike property)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.MountedBucket.name">(exasol.bucketfs.MountedBucket property)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.SaaSBucket.name">(exasol.bucketfs.SaaSBucket property)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.parent">parent (exasol.bucketfs._path.PathLike property)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike">PathLike (class in exasol.bucketfs._path)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.read">read() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.rm">rm() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.rmdir">rmdir() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.root">root (exasol.bucketfs._path.PathLike property)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs.SaaSBucket">SaaSBucket (class in exasol.bucketfs)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.suffix">suffix (exasol.bucketfs._path.PathLike property)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -387,10 +511,40 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.Bucket.udf_path">udf_path (exasol.bucketfs.Bucket property)</a>
+
+        <ul>
+          <li><a href="api.html#exasol.bucketfs.BucketLike.udf_path">(exasol.bucketfs.BucketLike property)</a>
 </li>
+          <li><a href="api.html#exasol.bucketfs.MountedBucket.udf_path">(exasol.bucketfs.MountedBucket property)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.SaaSBucket.udf_path">(exasol.bucketfs.SaaSBucket property)</a>
+</li>
+        </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api.html#exasol.bucketfs.Bucket.upload">upload() (exasol.bucketfs.Bucket method)</a>
+
+        <ul>
+          <li><a href="api.html#exasol.bucketfs.BucketLike.upload">(exasol.bucketfs.BucketLike method)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.MountedBucket.upload">(exasol.bucketfs.MountedBucket method)</a>
+</li>
+          <li><a href="api.html#exasol.bucketfs.SaaSBucket.upload">(exasol.bucketfs.SaaSBucket method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.walk">walk() (exasol.bucketfs._path.PathLike method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api.html#exasol.bucketfs._path.PathLike.write">write() (exasol.bucketfs._path.PathLike method)</a>
 </li>
     </ul></td>
   </tr></table>

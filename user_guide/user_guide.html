@@ -292,10 +292,10 @@
 <p>Depending on the database configuration, the bucketfs setup can range from straight forward to fairly complex.
 This is due to the fact that:</p>
 <ul class="simple">
-<li><p>Each database can have one or more BucketFS services</p></li>
+<li><p>Each database can have one or more BucketFS services (in the On-Prem database)</p></li>
 <li><p>Each BucketFS service is available on all worker cluster of a database</p></li>
 <li><p>Each BucketFS service runs on all data nodes of a database</p></li>
-<li><p>Each BucketFS service can have one or more Buckets</p></li>
+<li><p>Each BucketFS service can have one or more Buckets (in the On-Prem database)</p></li>
 <li><p>Each Bucket can hold one or more files</p></li>
 </ul>
 <p>The overview bellow tries to illustrate this in a more tangible manner.
@@ -304,7 +304,11 @@ For more details on bucketfs, please also have a look in the <a class="reference
 </section>
 <section id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Service</span><span class="p">,</span>
     <span class="n">as_bytes</span><span class="p">,</span>
 <span class="p">)</span>
@@ -317,19 +321,19 @@ For more details on bucketfs, please also have a look in the <a class="reference
 <span class="c1"># 0. List buckets</span>
 <span class="n">buckets</span> <span class="o">=</span> <span class="p">[</span><span class="n">bucket</span> <span class="k">for</span> <span class="n">bucket</span> <span class="ow">in</span> <span class="n">bucketfs</span><span class="p">]</span>
 
-<span class="c1"># 2. Get a bucket</span>
+<span class="c1"># 1. Get a bucket</span>
 <span class="n">default_bucket</span> <span class="o">=</span> <span class="n">bucketfs</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
 
-<span class="c1"># 3. List files in bucket</span>
+<span class="c1"># 2. List files in bucket</span>
 <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">default_bucket</span><span class="p">]</span>
 
-<span class="c1"># 4. Upload a file to the bucket</span>
+<span class="c1"># 3. Upload a file to the bucket</span>
 <span class="n">default_bucket</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="s2">&quot;MyFile.txt&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;File content&quot;</span><span class="p">)</span>
 
-<span class="c1"># 5. Download a file/content</span>
+<span class="c1"># 4. Download a file/content</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">as_bytes</span><span class="p">(</span><span class="n">default_bucket</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;MyFile.txt&quot;</span><span class="p">))</span>
 
-<span class="c1"># 6. Delete a file from a bucket</span>
+<span class="c1"># 5. Delete a file from a bucket</span>
 <span class="n">default_bucket</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;MyFile.txt&quot;</span><span class="p">)</span>
 </pre></div>
 </div>

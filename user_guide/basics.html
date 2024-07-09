@@ -289,8 +289,8 @@
 <h1>Basic’s<a class="headerlink" href="#basic-s" title="Permalink to this heading">¶</a></h1>
 <section id="the-bucketfs-service">
 <h2>The Bucketfs Service<a class="headerlink" href="#the-bucketfs-service" title="Permalink to this heading">¶</a></h2>
-<p>A single bucketfs service can host multiple buckets. In order to interact with a bucketfs service one
-can use the <a class="reference internal" href="../api.html#exasol-bucketfs-service"><span class="std std-ref">exasol.bucketfs.Service</span></a> class.</p>
+<p>In the On-Prem database, a single bucketfs service can host multiple buckets. In order to interact with a
+bucketfs service one can use the <a class="reference internal" href="../api.html#exasol-bucketfs-service"><span class="std std-ref">exasol.bucketfs.Service</span></a> class.</p>
 <section id="list-buckets">
 <h3>List buckets<a class="headerlink" href="#list-buckets" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
@@ -320,11 +320,19 @@ can use the <a class="reference internal" href="../api.html#exasol-bucketfs-serv
 <section id="bucket-class">
 <h2>Bucket class<a class="headerlink" href="#bucket-class" title="Permalink to this heading">¶</a></h2>
 <p>A Bucket contains a set of files which may be restricted, depending on the credentials of the requester.
-Using <a class="reference internal" href="../api.html#exasol-bucketfs-bucket"><span class="std std-ref">exasol.bucketfs.Bucket</span></a> class the user can interact (download, upload, list and delete) files.
-with the files in the bucket.</p>
+The Bucket class for an On-Prem database is <a class="reference internal" href="../api.html#exasol-bucketfs-bucket"><span class="std std-ref">exasol.bucketfs.Bucket</span></a>.
+The correspondent class for a SaaS database is exasol.bucketfs.SaaSBucket.
+Using these classes the user can interact with the files in the bucket (download, upload, list and delete them).</p>
+<p>Most of the examples below are based on the On-Prem implementation of the BucketFS. In the SaaS implementation
+there is only one BucketFS service, providing a single bucket. To access the BucketFS in SaaS the Bucket
+object should be created directly, as it is demonstrated in the last example. The interface of the Bucket
+object for the SaaS database is identical to that of the On-Prem database.</p>
 <section id="list-files-in-a-bucket">
 <h3>List files in a Bucket<a class="headerlink" href="#list-files-in-a-bucket" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
 
 <span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:6666&quot;</span>
 <span class="n">CREDENTIALS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}}</span>
@@ -338,7 +346,10 @@ with the files in the bucket.</p>
 </section>
 <section id="upload-files-to-a-bucket">
 <h3>Upload files to a Bucket<a class="headerlink" href="#upload-files-to-a-bucket" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">io</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">io</span>
 
 <span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
 
@@ -387,7 +398,10 @@ to get a more tangible object from the download, in that case the bucketfs conve
 <li><p><a class="reference internal" href="../api.html#exasol-bucketfs-as-hash"><span class="std std-ref">exasol.bucketfs.as_hash</span></a></p></li>
 <li><p><a class="reference internal" href="../api.html#exasol-bucketfs-as-file"><span class="std std-ref">exasol.bucketfs.as_file</span></a></p></li>
 </ul>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Service</span><span class="p">,</span>
     <span class="n">as_bytes</span><span class="p">,</span>
     <span class="n">as_file</span><span class="p">,</span>
@@ -419,7 +433,10 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </section>
 <section id="delete-files-from-bucket">
 <h3>Delete files from Bucket<a class="headerlink" href="#delete-files-from-bucket" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
 
 <span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:6666&quot;</span>
 <span class="n">CREDENTIALS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}}</span>
@@ -430,6 +447,176 @@ to get a more tangible object from the download, in that case the bucketfs conve
 <span class="c1"># Delete file from bucket</span>
 <span class="n">bucket</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;some/other/path/file2.bin&quot;</span><span class="p">)</span>
 
+</pre></div>
+</div>
+</section>
+<section id="create-bucket-object-in-saas">
+<h3>Create bucket object in SaaS<a class="headerlink" href="#create-bucket-object-in-saas" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example is relevant for the Exasol SaaS database.</span>
+<span class="sd">It demonstrates the creation of a bucket object for a SaaS database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">SaaSBucket</span>
+
+<span class="c1"># Let&#39;s assume that the required SaaS connection parameters</span>
+<span class="c1"># are stored in environment variables.</span>
+<span class="n">bucket</span> <span class="o">=</span> <span class="n">SaaSBucket</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_URL&#39;</span><span class="p">),</span>
+    <span class="n">account_id</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_ACCOUNT_ID&#39;</span><span class="p">),</span>
+    <span class="n">database_id</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_DATABASE_ID&#39;</span><span class="p">),</span>
+    <span class="n">pat</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_PAT&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pathlike-interface">
+<h2>PathLike interface<a class="headerlink" href="#pathlike-interface" title="Permalink to this heading">¶</a></h2>
+<p>A PathLike is an interface similar to the pathlib.Path and should feel familiar to most users.</p>
+<section id="using-the-pathlike-interface">
+<h3>Using the PathLike interface<a class="headerlink" href="#using-the-pathlike-interface" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">In this tutorial we will demonstrate the usage of the PathLike interface</span>
+<span class="sd">with an example of handling customer reviews.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ByteString</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">exasol.bucketfs</span> <span class="k">as</span> <span class="nn">bfs</span>
+
+<span class="c1"># First, we need to get a path in the BucketFS where we will store reviews.</span>
+<span class="c1"># We will use the build_path() function for that. This function takes different</span>
+<span class="c1"># input parameters depending on the backend in use. We will set the type of</span>
+<span class="c1"># backed to the variable below. Please change it to bfs.path.StorageBackend.saas</span>
+<span class="c1"># if needed.</span>
+<span class="n">backend</span> <span class="o">=</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">StorageBackend</span><span class="o">.</span><span class="n">onprem</span>
+
+<span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">StorageBackend</span><span class="o">.</span><span class="n">onprem</span><span class="p">:</span>
+    <span class="c1"># The parameters below are the default BucketFS parameters of the Docker-DB</span>
+    <span class="c1"># running on a local machine. Please change them according to the settings of the</span>
+    <span class="c1"># On-Prem database being used. For better security, consider storing the password</span>
+    <span class="c1"># in an environment variable.</span>
+    <span class="n">reviews</span> <span class="o">=</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">build_path</span><span class="p">(</span>
+        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://localhost:6666&quot;</span><span class="p">,</span>
+        <span class="n">bucket_name</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
+        <span class="n">service_name</span><span class="o">=</span><span class="s1">&#39;bfsdefault&#39;</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s1">&#39;reviews&#39;</span><span class="p">,</span>
+        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;write&#39;</span><span class="p">,</span>
+        <span class="n">verify</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+<span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">StorageBackend</span><span class="o">.</span><span class="n">saas</span><span class="p">:</span>
+    <span class="c1"># In case of a SaaS database we will assume that the required SaaS connection</span>
+    <span class="c1"># parameters are stored in environment variables.</span>
+    <span class="n">reviews</span> <span class="o">=</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">build_path</span><span class="p">(</span>
+        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_URL&#39;</span><span class="p">),</span>
+        <span class="n">account_id</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_ACCOUNT_ID&#39;</span><span class="p">),</span>
+        <span class="n">database_id</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_DATABASE_ID&#39;</span><span class="p">),</span>
+        <span class="n">pat</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SAAS_PAT&#39;</span><span class="p">),</span>
+        <span class="n">path</span><span class="o">=</span><span class="s1">&#39;reviews&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown backend </span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s create a path for good reviews and write some reviews there,</span>
+<span class="c1"># each into a separate file.</span>
+<span class="n">good_reviews</span> <span class="o">=</span> <span class="n">reviews</span> <span class="o">/</span> <span class="s1">&#39;good&#39;</span>
+
+<span class="n">john_h_review</span> <span class="o">=</span> <span class="n">good_reviews</span> <span class="o">/</span> <span class="s1">&#39;John-H.review&#39;</span>
+<span class="n">john_h_review</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+    <span class="sa">b</span><span class="s1">&#39;I had an amazing experience with this company! &#39;</span>
+    <span class="sa">b</span><span class="s1">&#39;The customer service was top-notch, and the product exceeded my expectations. &#39;</span>
+    <span class="sa">b</span><span class="s1">&#39;I highly recommend them to anyone looking for quality products and excellent service.&#39;</span>
+<span class="p">)</span>
+
+<span class="n">sarah_l_review</span> <span class="o">=</span> <span class="n">good_reviews</span> <span class="o">/</span> <span class="s1">&#39;Sarah-L.review&#39;</span>
+<span class="n">sarah_l_review</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+    <span class="sa">b</span><span class="s1">&#39;I am a repeat customer of this business, and they never disappoint. &#39;</span>
+    <span class="sa">b</span><span class="s1">&#39;The team is always friendly and helpful, and their products are outstanding. &#39;</span>
+    <span class="sa">b</span><span class="s1">&#39;I have recommended them to all my friends and family, and I will continue to do so!&#39;</span>
+<span class="p">)</span>
+
+<span class="n">david_w_review</span> <span class="o">=</span> <span class="n">good_reviews</span> <span class="o">/</span> <span class="s1">&#39;David-W.review&#39;</span>
+<span class="n">david_w_review</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+    <span class="sa">b</span><span class="s1">&#39;After trying several other companies, I finally found the perfect fit with this one. &#39;</span>
+    <span class="sa">b</span><span class="s1">&#39;Their attention to detail and commitment to customer satisfaction is unparalleled. &#39;</span>
+    <span class="sa">b</span><span class="s1">&#39;I will definitely be using their services again in the future.&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Now let&#39;s write some bad reviews in a different subdirectory.</span>
+<span class="n">bad_reviews</span> <span class="o">=</span> <span class="n">reviews</span> <span class="o">/</span> <span class="s1">&#39;bad&#39;</span>
+
+<span class="c1"># Previously we provided content as a ByteString. But we can also use a file object,</span>
+<span class="c1"># as shown here.</span>
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+    <span class="n">file_obj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+        <span class="sa">b</span><span class="s1">&#39;I first began coming here because of their amazing reviews. &#39;</span>
+        <span class="sa">b</span><span class="s1">&#39;Unfortunately, my experiences have been overwhelmingly negative. &#39;</span>
+        <span class="sa">b</span><span class="s1">&#39;I was billed more than 2,600 euros, the vast majority of which &#39;</span>
+        <span class="sa">b</span><span class="s1">&#39;I did not consent to and were never carried out.&#39;</span>
+    <span class="p">)</span>
+    <span class="n">file_obj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">mike_s_review</span> <span class="o">=</span> <span class="n">bad_reviews</span> <span class="o">/</span> <span class="s1">&#39;Mike-S.review&#39;</span>
+    <span class="n">mike_s_review</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_obj</span><span class="p">)</span>
+
+
+<span class="c1"># A PathLike object supports an interface similar to the PosixPurePath.</span>
+<span class="k">for</span> <span class="n">path_obj</span> <span class="ow">in</span> <span class="p">[</span><span class="n">reviews</span><span class="p">,</span> <span class="n">good_reviews</span><span class="p">,</span> <span class="n">john_h_review</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">path_obj</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">name:&#39;</span><span class="p">,</span> <span class="n">path_obj</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">suffix:&#39;</span><span class="p">,</span> <span class="n">path_obj</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">parent:&#39;</span><span class="p">,</span> <span class="n">path_obj</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">exists:&#39;</span><span class="p">,</span> <span class="n">path_obj</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">is_dir:&#39;</span><span class="p">,</span> <span class="n">path_obj</span><span class="o">.</span><span class="n">is_dir</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">is_file:&#39;</span><span class="p">,</span> <span class="n">path_obj</span><span class="o">.</span><span class="n">is_file</span><span class="p">())</span>
+
+<span class="c1"># The as_udf_path() function returns the correspondent path, as it&#39;s seen from a UDF.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A UDF can find John&#39;s review at&quot;</span><span class="p">,</span> <span class="n">john_h_review</span><span class="o">.</span><span class="n">as_udf_path</span><span class="p">())</span>
+
+
+<span class="c1"># The read() method returns an iterator over chunks of content.</span>
+<span class="c1"># The function below reads the whole content of the specified file.</span>
+<span class="k">def</span> <span class="nf">read_content</span><span class="p">(</span><span class="n">bfs_path</span><span class="p">:</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bfs_path</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+
+<span class="c1"># Like the pathlib.Path class, the BucketFS PathLike object provides methods</span>
+<span class="c1"># to iterate over the content of a directory.</span>
+<span class="c1"># Let&#39;s use the iterdir() method to print all good reviews.</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">good_reviews</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;said:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">read_content</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+
+
+<span class="c1"># The walk method allows traversing subdirectories.</span>
+<span class="c1"># Let&#39;s use this method to create a list of all review paths.</span>
+<span class="n">all_reviews</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="o">/</span> <span class="n">file</span> <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">reviews</span><span class="o">.</span><span class="n">walk</span><span class="p">()</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">review</span> <span class="ow">in</span> <span class="n">all_reviews</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">review</span><span class="p">)</span>
+
+
+<span class="c1"># A file can be deleted using the rm() method. Please note that once the file is</span>
+<span class="c1"># deleted it won&#39;t be possible to write another file to the same path for a certain</span>
+<span class="c1"># time, due to internal internode synchronisation procedure.</span>
+<span class="n">mike_s_review</span><span class="o">.</span><span class="n">rm</span><span class="p">()</span>
+
+<span class="c1"># A directory can be deleted using the rmdir() method. If it is not empty we need</span>
+<span class="c1"># to use the recursive=True option to delete the directory with all its content.</span>
+<span class="n">good_reviews</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Now all reviews should be deleted.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Are any reviews left?&#39;</span><span class="p">,</span> <span class="n">reviews</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+
+<span class="c1"># It may look surprising why a call to the review.exists() returns False, since we</span>
+<span class="c1"># have not deleted the base directory. In BucketFS a directory doesn&#39;t exist as a</span>
+<span class="c1"># distinct entity. Therefore, the exists() function called on a path for an empty</span>
+<span class="c1"># directory returns False.</span>
 </pre></div>
 </div>
 </section>
@@ -516,6 +703,11 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </ul>
 </li>
 <li><a class="reference internal" href="#delete-files-from-bucket">Delete files from Bucket</a></li>
+<li><a class="reference internal" href="#create-bucket-object-in-saas">Create bucket object in SaaS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pathlike-interface">PathLike interface</a><ul>
+<li><a class="reference internal" href="#using-the-pathlike-interface">Using the PathLike interface</a></li>
 <li><a class="reference internal" href="#configure-logging">Configure logging</a></li>
 </ul>
 </li>

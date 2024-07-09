@@ -316,7 +316,7 @@
 <span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">BucketLike</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<div class="viewcode-block" id="BucketLike"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.BucketLike">[docs]</a><span class="k">class</span> <span class="nc">BucketLike</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Definition of the Bucket interface.</span>
 <span class="sd">    It is compatible with both on-premises an SaaS BucketFS systems.</span>
@@ -348,7 +348,7 @@
 <span class="sd">        no backslash at the start or at the end.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BucketLike.delete"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.BucketLike.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deletes a file in the bucket.</span>
 
@@ -359,10 +359,10 @@
 
 <span class="sd">        Q. What happens if the path points to a directory?</span>
 <span class="sd">        A. Same. There are no directories as such in the BucketFS, hence</span>
-<span class="sd">           a directory path is just a non-existent file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        a directory path is just a non-existent file.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
 
-    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="BucketLike.upload"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.BucketLike.upload">[docs]</a>    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Uploads a file to the bucket.</span>
 
@@ -371,23 +371,23 @@
 
 <span class="sd">        Q. What happens if the parent is missing?</span>
 <span class="sd">        A. The bucket doesn&#39;t care about the structure of the file&#39;s path. Looking from the prospective</span>
-<span class="sd">           of a file system, the bucket will create the missing parent, but in reality it will just</span>
-<span class="sd">           store the data indexed by the provided path.</span>
+<span class="sd">        of a file system, the bucket will create the missing parent, but in reality it will just</span>
+<span class="sd">        store the data indexed by the provided path.</span>
 
 <span class="sd">        Q. What happens if the path points to an existing file?</span>
 <span class="sd">        A. That&#39;s fine, the file will be updated.</span>
 
 <span class="sd">        Q. What happens if the path points to an existing directory?</span>
 <span class="sd">        A. The bucket doesn&#39;t care about the structure of the file&#39;s path. Looking from the prospective</span>
-<span class="sd">           of a file system, there will exist a file and directory with the same name.</span>
+<span class="sd">        of a file system, there will exist a file and directory with the same name.</span>
 
 <span class="sd">        Q. How should the path look like?</span>
 <span class="sd">        A. It should look like a POSIX path, but it should not contain any of the NTFS invalid characters.</span>
-<span class="sd">           It can have the leading and/or ending backslashes, which will be subsequently removed.</span>
-<span class="sd">           If the path doesn&#39;t conform to this format an BucketFsError will be raised.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        It can have the leading and/or ending backslashes, which will be subsequently removed.</span>
+<span class="sd">        If the path doesn&#39;t conform to this format an BucketFsError will be raised.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
 
-    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
+<div class="viewcode-block" id="BucketLike.download"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.BucketLike.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Downloads a file from the bucket. The content of the file will be provided</span>
 <span class="sd">        in chunks of the specified size. The full content of the file can be constructed using</span>
@@ -402,15 +402,31 @@
 
 <span class="sd">        Q. What happens if the path points to a directory.</span>
 <span class="sd">        A. Same, since a &quot;directory&quot; in the BucketFS is just a non-existent file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
 
 
 <div class="viewcode-block" id="Bucket"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.Bucket">[docs]</a><span class="k">class</span> <span class="nc">Bucket</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implementation of the On-Premises bucket.</span>
+<span class="sd">    Implementation of the BucketLike interface for the BucketFS in Exasol On-Premises database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name:</span>
+<span class="sd">            Name of the bucket.</span>
+<span class="sd">        service:</span>
+<span class="sd">            Url where this bucket is hosted on.</span>
+<span class="sd">        username:</span>
+<span class="sd">            Username used for authentication.</span>
+<span class="sd">        password:</span>
+<span class="sd">            Password used for authentication.</span>
+<span class="sd">        verify:</span>
+<span class="sd">            Either a boolean, in which case it controls whether we verify</span>
+<span class="sd">            the server&#39;s TLS certificate, or a string, in which case it must be a path</span>
+<span class="sd">            to a CA bundle to use. Defaults to ``True``.</span>
+<span class="sd">        service_name:</span>
+<span class="sd">            Optional name of the BucketFS service.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Bucket.__init__"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.Bucket.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">service</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -419,31 +435,12 @@
         <span class="n">verify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">service_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create a new bucket instance.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            name:</span>
-<span class="sd">                Name of the bucket.</span>
-<span class="sd">            service:</span>
-<span class="sd">                Url where this bucket is hosted on.</span>
-<span class="sd">            username:</span>
-<span class="sd">                Username used for authentication.</span>
-<span class="sd">            password:</span>
-<span class="sd">                Password used for authentication.</span>
-<span class="sd">            verify:</span>
-<span class="sd">                Either a boolean, in which case it controls whether we verify</span>
-<span class="sd">                the server&#39;s TLS certificate, or a string, in which case it must be a path</span>
-<span class="sd">                to a CA bundle to use. Defaults to ``True``.</span>
-<span class="sd">            service_name:</span>
-<span class="sd">                Optional name of the BucketFS service.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_service</span> <span class="o">=</span> <span class="n">_parse_service_url</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_username</span> <span class="o">=</span> <span class="n">username</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_verify</span> <span class="o">=</span> <span class="n">verify</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_service_name</span> <span class="o">=</span> <span class="n">service_name</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_service_name</span> <span class="o">=</span> <span class="n">service_name</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Bucket&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | on: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
@@ -482,13 +479,6 @@
 <div class="viewcode-block" id="Bucket.upload"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.Bucket.upload">[docs]</a>    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Uploads a file onto this bucket</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            path: in the bucket the file shall be associated with.</span>
-<span class="sd">            data: raw content of the file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploading </span><span class="si">%s</span><span class="s2"> to bucket </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verify</span><span class="p">)</span>
@@ -498,15 +488,6 @@
             <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t upload file: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span></div>
 
 <div class="viewcode-block" id="Bucket.delete"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.Bucket.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Deletes a specific file in this bucket.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            path: points to the file which shall be deleted.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            A BucketFsError if the operation couldn&#39;t be executed successfully.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deleting </span><span class="si">%s</span><span class="s2"> from bucket </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verify</span><span class="p">)</span>
@@ -517,16 +498,6 @@
             <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t delete: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span></div>
 
 <div class="viewcode-block" id="Bucket.download"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.Bucket.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Downloads a specific file of this bucket.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            path: which shall be downloaded.</span>
-<span class="sd">            chunk_size: which shall be used for downloading.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            An iterable of binary chunks representing the downloaded file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2"> using a chunk size of </span><span class="si">%d</span><span class="s2"> bytes from bucket </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span>
@@ -543,7 +514,20 @@
             <span class="k">yield from</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">)</span></div></div>
 
 
-<span class="k">class</span> <span class="nc">SaaSBucket</span><span class="p">:</span>
+<div class="viewcode-block" id="SaaSBucket"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.SaaSBucket">[docs]</a><span class="k">class</span> <span class="nc">SaaSBucket</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the BucketLike interface for the BucketFS in Exasol SaaS.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        url:</span>
+<span class="sd">            Url of the Exasol SaaS service.</span>
+<span class="sd">        account_id:</span>
+<span class="sd">            SaaS user account ID.</span>
+<span class="sd">        database_id:</span>
+<span class="sd">            SaaS database ID.</span>
+<span class="sd">        pat:</span>
+<span class="sd">            Personal Access Token</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pat</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
@@ -583,7 +567,7 @@
 
         <span class="k">return</span> <span class="n">file_list</span>
 
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="SaaSBucket.delete"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.SaaSBucket.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deleting </span><span class="si">%s</span><span class="s2"> from the bucket.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">SaasAuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span>
                                      <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pat</span><span class="p">,</span>
@@ -591,9 +575,9 @@
             <span class="n">saas_delete_file</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="p">,</span>
                              <span class="n">database_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="p">,</span>
                              <span class="n">key</span><span class="o">=</span><span class="n">quote_plus</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
-                             <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+                             <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="SaaSBucket.upload"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.SaaSBucket.upload">[docs]</a>    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploading </span><span class="si">%s</span><span class="s2"> to the bucket.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="c1"># Q. The service can handle any characters in the path.</span>
         <span class="c1">#    Do we need to check this path for presence of characters deemed</span>
@@ -612,9 +596,9 @@
             <span class="n">upload_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">parsed</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\u0026&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
 
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">upload_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
+<div class="viewcode-block" id="SaaSBucket.download"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.SaaSBucket.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2"> from the bucket.&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">SaasAuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span>
                                      <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_pat</span><span class="p">,</span>
@@ -635,15 +619,15 @@
         <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
-                <span class="k">yield</span> <span class="n">chunk</span>
+                <span class="k">yield</span> <span class="n">chunk</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SaaSBucket&lt;account id: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="si">}</span><span class="s2">, database id: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SaaSBucket&lt;account id: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span><span class="si">}</span><span class="s2">, database id: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_id</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div>
 
 
-<span class="k">class</span> <span class="nc">MountedBucket</span><span class="p">:</span>
+<div class="viewcode-block" id="MountedBucket"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.MountedBucket">[docs]</a><span class="k">class</span> <span class="nc">MountedBucket</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implementation of the Bucket interface backed by a normal file system.</span>
+<span class="sd">    Implementation of the BucketLike interface backed by a normal file system.</span>
 <span class="sd">    The targeted use case is the access to the BucketFS files from a UDF.</span>
 
 <span class="sd">    Arguments:</span>
@@ -681,14 +665,14 @@
     <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">pth</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">))</span> <span class="k">for</span> <span class="n">pth</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s1">&#39;*.*&#39;</span><span class="p">)]</span>
 
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MountedBucket.delete"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.MountedBucket.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="n">path</span>
             <span class="n">full_path</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">IsADirectoryError</span><span class="p">:</span>
-            <span class="k">pass</span>
+            <span class="k">pass</span></div>
 
-    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MountedBucket.upload"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.MountedBucket.upload">[docs]</a>    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="n">path</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">full_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">full_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -699,9 +683,9 @@
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;upload called with unrecognised data type. &#39;</span> 
-                                 <span class="s1">&#39;A valid data should be either ByteString or BinaryIO&#39;</span><span class="p">)</span>
+                                 <span class="s1">&#39;A valid data should be either ByteString or BinaryIO&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
+<div class="viewcode-block" id="MountedBucket.download"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.MountedBucket.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
         <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="n">path</span>
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">full_path</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">full_path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()):</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
@@ -710,10 +694,10 @@
                 <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">chunk_size</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
                     <span class="k">break</span>
-                <span class="k">yield</span> <span class="n">data</span>
+                <span class="k">yield</span> <span class="n">data</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;MountedBucket&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | on: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_service_name</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;MountedBucket&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | on: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_service_name</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div>
 
 
 <div class="viewcode-block" id="MappedBucket"><a class="viewcode-back" href="../../../api.html#exasol.bucketfs.MappedBucket">[docs]</a><span class="k">class</span> <span class="nc">MappedBucket</span><span class="p">:</span>
