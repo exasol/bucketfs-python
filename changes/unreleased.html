@@ -290,6 +290,18 @@
 <section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
 <p>The current release adds a dependency to plugin <code class="docutils literal notranslate"><span class="pre">pytest_exasol_saas</span></code> and replaces individual test fixtures by those provided by the plugin.</p>
+<p>Additionally the release fixes vulnerabilities by updating dependencies.</p>
+</section>
+<section id="security">
+<h2>Security<a class="headerlink" href="#security" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Fixed vulnerabilities by updating dependencies</p>
+<ul>
+<li><p>Vulnerability CVE-2024-21503 in transitive dependency via <code class="docutils literal notranslate"><span class="pre">exasol-toolbox</span></code> to <code class="docutils literal notranslate"><span class="pre">black</span></code> in versions below <code class="docutils literal notranslate"><span class="pre">24.3.0</span></code></p></li>
+<li><p>Vulnerability CVE-2024-35195 in dependency <code class="docutils literal notranslate"><span class="pre">requests</span></code> in versions below <code class="docutils literal notranslate"><span class="pre">2.32.0</span></code></p></li>
+</ul>
+</li>
+</ul>
 </section>
 <section id="refactorings">
 <h2>Refactorings<a class="headerlink" href="#refactorings" title="Permalink to this heading">¶</a></h2>
@@ -363,6 +375,7 @@
             <ul>
 <li><a class="reference internal" href="#">Unreleased</a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#security">Security</a></li>
 <li><a class="reference internal" href="#refactorings">Refactorings</a></li>
 <li><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
