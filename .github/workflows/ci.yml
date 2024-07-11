@@ -1,14 +1,7 @@
 name: CI
 
 on:
-  push:
-    branches-ignore:
-      - "github-pages/*"
-      - "gh-pages/*"
-      - "main"
-      - "master"
   pull_request:
-    types: [opened, reopened]
   schedule:
     # “At 00:00 on every 7th day-of-month from 1 through 31.” (https://crontab.guru)
     - cron: "0 0 1/7 * *"
@@ -45,7 +38,13 @@ jobs:
         working-directory: ../integration-test-docker-environment
 
       - name: Run Tests
-        run: poetry run pytest tests
+        run: poetry run nox -s coverage
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: .coverage
+          path: .coverage
 
   metrics:
     needs: [ fast-tests ]
@@ -60,6 +59,7 @@ jobs:
         run: true
 
   slow-test-detection:
+    name: Run Slow or Expensive Tests (e.g. SaaS)?
     runs-on: ubuntu-latest
     steps:
       - name: Detect Slow Tests
@@ -68,6 +68,7 @@ jobs:
       slow-tests
 
   run-slow-tests:
+    name: Run Slow or Expensive Tests (e.g. SaaS) if Requested
     runs-on: ubuntu-latest
     needs: [ slow-test-detection ]
 
