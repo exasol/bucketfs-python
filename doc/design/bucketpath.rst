@@ -8,8 +8,8 @@ Problem Description
 Users of the BucketFS file system need to use it in various diffrent contexts like, from the outside of the
 DB interacting with bucketfs, from within the DB when accessing BucketFS paths from within UDFs.
 Also common actions/tasks like listing a directory are pretty tedious when just interacting with
-the BucketFS API due to the fact that it does not know the concept of directories. So in 
-order to simplify and streamline frequently used path operations and also provide a uniform 
+the BucketFS API due to the fact that it does not know the concept of directories. So in
+order to simplify and streamline frequently used path operations and also provide a uniform
 interface accross the actual system (local path, http, ...) behind the BucketFS path we need
 to have an abstraction for the user.
 
@@ -38,7 +38,7 @@ Challenges with Current BucketFS Interactions
 Proposed Solution
 =================
 
-To address the identified issues with BucketFS interactions, we propose adding an abstraction layer that simplifies and standardizes these interactions across different contexts and operations. This approach is based on the design of the `pathlib` module in the Python standard library, which abstracts filesystem access across operating systems. 
+To address the identified issues with BucketFS interactions, we propose adding an abstraction layer that simplifies and standardizes these interactions across different contexts and operations. This approach is based on the design of the `pathlib` module in the Python standard library, which abstracts filesystem access across operating systems.
 
 Our proposed path abstraction layer will:
 
@@ -152,50 +152,50 @@ Pathlike
     class Pathlike(Protocol):
 
         @property
-        def name:
+        def name(self) -> str:
             """
             A string representing the final path component, excluding the drive and root, if any.
             """
 
         @property
-        def suffix:
+        def suffix(self) -> str:
             """
             The file extension of the final component, if any.
             """
 
         @property
-        def root:
+        def root(self) -> str:
             """
             A string representing the root, if any.
             """
 
         @property
-        def parent:
+        def parent(self) -> PathLike:
             """
             The logical parent of this path.
             """
 
-        def as_uri():
+        def as_uri(self) -> str:
             """
             Represent the path as a file URI. Can be used to reconstruct the location/path.
             """
 
-        def exists():
+        def exists(self) -> bool:
             """
             Return True if the path points to an existing file or directory.
             """
 
-        def is_dir():
+        def is_dir(self) -> bool:
             """
             Return True if the path points to a directory, False if it points to another kind of file.
             """
 
-        def is_file():
+        def is_file(self) -> bool:
             """
             Return True if the path points to a regular file, False if it points to another kind of file.
             """
 
-        def read(chunk_size: int = 8192) -> Iterable[ByteString]:
+        def read(self, chunk_size: int = 8192) -> Iterable[ByteString]:
             """
             Read the content of a the file behind this path.
 
@@ -212,9 +212,9 @@ Pathlike
                 FileNotFoundError: If the file does not exist.
             """
 
-        def write(data: ByteString | BinaryIO | Iterable[ByteString]):
+        def write(self, data: ByteString | BinaryIO | Iterable[ByteString]):
             """
-            Writes data to a this path. 
+            Writes data to a this path.
 
             After successfully writing to this path `exists` will yield true for this path.
             If the file already existed it will be overwritten.
@@ -226,7 +226,7 @@ Pathlike
                 NotAFileError: if the pathlike object is not a file path.
             """
 
-        def rm():
+        def rm(self):
             """
             Remove this file.
 
@@ -238,7 +238,7 @@ Pathlike
                 FileNotFoundError: If the file does not exist.
             """
 
-        def rmdir(recursive: bool = False):
+        def rmdir(self, recursive: bool = False):
             """
             Removes this directory.
 
@@ -254,7 +254,7 @@ Pathlike
                 PermissionError: If recursive is false and the directory is not empty.
             """
 
-        def joinpath(*pathsegements) -> Pathlike:
+        def joinpath(self, *pathsegements) -> Pathlike:
             """
             Calling this method is equivalent to combining the path with each of the given pathsegments in turn.
 
@@ -262,7 +262,7 @@ Pathlike
                 A new pathlike object pointing the combined path.
             """
 
-        def walk() -> Tuple[Pathlike, List[str], List[str]]:
+        def walk(self) -> Tuple[Pathlike, List[str], List[str]]:
             """
             Generate the file names in a directory tree by walking the tree either top-down or bottom-up.
 
@@ -274,7 +274,7 @@ Pathlike
                 A 3-tuple of (dirpath, dirnames, filenames).
             """
 
-        def iterdir() -> Generator[Pathlike, None, None]:
+        def iterdir(self) -> Generator[Pathlike, None, None]:
             """
             When the path points to a directory, yield path objects of the directory contents.
 
@@ -286,7 +286,7 @@ Pathlike
             """
 
         # Overload / for joining, see also joinpath or `pathlib.Path`.
-        def __truediv__():
+        def __truediv__(self, other):
             """
             """
 
@@ -310,7 +310,7 @@ Each backend must implement the ``as_uri`` method in a way that the location is 
         """
         Provides access to a bucket path served via http or https.
         """
-        
+
         # uri protocol specifies associated with this class
         protocol = ['bfs', 'bfss']
 
@@ -322,7 +322,7 @@ Each backend must implement the ``as_uri`` method in a way that the location is 
             bucket: used for accssing and interacting with to the underlying bucket.
             path: of the file within the bucket.
         """
-            
+
         # Pathlike functionalities
         # ...
 
@@ -365,7 +365,7 @@ Each modifier:
         """
         Modifies a pathlike object so it will be locked into a specified root.
         """
-        
+
         def __init__(self, path: Pathlike, chroot='/'):
         """
         Create a new Chroot.
@@ -400,7 +400,7 @@ Each modifier:
             Returns:
                 A path like object whith write proection.
             """
-        
+
         # Pathlike functionalities
         # Note: Non readonly actions should throw an exception
         # ...
@@ -445,7 +445,7 @@ Factory & Builders
                 A Pathlike object for the given uri.
             """
             # type: LocalPath, BucketPath, Chroot ...
-            # 
+            #
             # Note: based on the uri the factory should assemble the apropriate Pathlike object.
             # E.g.:
             type = _determine_type(path)
@@ -494,4 +494,4 @@ Utilities
         Returns:
             A LocalPath (UdfPath) object.
         """
-    
+

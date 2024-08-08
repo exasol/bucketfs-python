@@ -42,7 +42,7 @@ class PathLike(Protocol):
         """
 
     @property
-    def parent(self) -> str:
+    def parent(self) -> PathLike:
         """
         The logical parent of this path.
         """
@@ -289,8 +289,8 @@ class BucketPath:
         return self._path.root
 
     @property
-    def parent(self) -> str:
-        return self._path.parent.name
+    def parent(self) -> PathLike:
+        return BucketPath(self._path.parent, self._bucket_api)
 
     def as_uri(self) -> str:
         return self._path.as_uri()
