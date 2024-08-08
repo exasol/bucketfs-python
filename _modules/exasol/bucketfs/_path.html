@@ -230,6 +230,7 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../changes/changelog.html">📝 Changes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 📝 Changes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../changes/unreleased.html">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.13.0.html">0.13.0 - 2024-08-07</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.12.0.html">0.12.0 - 2024-07-11</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.11.0.html">0.11.0 - 2024-05-23</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.10.0.html">BucketFs Python 0.10.0, released 2024-05-15</a></li>
@@ -324,7 +325,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathLike</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The logical parent of this path.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -571,8 +572,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">root</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathLike</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">BucketPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucket_api</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">as_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span>
