@@ -203,3 +203,10 @@ def test_write_and_create_parent(bucket_fake):
 def test_archive_as_udf_path(bucket_fake):
     path = bfs.path.BucketPath('container/my_container.tar.gz', bucket_api=bucket_fake)
     assert path.as_udf_path().endswith('container/my_container')
+
+
+def test_eq(bucket_fake):
+    path = bfs.path.BucketPath('dir', bucket_api=bucket_fake)
+    a = path / "dir1"
+    b = path / "dir1"
+    assert a == b
