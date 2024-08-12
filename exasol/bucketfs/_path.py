@@ -401,6 +401,11 @@ class BucketPath:
         new_path = self._path / (other._path if isinstance(other, cls) else other)
         return cls(new_path, self._bucket_api)
 
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, BucketPath):
+            return False
+        return (self._path, self._bucket_api) == (other._path, other._bucket_api)
+
     def __str__(self):
         return str(self._path)
 

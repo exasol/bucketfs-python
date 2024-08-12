@@ -203,3 +203,16 @@ def test_write_and_create_parent(bucket_fake):
 def test_archive_as_udf_path(bucket_fake):
     path = bfs.path.BucketPath('container/my_container.tar.gz', bucket_api=bucket_fake)
     assert path.as_udf_path().endswith('container/my_container')
+
+
+@pytest.mark.parametrize(
+    "file1,file2,expectation",
+    [
+        ('a.txt', 'b.txt', False),
+        ('a.txt', 'a.txt', True),
+    ])
+def test_eq(bucket_fake, file1, file2, expectation):
+    path = bfs.path.BucketPath('dir', bucket_api=bucket_fake)
+    a = path / file1
+    b = path / file2
+    assert (a == b) == expectation
