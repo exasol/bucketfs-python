@@ -2,14 +2,14 @@ from exasol.bucketfs import SaaSBucket
 
 
 def test_write_bytes_to_saas_bucket(saas_host, saas_pat,
-                                    saas_account_id, operational_saas_database_id):
+                                    saas_account_id, backend_aware_saas_database_id):
     """
     Uploads some bytes into a SaaS bucket file and checks that the file is listed
     in the SaaS BucketFS.
     """
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
-                        database_id=operational_saas_database_id,
+                        database_id=backend_aware_saas_database_id,
                         pat=saas_pat)
 
     file_name = 'bucketfs_test/test_write_bytes_to_saas_bucket/the_file.dat'
@@ -18,7 +18,7 @@ def test_write_bytes_to_saas_bucket(saas_host, saas_pat,
 
 
 def test_write_file_to_saas_bucket(saas_host, saas_pat,
-                                   saas_account_id, operational_saas_database_id,
+                                   saas_account_id, backend_aware_saas_database_id,
                                    tmpdir):
     """
     Uploads a file from a local file system into a SaaS bucket and checks that
@@ -26,7 +26,7 @@ def test_write_file_to_saas_bucket(saas_host, saas_pat,
     """
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
-                        database_id=operational_saas_database_id,
+                        database_id=backend_aware_saas_database_id,
                         pat=saas_pat)
 
     tmp_file = tmpdir / 'the_file.dat'
@@ -38,14 +38,14 @@ def test_write_file_to_saas_bucket(saas_host, saas_pat,
 
 
 def test_read_bytes_from_saas_bucket(saas_host, saas_pat,
-                                     saas_account_id, operational_saas_database_id):
+                                     saas_account_id, backend_aware_saas_database_id):
     """
     Uploads some bytes into a SaaS bucket file, reads them back and checks that
     they are unchanged.
     """
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
-                        database_id=operational_saas_database_id,
+                        database_id=backend_aware_saas_database_id,
                         pat=saas_pat)
 
     file_name = 'bucketfs_test/test_read_bytes_from_saas_bucket/the_file.dat'
@@ -56,7 +56,7 @@ def test_read_bytes_from_saas_bucket(saas_host, saas_pat,
 
 
 def test_read_file_from_saas_bucket(saas_host, saas_pat,
-                                    saas_account_id, operational_saas_database_id,
+                                    saas_account_id, backend_aware_saas_database_id,
                                     tmpdir):
     """
     Uploads a file from a local file system into a SaaS bucket, reads its content
@@ -64,7 +64,7 @@ def test_read_file_from_saas_bucket(saas_host, saas_pat,
     """
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
-                        database_id=operational_saas_database_id,
+                        database_id=backend_aware_saas_database_id,
                         pat=saas_pat)
 
     content = b'A string long enough to be downloaded in chunks.'
@@ -78,14 +78,14 @@ def test_read_file_from_saas_bucket(saas_host, saas_pat,
 
 
 def test_delete_file_from_saas_bucket(saas_host, saas_pat,
-                                      saas_account_id, operational_saas_database_id):
+                                      saas_account_id, backend_aware_saas_database_id):
     """
     Creates a SaaS bucket file, then deletes it and checks that it is not listed
     in the SaaS BucketFS.
     """
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
-                        database_id=operational_saas_database_id,
+                        database_id=backend_aware_saas_database_id,
                         pat=saas_pat)
 
     file_name = 'bucketfs_test/test_delete_file_from_saas_bucket/the_file.dat'

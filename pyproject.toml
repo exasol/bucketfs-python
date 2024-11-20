@@ -29,7 +29,7 @@ homepage = "https://github.com/exasol/bucketfs-python"
 keywords = ['exasol', 'bucketfs']
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+python = ">=3.9,<4.0"
 requests = ">=2.24.0"
 joblib=">=1.0.1"
 typeguard = ">=4.3.0"
@@ -46,7 +46,7 @@ toml = ">=0.10.2"
 sphinx-copybutton = "^0.5.0"
 exasol-toolbox = ">=0.14.0"
 pytest-localserver = "^0.8.1"
-pytest-exasol-saas = ">=0.2.1"
+pytest-exasol-backend = ">=0.3.1,<1"
 
 [tool.coverage.run]
 source = [
