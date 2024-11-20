@@ -48,29 +48,6 @@ class TestConfig:
     password: str
 
 
-def pytest_addoption(parser):
-    option = "--bucketfs-{name}"
-    group = parser.getgroup("bucketfs")
-    group.addoption(
-        option.format(name="url"),
-        type=str,
-        default="http://127.0.0.1:6666",
-        help="Base url used to connect to the bucketfs service (default: 'http://127.0.0.1:6666').",
-    )
-    group.addoption(
-        option.format(name="username"),
-        type=str,
-        default="w",
-        help="Username used to authenticate against the bucketfs service (default: 'w').",
-    )
-    group.addoption(
-        option.format(name="password"),
-        type=str,
-        default="write",
-        help="Password used to authenticate against the bucketfs service (default: 'write').",
-    )
-
-
 @pytest.fixture
 def test_config(request) -> TestConfig:
     options = request.config.option
