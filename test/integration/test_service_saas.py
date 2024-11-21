@@ -1,12 +1,16 @@
+import pytest
+
 from exasol.bucketfs import SaaSBucket
 
 
-def test_write_bytes_to_saas_bucket(saas_host, saas_pat,
+def test_write_bytes_to_saas_bucket(backend, saas_host, saas_pat,
                                     saas_account_id, backend_aware_saas_database_id):
     """
     Uploads some bytes into a SaaS bucket file and checks that the file is listed
     in the SaaS BucketFS.
     """
+    if backend != 'saas':
+        pytest.skip('The test runs only with SaaS database')
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
                         database_id=backend_aware_saas_database_id,
@@ -17,13 +21,15 @@ def test_write_bytes_to_saas_bucket(saas_host, saas_pat,
     assert file_name in bucket.files
 
 
-def test_write_file_to_saas_bucket(saas_host, saas_pat,
+def test_write_file_to_saas_bucket(backend, saas_host, saas_pat,
                                    saas_account_id, backend_aware_saas_database_id,
                                    tmpdir):
     """
     Uploads a file from a local file system into a SaaS bucket and checks that
     the file is listed in the SaaS BucketFS.
     """
+    if backend != 'saas':
+        pytest.skip('The test runs only with SaaS database')
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
                         database_id=backend_aware_saas_database_id,
@@ -37,12 +43,14 @@ def test_write_file_to_saas_bucket(saas_host, saas_pat,
     assert file_name in bucket.files
 
 
-def test_read_bytes_from_saas_bucket(saas_host, saas_pat,
+def test_read_bytes_from_saas_bucket(backend, saas_host, saas_pat,
                                      saas_account_id, backend_aware_saas_database_id):
     """
     Uploads some bytes into a SaaS bucket file, reads them back and checks that
     they are unchanged.
     """
+    if backend != 'saas':
+        pytest.skip('The test runs only with SaaS database')
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
                         database_id=backend_aware_saas_database_id,
@@ -55,13 +63,15 @@ def test_read_bytes_from_saas_bucket(saas_host, saas_pat,
     assert received_content == content
 
 
-def test_read_file_from_saas_bucket(saas_host, saas_pat,
+def test_read_file_from_saas_bucket(backend, saas_host, saas_pat,
                                     saas_account_id, backend_aware_saas_database_id,
                                     tmpdir):
     """
     Uploads a file from a local file system into a SaaS bucket, reads its content
     back and checks that it's unchanged.
     """
+    if backend != 'saas':
+        pytest.skip('The test runs only with SaaS database')
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
                         database_id=backend_aware_saas_database_id,
@@ -77,12 +87,14 @@ def test_read_file_from_saas_bucket(saas_host, saas_pat,
     assert received_content == content
 
 
-def test_delete_file_from_saas_bucket(saas_host, saas_pat,
+def test_delete_file_from_saas_bucket(backend, saas_host, saas_pat,
                                       saas_account_id, backend_aware_saas_database_id):
     """
     Creates a SaaS bucket file, then deletes it and checks that it is not listed
     in the SaaS BucketFS.
     """
+    if backend != 'saas':
+        pytest.skip('The test runs only with SaaS database')
     bucket = SaaSBucket(url=saas_host,
                         account_id=saas_account_id,
                         database_id=backend_aware_saas_database_id,
