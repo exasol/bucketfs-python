@@ -22,7 +22,7 @@ jobs:
 
       - name: Build Documentation
         run: |
-          poetry run python -m nox -s build-docs
+          poetry run python -m nox -s docs:build
 
   lint-job:
     name: Linting and Type checks (Python-${{ matrix.python-version }})

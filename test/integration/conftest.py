@@ -7,7 +7,7 @@ from typing import (
 
 import pytest
 
-from test.integration.test_utils import File, upload_file, delete_file
+from test.integration.utils.test_utils import File, upload_file, delete_file
 
 
 @pytest.fixture

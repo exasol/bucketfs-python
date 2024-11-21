@@ -13,7 +13,7 @@ from typing import (
 import pytest
 import requests
 
-from test.integration.test_utils import (
+from test.integration.utils.test_utils import (
     File,
     delete_file,
 )
