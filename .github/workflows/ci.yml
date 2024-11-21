@@ -32,9 +32,6 @@ jobs:
       - name: Run Unit Tests
         run: poetry run nox -s test:unit
 
-      - name: Run Legacy Tests
-        run: poetry run pytest --backend=onprem test_legacy
-
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -81,7 +78,7 @@ jobs:
           SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
           SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
           SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
-        run: poetry run pytest --backend=onprem test/integration
+        run: poetry run pytest --backend=all test/integration
 
   gate-2:
     name: Gate 2 - Allow Merge
