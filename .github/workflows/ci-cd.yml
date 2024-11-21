@@ -45,7 +45,7 @@ jobs:
         working-directory: ../integration-test-docker-environment
 
       - name: Run Tests
-        run: poetry run pytest tests
+        run: poetry run pytest test_legacy --backend=onprem
 
   cd-job:
     name: Continuous Delivery

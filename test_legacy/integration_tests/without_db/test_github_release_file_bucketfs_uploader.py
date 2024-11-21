@@ -1,12 +1,14 @@
 import requests
+from urllib.parse import urlparse
 
 from exasol_bucketfs_utils_python.github_release_file_bucketfs_uploader import (
     GithubReleaseFileBucketFSUploader,
 )
 
 
-def test_uploading_github_release_to_bucketfs():
-    bucketfs_url = "http://localhost:6666/default/"
+def test_uploading_github_release_to_bucketfs(bucketfs_config):
+    info = urlparse(bucketfs_config.url)
+    bucketfs_url = f"{info.scheme}://{info.hostname}:{info.port}/default/"
     release_uploader = GithubReleaseFileBucketFSUploader(
         file_to_download_name="virtual-schema-dist",
         github_user="exasol",

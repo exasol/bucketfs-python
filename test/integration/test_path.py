@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import ByteString
 import pytest
+
 import exasol.bucketfs as bfs
 
 
@@ -34,10 +35,10 @@ def _collect_all_names(path: bfs.path.PathLike) -> set[str]:
     return all_names
 
 
-def test_write_read_back_saas(backend_aware_saas_bucketfs_params,
-                              children_poem):
+def test_write_read_back(backend_aware_bucketfs_params,
+                         children_poem):
 
-    base_path = bfs.path.build_path(**backend_aware_saas_bucketfs_params)
+    base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
     file_name = 'test_bucket_path/test_write_read_back_saas/little_star.txt'
     poem_path = base_path / file_name
 
@@ -46,10 +47,10 @@ def test_write_read_back_saas(backend_aware_saas_bucketfs_params,
     assert data_back == children_poem
 
 
-def test_write_list_files_saas(backend_aware_saas_bucketfs_params,
-                               children_poem, classic_poem):
+def test_write_list_files(backend_aware_bucketfs_params,
+                          children_poem, classic_poem):
 
-    base_path = bfs.path.build_path(**backend_aware_saas_bucketfs_params,
+    base_path = bfs.path.build_path(**backend_aware_bucketfs_params,
                                     path='test_bucket_path/test_write_list_files_saas')
     poem_path1 = base_path / 'children/little_star.txt'
     poem_path2 = base_path / 'classic/highlands.txt'
@@ -60,10 +61,10 @@ def test_write_list_files_saas(backend_aware_saas_bucketfs_params,
     assert _collect_all_names(base_path) == expected_names
 
 
-def test_write_delete_saas(backend_aware_saas_bucketfs_params,
-                           children_poem, classic_poem):
+def test_write_delete(backend_aware_bucketfs_params,
+                      children_poem, classic_poem):
 
-    base_path = bfs.path.build_path(**backend_aware_saas_bucketfs_params)
+    base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
     poems_root = base_path / 'test_bucket_path/test_write_delete_saas'
     poem_path1 = poems_root / 'children/little_star.txt'
     poem_path2 = poems_root / 'classic/highlands.txt'

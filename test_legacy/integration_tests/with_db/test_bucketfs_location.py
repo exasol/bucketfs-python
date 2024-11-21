@@ -3,13 +3,9 @@ from pathlib import PurePosixPath
 
 import pytest
 
-from exasol_bucketfs_utils_python.bucket_config import BucketConfig
 from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
-from exasol_bucketfs_utils_python.bucketfs_connection_config import (
-    BucketFSConnectionConfig,
-)
 from exasol_bucketfs_utils_python.bucketfs_location import BucketFSLocation
-from tests.integration_tests.with_db.test_load_fs_file_from_udf import (
+from test_legacy.integration_tests.with_db.test_load_fs_file_from_udf import (
     delete_testfile_from_bucketfs,
     upload_testfile_to_bucketfs,
 )
@@ -18,16 +14,9 @@ from tests.integration_tests.with_db.test_load_fs_file_from_udf import (
 
 
 def test_generate_bucket_udf_path_with_db(
-    upload_language_container, pyexasol_connection
+    default_bucket_config, upload_language_container, pyexasol_connection
 ):
-    connection_config = BucketFSConnectionConfig(
-        host="localhost", port=6666, user="w", pwd="write", is_https=False
-    )
-    bucketfs_config = BucketFSConfig(
-        connection_config=connection_config, bucketfs_name="bfsdefault"
-    )
-    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=bucketfs_config)
-    bucketfs_location = BucketFSLocation(bucket_config, "")
+    bucketfs_location = BucketFSLocation(default_bucket_config, "")
 
     bucket_file_path = "test_file.txt"
     test_string = "test_string"
@@ -85,20 +74,15 @@ def test_generate_bucket_udf_path_with_db(
 
 @pytest.mark.usefixtures("upload_language_container", "pyexasol_connection")
 def test_read_files_to_str_from_bucketfs_inside_udf(
-    upload_language_container, pyexasol_connection
+    default_bucket_config, upload_language_container, pyexasol_connection
 ):
-    connection_config = BucketFSConnectionConfig(
-        host="localhost", port=6666, user="w", pwd="write", is_https=False
-    )
-    bucketfs_config = BucketFSConfig("bfsdefault", connection_config=connection_config)
-    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=bucketfs_config)
     bucket_base_path = PurePosixPath("test_read_str")
-    bucketfs_location_upload = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_upload = BucketFSLocation(default_bucket_config, bucket_base_path)
     bucket_file_path = "test_file.txt"
     test_string = "test_string"
     bucketfs_location_upload.upload_string_to_bucketfs(bucket_file_path, test_string)
 
-    bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_read = BucketFSLocation(default_bucket_config, bucket_base_path)
 
     try:
         # load file from udf
@@ -152,24 +136,19 @@ def test_read_files_to_str_from_bucketfs_inside_udf(
 
 
 def test_read_files_via_joblib_from_bucketfs_inside_udf(
-    upload_language_container, pyexasol_connection
+    default_bucket_config, upload_language_container, pyexasol_connection
 ):
     # only works for python objects known inside the udf.
     # Therefore BucketFSConfig is used as a test object.
-    connection_config = BucketFSConnectionConfig(
-        host="localhost", port=6666, user="w", pwd="write", is_https=False
-    )
-    bucketfs_config = BucketFSConfig("bfsdefault", connection_config=connection_config)
-    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=bucketfs_config)
     bucket_base_path = PurePosixPath("test_read_job")
-    bucketfs_location_upload = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_upload = BucketFSLocation(default_bucket_config, bucket_base_path)
     bucket_file_path = "test_file.txt"
     test_python_object = BucketFSConfig("test_name")
     bucketfs_location_upload.upload_object_to_bucketfs_via_joblib(
         test_python_object, bucket_file_path
     )
 
-    bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_read = BucketFSLocation(default_bucket_config, bucket_base_path)
 
     try:
         # load file from udf
@@ -223,20 +202,15 @@ def test_read_files_via_joblib_from_bucketfs_inside_udf(
 
 
 def test_read_files_to_file_from_bucketfs_inside_udf(
-    upload_language_container, pyexasol_connection
+    default_bucket_config, upload_language_container, pyexasol_connection
 ):
-    connection_config = BucketFSConnectionConfig(
-        host="localhost", port=6666, user="w", pwd="write", is_https=False
-    )
-    bucketfs_config = BucketFSConfig("bfsdefault", connection_config=connection_config)
-    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=bucketfs_config)
     bucket_base_path = PurePosixPath("test_read_file")
     bucket_file_path = "test_file.txt"
     test_string = "test_string"
     upload_testfile_to_bucketfs(
-        bucket_config, str(bucket_base_path) + "/" + bucket_file_path, test_string
+        default_bucket_config, str(bucket_base_path) + "/" + bucket_file_path, test_string
     )
-    bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_read = BucketFSLocation(default_bucket_config, bucket_base_path)
 
     try:
         # load file from udf
@@ -293,22 +267,17 @@ def test_read_files_to_file_from_bucketfs_inside_udf(
 
 
 def test_read_files_to_fileobj_from_bucketfs_inside_udf(
-    upload_language_container, pyexasol_connection
+    default_bucket_config, upload_language_container, pyexasol_connection
 ):
-    connection_config = BucketFSConnectionConfig(
-        host="localhost", port=6666, user="w", pwd="write", is_https=False
-    )
-    bucketfs_config = BucketFSConfig("bfsdefault", connection_config=connection_config)
-    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=bucketfs_config)
     bucket_base_path = PurePosixPath("test_read_obj")
-    bucketfs_location_upload = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_upload = BucketFSLocation(default_bucket_config, bucket_base_path)
     bucket_file_path = "test_file.txt"
     test_string = "test_string"
     upload_testfile_to_bucketfs(
-        bucket_config, str(bucket_base_path) + "/" + bucket_file_path, test_string
+        default_bucket_config, str(bucket_base_path) + "/" + bucket_file_path, test_string
     )
 
-    bucketfs_location_read = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_read = BucketFSLocation(default_bucket_config, bucket_base_path)
 
     try:
         # load file from udf
