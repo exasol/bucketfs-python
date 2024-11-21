@@ -38,13 +38,7 @@ jobs:
         working-directory: ../integration-test-docker-environment
 
       - name: Run Unit Tests
-        run: poetry run nox -s test:unit
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: .coverage
-          path: .coverage
+        run: poetry run pytest test/unit
 
   metrics:
     needs: [ fast-test_legacy ]
