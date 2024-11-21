@@ -29,14 +29,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           poetry-version: 1.2.2
 
-      - name: Checkout ITDE
-        run: git clone https://github.com/exasol/integration-test-docker-environment.git
-        working-directory: ..
-
-      - name: Start EXASOL Test-Docker-Environment (ITDE)
-        run: ./start-test-env spawn-test-environment --environment-name test --database-port-forward 8888 --bucketfs-port-forward 6666 --db-mem-size 4GB
-        working-directory: ../integration-test-docker-environment
-
       - name: Run Unit Tests
         run: poetry run nox -s test:unit
 

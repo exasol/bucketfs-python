@@ -26,25 +26,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python & Poetry Environment
+        uses: exasol/python-toolbox/.github/actions/python-environment@0.14.0
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: abatilo/actions-poetry@v3.0.0
-        with:
           poetry-version: 1.2.2
 
-      - name: Install Project
-        run: poetry install
-
-      - name: Checkout ITDE
-        run: git clone https://github.com/exasol/integration-test-docker-environment.git
-        working-directory: ..
-
-      - name: Start EXASOL Test-Environment
-        run: ./start-test-env spawn-test-environment --environment-name test --database-port-forward 8888 --bucketfs-port-forward 6666 --db-mem-size 4GB
-        working-directory: ../integration-test-docker-environment
-
-      - name: Run Tests
+      - name: Run Legacy Tests
         run: poetry run pytest --backend=onprem test_legacy
 
   cd-job:
