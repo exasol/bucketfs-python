@@ -10,10 +10,9 @@ from test_legacy.integration_tests.with_db.test_load_fs_file_from_udf import (
 
 
 def test_upload_download_string_from_different_instance(default_bucket_config):
-    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=default_bucket_config)
     bucket_base_path = PurePosixPath("test_up_down_str")
-    bucketfs_location_upload = BucketFSLocation(bucket_config, bucket_base_path)
-    bucketfs_location_download = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_upload = BucketFSLocation(default_bucket_config, bucket_base_path)
+    bucketfs_location_download = BucketFSLocation(default_bucket_config, bucket_base_path)
     bucket_file_path = "test_file.txt"
     test_string = "test_string"
     bucketfs_location_upload.upload_string_to_bucketfs(bucket_file_path, test_string)
@@ -38,10 +37,9 @@ class TestValue:
 
 
 def test_upload_download_obj_from_different_instance(default_bucket_config):
-    bucket_config = BucketConfig(bucket_name="default", bucketfs_config=default_bucket_config)
     bucket_base_path = PurePosixPath("test_up_down_obj")
-    bucketfs_location_upload = BucketFSLocation(bucket_config, bucket_base_path)
-    bucketfs_location_download = BucketFSLocation(bucket_config, bucket_base_path)
+    bucketfs_location_upload = BucketFSLocation(default_bucket_config, bucket_base_path)
+    bucketfs_location_download = BucketFSLocation(default_bucket_config, bucket_base_path)
     bucket_file_path = "test_file.txt"
     test_value = TestValue("test_string")
     bucketfs_location_upload.upload_object_to_bucketfs_via_joblib(
