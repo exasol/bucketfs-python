@@ -11,7 +11,7 @@ from exasol_bucketfs_utils_python.bucketfs_connection_config import (
     BucketFSConnectionConfig,
 )
 from exasol_bucketfs_utils_python.bucketfs_location import BucketFSLocation
-from tests.integration_tests.with_db.test_load_fs_file_from_udf import (
+from test_legacy.integration_tests.with_db.test_load_fs_file_from_udf import (
     delete_testfile_from_bucketfs,
 )
 

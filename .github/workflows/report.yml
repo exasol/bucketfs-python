@@ -29,6 +29,7 @@ jobs:
           path: ./artifacts
 
       - name: Copy Artifacts into Root Folder
+        if: ${{ hashFiles('./artifacts') != '' }}
         working-directory: ./artifacts
         run: |
           cp .coverage/.coverage ../
@@ -44,6 +45,7 @@ jobs:
           path: metrics.json
 
       - name: Generate GitHub Summary
+        if: ${{ hashFiles('./artifacts') != '' }}
         run: |
           echo -e "# Summary\n" >> $GITHUB_STEP_SUMMARY
           poetry run nox -s report -- -- --format markdown >> $GITHUB_STEP_SUMMARY

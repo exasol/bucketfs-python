@@ -1,4 +1,5 @@
 import pytest
+from urllib.parse import urlparse
 
 from exasol_bucketfs_utils_python import upload
 from exasol_bucketfs_utils_python.bucket_config import BucketConfig
@@ -6,15 +7,17 @@ from exasol_bucketfs_utils_python.bucketfs_config import BucketFSConfig
 from exasol_bucketfs_utils_python.bucketfs_connection_config import (
     BucketFSConnectionConfig,
 )
-from tests.integration_tests.with_db.test_load_fs_file_from_udf import (
+from test_legacy.integration_tests.with_db.test_load_fs_file_from_udf import (
     delete_testfile_from_bucketfs,
 )
 
 
 @pytest.fixture(scope="module")
-def default_bucket_config():
+def default_bucket_config(bucketfs_config):
+    info = urlparse(bucketfs_config.url)
     connection_config = BucketFSConnectionConfig(
-        host="localhost", port=6666, user="w", pwd="write", is_https=False
+        host=info.hostname, port=info.port, user=bucketfs_config.username,
+        pwd=bucketfs_config.password, is_https=(info.scheme.lower() == 'https')
     )
     bucketfs_config = BucketFSConfig(
         connection_config=connection_config, bucketfs_name="bfsdefault"

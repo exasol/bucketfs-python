@@ -12,12 +12,11 @@ from typing import (
 
 import pytest
 import requests
-from integration.conftest import (
+
+from test.integration.conftest import (
     File,
-    TestConfig,
     delete_file,
 )
-
 from exasol.bucketfs import (
     Bucket,
     Service,
@@ -44,8 +43,8 @@ def does_not_raise(exception_type: Exception = Exception):
         {"default"},
     ],
 )
-def test_list_buckets(test_config, expected):
-    service = Service(test_config.url)
+def test_list_buckets(bucketfs_config, expected):
+    service = Service(bucketfs_config.url)
     actual = {bucket for bucket in service}
     assert expected.issubset(actual)
 
@@ -68,14 +67,14 @@ def test_list_buckets(test_config, expected):
     ],
 )
 def test_upload_to_bucket(
-    test_config: TestConfig,
+    bucketfs_config,
     name: str,
     data: Union[ByteString, Iterable[ByteString], Iterable[int]],
 ):
     file_name = "Uploaded-File-{random_string}.bin".format(
         random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
-    bucket = Bucket(name, test_config.url, test_config.username, test_config.password)
+    bucket = Bucket(name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password)
 
     # run test scenario
     try:
@@ -85,10 +84,10 @@ def test_upload_to_bucket(
     finally:
         # cleanup
         _, _ = delete_file(
-            test_config.url,
+            bucketfs_config.url,
             bucket.name,
-            test_config.username,
-            test_config.password,
+            bucketfs_config.username,
+            bucketfs_config.password,
             file_name,
         )
 
@@ -109,10 +108,10 @@ def test_upload_to_bucket(
 )
 def test_download_file_from_bucket(
     temporary_bucket_files: Tuple[str, Union[File, Iterable[File]]],
-    test_config: TestConfig,
+    bucketfs_config,
 ):
     name, files = temporary_bucket_files
-    bucket = Bucket(name, test_config.url, test_config.username, test_config.password)
+    bucket = Bucket(name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password)
 
     for file in files:
         expected = file.content
@@ -135,10 +134,10 @@ def test_download_file_from_bucket(
 )
 def test_list_files_in_bucket(
     temporary_bucket_files: Tuple[str, Union[File, Iterable[File]]],
-    test_config: TestConfig,
+    bucketfs_config,
 ):
     name, files = temporary_bucket_files
-    bucket = Bucket(name, test_config.url, test_config.username, test_config.password)
+    bucket = Bucket(name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password)
     expected = {file.name for file in files}
     actual = {file for file in bucket}
     assert expected.issubset(actual)

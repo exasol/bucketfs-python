@@ -31,9 +31,9 @@ Tests
 Pytest Plugins
 --------------
 
-BFSPY declares a dependency to pytest plugin ``pytest-exasol-saas`` which is
-maintained in GitHub repository `pytest-plugins/pytest_saas
-<https://github.com/exasol/pytest-plugins/tree/main/pytest-saas/>`_.  This
+BFSPY declares a dependency to pytest plugin ``pytest-exasol-backend`` which is
+maintained in GitHub repository `pytest-plugins/pytest_backend
+<https://github.com/exasol/pytest-plugins/tree/main/pytest-backend/>`_.  This
 plugin makes additional fixtures available that are used in the saas
 integration tests of BFSPY, see files in folder `test_saas/integration
 <https://github.com/exasol/bucketfs-python/tree/main/test_saas/integration/>`_.
