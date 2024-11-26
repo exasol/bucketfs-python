@@ -1,2 +1,0 @@
-# This file adds type hints to the wheel published to pypi and enables other
-# projects importing exasol.bucketfs without ignoring typing.
