@@ -1,0 +1,38 @@
+name: Merge-Gate
+
+on:
+  workflow_call:
+    secrets:
+      ALTERNATIVE_GITHUB_TOKEN:
+        required: false
+
+jobs:
+
+  fast-checks:
+    name: Fast
+    uses: ./.github/workflows/checks.yml
+
+  slow-checks:
+    name: Slow
+    runs-on: ubuntu-latest
+    environment: slow-tests # manual-approval
+    steps:
+      - name: Tests
+        env:
+          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
+          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
+          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
+        run: poetry run pytest --backend=all test/integration
+
+  # This job ensures inputs have been executed successfully.
+  approve-merge:
+    name: Allow Merge
+    runs-on: ubuntu-latest
+    # If you need additional jobs to be part of the merge gate, add them below
+    needs: [ fast-checks, slow-checks ]
+
+    # Each job requires a step, so we added this dummy step.
+    steps:
+      - name: Approve
+        run: |
+          echo "Merge Approved"
