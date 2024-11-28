@@ -15,8 +15,16 @@ jobs:
   slow-checks:
     name: Slow
     runs-on: ubuntu-latest
-    environment: slow-tests # manual-approval
+    environment: slow-tests
     steps:
+      - name: SCM Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python & Poetry Environment
+        uses: exasol/python-toolbox/.github/actions/python-environment@0.18.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
       - name: Tests
         env:
           SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
