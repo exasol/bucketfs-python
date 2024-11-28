@@ -13,16 +13,13 @@
 import os
 import sys
 
-# sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath("../"))
-
 
 # -- Project information -----------------------------------------------------
 
 project = "Exasol BucketFS"
-copyright = "2021, Exasol"
+copyright = "2024, Exasol"
 author = "Exasol"
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -30,20 +27,23 @@ author = "Exasol"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx.ext.todo",
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosummary",
-    "myst_parser",
     "sphinx_copybutton",
-    "sphinx.ext.autosectionlabel",
+    "myst_parser",
+    "sphinx_design",
+    "sphinx_inline_tabs",
+    "sphinx_copybutton",
+    "exasol.toolbox.sphinx.multiversion",
 ]
 
 intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # Make sure the target is unique
-autosectionlabel_prefix_document = True
 source_suffix = {
     ".rst": "restructuredtext",
     ".txt": "markdown",
@@ -60,20 +60,21 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".build-docu"]
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "furo"
+html_theme = "shibuya"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-html_title = f"Bucketfs"
+html_title = "Bucketfs"
 html_theme_options = {
     "light_logo": "light-exasol-logo.svg",
     "dark_logo": "dark-exasol-logo.svg",
+    "github_url": "https://github.com/exasol/bucketfs-python",
+    "accent_color": "grass",
 }
