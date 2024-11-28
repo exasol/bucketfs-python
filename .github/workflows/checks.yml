@@ -24,12 +24,6 @@ jobs:
       - name: Check Version(s)
         run: |
           poetry run version-check `poetry run python -c "from noxconfig import PROJECT_CONFIG; print(PROJECT_CONFIG.version_file)"`
-          echo "Please enable the version check by replacing this output with shell command bellow:"
-          echo ""
-          echo "poetry run version-check <<VERSION_PY>>"
-          echo ""
-          echo "Note: <<VERSION_PY>> needs to point to the version file of the project (version.py)."
-          exit 1
 
   Documentation:
     name: Docs
