@@ -1,0 +1,27 @@
+﻿exasol\_bucketfs\_utils\_python
+===============================
+
+.. automodule:: exasol_bucketfs_utils_python
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   abstract_bucketfs_location
+   bucket_config
+   bucketfs_config
+   bucketfs_connection_config
+   bucketfs_factory
+   bucketfs_location
+   bucketfs_utils
+   delete
+   download
+   github_release_file_bucketfs_uploader
+   list_files
+   load_file_from_local_fs
+   localfs_mock_bucketfs_location
+   release_link_extractor
+   upload

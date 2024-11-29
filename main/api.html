@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="grass" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>🧰 API Reference - Bucketfs</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="🛠 Developer Guide" href="developer_guide/developer_guide.html" /><link rel="prev" title="Github Artifacts" href="user_guide/upload_github_release_to_bucket.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=83eaa723" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    
+    <meta property="og:type" content="website"/><meta property="og:title" content="🧰 API Reference"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      <img class="light-logo" src="light-exasol-logo.svg" alt="Exasol BucketFS" height="28" loading="lazy" />
+      <img class="dark-logo" src="dark-exasol-logo.svg" alt="Exasol BucketFS" height="28" loading="lazy" />
+      <strong>Exasol BucketFS</strong>
+    </a>
+    <div class="sy-head-nav" id="HeadNav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="nav-versions">
+    <button type="button" aria-label="Versions">
+      <span class="md:hidden">Versions</span>
+      <span class="hidden md:inline">main</span>
+      <i class="i-lucide chevron-down"></i>
+    </button>
+    <div class="nav-versions-choices"><ul><li><a href="api.html">main</a></li><li><a href="../0.14.0/api.html">0.14.0</a></li><li><a href="../0.13.0/api.html">0.13.0</a></li><li><a href="../0.12.0/api.html">0.12.0</a></li><li><a href="../0.11.0/api.html">0.11.0</a></li><li><a href="../0.10.0/api.html">0.10.0</a></li><li><a href="../0.9.0/api.html">0.9.0</a></li><li><a href="../0.8.0/api.html">0.8.0</a></li><li><a href="../0.7.0/api.html">0.7.0</a></li><li><a href="../0.6.0/api.html">0.6.0</a></li><li><a href="../0.5.0/api.html">0.5.0</a></li><li><a href="../0.4.0/api.html">0.4.0</a></li><li><a href="../0.3.0/api.html">0.3.0</a></li><li><a href="../0.2.0/index.html">0.2.0</a></li><li><a href="../0.1.0/index.html">0.1.0</a></li></ul></div>
+  </div><div class="sy-head-socials">
+  <a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="HeadNav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_guide/user_guide.html">👤 User Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">🧰 API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide/developer_guide.html">🛠 Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design/design.html">📑 Design Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes/changelog.html">📝 Changes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#exasol-bucketfs-service">exasol.bucketfs.Service</a></li>
+<li><a class="reference internal" href="#exasol-bucketfs-bucketlike">exasol.bucketfs.BucketLike</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketLike"><code class="docutils literal notranslate"><span class="pre">BucketLike</span></code></a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketLike.delete"><code class="docutils literal notranslate">delete()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketLike.download"><code class="docutils literal notranslate">download()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketLike.files"><code class="docutils literal notranslate">files</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketLike.name"><code class="docutils literal notranslate">name</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketLike.udf_path"><code class="docutils literal notranslate">udf_path</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketLike.upload"><code class="docutils literal notranslate">upload()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-bucket">exasol.bucketfs.Bucket</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.Bucket"><code class="docutils literal notranslate"><span class="pre">Bucket</span></code></a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.Bucket.delete"><code class="docutils literal notranslate">delete()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.Bucket.download"><code class="docutils literal notranslate">download()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.Bucket.files"><code class="docutils literal notranslate">files</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.Bucket.name"><code class="docutils literal notranslate">name</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.Bucket.udf_path"><code class="docutils literal notranslate">udf_path</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.Bucket.upload"><code class="docutils literal notranslate">upload()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-saasbucket">exasol.bucketfs.SaaSBucket</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.SaaSBucket"><code class="docutils literal notranslate"><span class="pre">SaaSBucket</span></code></a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.SaaSBucket.delete"><code class="docutils literal notranslate">delete()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.SaaSBucket.download"><code class="docutils literal notranslate">download()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.SaaSBucket.files"><code class="docutils literal notranslate">files</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.SaaSBucket.name"><code class="docutils literal notranslate">name</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.SaaSBucket.udf_path"><code class="docutils literal notranslate">udf_path</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.SaaSBucket.upload"><code class="docutils literal notranslate">upload()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-mountedbucket">exasol.bucketfs.MountedBucket</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.MountedBucket"><code class="docutils literal notranslate"><span class="pre">MountedBucket</span></code></a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.MountedBucket.delete"><code class="docutils literal notranslate">delete()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.MountedBucket.download"><code class="docutils literal notranslate">download()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.MountedBucket.files"><code class="docutils literal notranslate">files</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.MountedBucket.name"><code class="docutils literal notranslate">name</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.MountedBucket.udf_path"><code class="docutils literal notranslate">udf_path</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.MountedBucket.upload"><code class="docutils literal notranslate">upload()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-path-pathlike">exasol.bucketfs.path.PathLike</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike"><code class="docutils literal notranslate"><span class="pre">PathLike</span></code></a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.as_udf_path"><code class="docutils literal notranslate">as_udf_path()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.as_uri"><code class="docutils literal notranslate">as_uri()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.exists"><code class="docutils literal notranslate">exists()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.is_dir"><code class="docutils literal notranslate">is_dir()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.is_file"><code class="docutils literal notranslate">is_file()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.iterdir"><code class="docutils literal notranslate">iterdir()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.joinpath"><code class="docutils literal notranslate">joinpath()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.name"><code class="docutils literal notranslate">name</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.parent"><code class="docutils literal notranslate">parent</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.read"><code class="docutils literal notranslate">read()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.rm"><code class="docutils literal notranslate">rm()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.rmdir"><code class="docutils literal notranslate">rmdir()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.root"><code class="docutils literal notranslate">root</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.suffix"><code class="docutils literal notranslate">suffix</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.walk"><code class="docutils literal notranslate">walk()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs._path.PathLike.write"><code class="docutils literal notranslate">write()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-path-build-path">exasol.bucketfs.path.build_path</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs._path.build_path"><code class="docutils literal notranslate"><span class="pre">build_path()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-as-bytes">exasol.bucketfs.as_bytes</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.as_bytes"><code class="docutils literal notranslate"><span class="pre">as_bytes()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-as-string">exasol.bucketfs.as_string</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.as_string"><code class="docutils literal notranslate"><span class="pre">as_string()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-as-file">exasol.bucketfs.as_file</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.as_file"><code class="docutils literal notranslate"><span class="pre">as_file()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-as-hash">exasol.bucketfs.as_hash</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.as_hash"><code class="docutils literal notranslate"><span class="pre">as_hash()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-mappedbucket">exasol.bucketfs.MappedBucket</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.MappedBucket"><code class="docutils literal notranslate"><span class="pre">MappedBucket</span></code></a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.MappedBucket.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#exasol.bucketfs.MappedBucket.chunk_size"><code class="docutils literal notranslate">chunk_size</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exasol-bucketfs-bucketfserror">exasol.bucketfs.BucketFsError</a><ul>
+<li><a class="reference internal" href="#exasol.bucketfs.BucketFsError"><code class="docutils literal notranslate"><span class="pre">BucketFsError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6"><div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Exasol BucketFS</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">🧰 API Reference</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="api-reference">
+<h1>🧰 API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h1>
+<section id="exasol-bucketfs-service">
+<h2>exasol.bucketfs.Service<a class="headerlink" href="#exasol-bucketfs-service" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.13)"><span class="pre">Mapping</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.13)"><span class="pre">Mapping</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_service.html#Service"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Provides a simple to use api to access a bucketfs service.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">buckets</span></span></dt>
+<dd><p>lists all available buckets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.13)"><span class="pre">Mapping</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.13)"><span class="pre">Mapping</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_service.html#Service.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Create a new Service instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> – Url of the bucketfs service, e.g. <cite>http(s)://127.0.0.1:2580</cite>.</p></li>
+<li><p><strong>credentials</strong> – A mapping containing credentials (username and password) for buckets.
+E.g. {“bucket1”: { “username”: “foo”, “password”: “bar” }}</p></li>
+<li><p><strong>verify</strong> – Either a boolean, in which case it controls whether we verify
+the server’s TLS certificate, or a string, in which case it must be a path
+to a CA bundle to use. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>service_name</strong> – Optional name of the bucketfs service.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">buckets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.MutableMapping" title="(in Python v3.13)"><span class="pre">MutableMapping</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#exasol.bucketfs.Bucket" title="exasol.bucketfs._buckets.Bucket"><span class="pre">Bucket</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>List all available buckets.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-bucketlike">
+<h2>exasol.bucketfs.BucketLike<a class="headerlink" href="#exasol-bucketfs-bucketlike" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketLike">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">BucketLike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#BucketLike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.BucketLike" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Protocol" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></a></p>
+<p>Definition of the Bucket interface.
+It is compatible with both on-premises an SaaS BucketFS systems.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketLike.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#BucketLike.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.BucketLike.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Deletes a file in the bucket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – Path of the file to be deleted.</p>
+</dd>
+</dl>
+<p>Q. What happens if the path doesn’t exist?
+A. It does nothing, no error.</p>
+<p>Q. What happens if the path points to a directory?
+A. Same. There are no directories as such in the BucketFS, hence
+a directory path is just a non-existent file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketLike.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8192</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#BucketLike.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.BucketLike.download" title="Link to this definition">¶</a></dt>
+<dd><p>Downloads a file from the bucket. The content of the file will be provided
+in chunks of the specified size. The full content of the file can be constructed using
+code similar to the line below.
+content = b’’.join(api.download_file(path))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Path of the file in the bucket that should be downloaded.</p></li>
+<li><p><strong>chunk_size</strong> – Size of the chunks the file content will be delivered in.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Q. What happens if the file specified by the path doesn’t exist.
+A. BucketFsError will be raised.</p>
+<p>Q. What happens if the path points to a directory.
+A. Same, since a “directory” in the BucketFS is just a non-existent file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketLike.files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exasol.bucketfs.BucketLike.files" title="Link to this definition">¶</a></dt>
+<dd><p>Returns an iterator over the bucket files.</p>
+<p>A usage example:
+print(list(bucket_api.files))
+output:
+[dir1/subdir1/file1.dat, dir1/subdir2/file2.txt, ….]</p>
+<p>Note that the paths will look like in the example above, i.e. POSIX style,
+no backslash at the start or at the end.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketLike.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.BucketLike.name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the bucket name.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketLike.udf_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">udf_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.BucketLike.udf_path" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the path to the bucket’s base directory, as it’s seen from a UDF.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketLike.upload">
+<span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.13)"><span class="pre">BinaryIO</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#BucketLike.upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.BucketLike.upload" title="Link to this definition">¶</a></dt>
+<dd><p>Uploads a file to the bucket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Path in the bucket where the file should be uploaded.</p></li>
+<li><p><strong>data</strong> – Either a binary array or a binary stream, e.g. a file opened in the binary mode.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Q. What happens if the parent is missing?
+A. The bucket doesn’t care about the structure of the file’s path. Looking from the prospective
+of a file system, the bucket will create the missing parent, but in reality it will just
+store the data indexed by the provided path.</p>
+<p>Q. What happens if the path points to an existing file?
+A. That’s fine, the file will be updated.</p>
+<p>Q. What happens if the path points to an existing directory?
+A. The bucket doesn’t care about the structure of the file’s path. Looking from the prospective
+of a file system, there will exist a file and directory with the same name.</p>
+<p>Q. How should the path look like?
+A. It should look like a POSIX path, but it should not contain any of the NTFS invalid characters.
+It can have the leading and/or ending backslashes, which will be subsequently removed.
+If the path doesn’t conform to this format an BucketFsError will be raised.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-bucket">
+<h2>exasol.bucketfs.Bucket<a class="headerlink" href="#exasol-bucketfs-bucket" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="exasol.bucketfs.Bucket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">Bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#Bucket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.Bucket" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Implementation of the BucketLike interface for the BucketFS in Exasol On-Premises database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the bucket.</p></li>
+<li><p><strong>service</strong> – Url where this bucket is hosted on.</p></li>
+<li><p><strong>username</strong> – Username used for authentication.</p></li>
+<li><p><strong>password</strong> – Password used for authentication.</p></li>
+<li><p><strong>verify</strong> – Either a boolean, in which case it controls whether we verify
+the server’s TLS certificate, or a string, in which case it must be a path
+to a CA bundle to use. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>service_name</strong> – Optional name of the BucketFS service.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.Bucket.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#Bucket.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.Bucket.delete" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.Bucket.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8192</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#Bucket.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.Bucket.download" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.Bucket.files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exasol.bucketfs.Bucket.files" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.Bucket.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.Bucket.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.Bucket.udf_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">udf_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.Bucket.udf_path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.Bucket.upload">
+<span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.13)"><span class="pre">BinaryIO</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#Bucket.upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.Bucket.upload" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-saasbucket">
+<h2>exasol.bucketfs.SaaSBucket<a class="headerlink" href="#exasol-bucketfs-saasbucket" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="exasol.bucketfs.SaaSBucket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">SaaSBucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">account_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">database_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#SaaSBucket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.SaaSBucket" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Implementation of the BucketLike interface for the BucketFS in Exasol SaaS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> – Url of the Exasol SaaS service.</p></li>
+<li><p><strong>account_id</strong> – SaaS user account ID.</p></li>
+<li><p><strong>database_id</strong> – SaaS database ID.</p></li>
+<li><p><strong>pat</strong> – Personal Access Token</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.SaaSBucket.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#SaaSBucket.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.SaaSBucket.delete" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.SaaSBucket.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8192</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#SaaSBucket.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.SaaSBucket.download" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.SaaSBucket.files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exasol.bucketfs.SaaSBucket.files" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.SaaSBucket.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.SaaSBucket.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.SaaSBucket.udf_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">udf_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.SaaSBucket.udf_path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.SaaSBucket.upload">
+<span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.13)"><span class="pre">BinaryIO</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#SaaSBucket.upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.SaaSBucket.upload" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-mountedbucket">
+<h2>exasol.bucketfs.MountedBucket<a class="headerlink" href="#exasol-bucketfs-mountedbucket" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="exasol.bucketfs.MountedBucket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">MountedBucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'bfsdefault'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#MountedBucket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.MountedBucket" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Implementation of the BucketLike interface backed by a normal file system.
+The targeted use case is the access to the BucketFS files from a UDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service_name</strong> – Name of the BucketFS service (not a service url). Defaults to ‘bfsdefault’.</p></li>
+<li><p><strong>bucket_name</strong> – Name of the bucket. Defaults to ‘default’.</p></li>
+<li><p><strong>base_path</strong> – Instead of specifying the names of the service and the bucket, one can provide
+a full path to the root directory. This can be a useful option for testing when
+the backend is a local file system.
+If this parameter is not provided the root directory is set to
+buckets/&lt;service_name&gt;/&lt;bucket_name&gt;.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.MountedBucket.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#MountedBucket.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.MountedBucket.delete" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.MountedBucket.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#MountedBucket.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.MountedBucket.download" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.MountedBucket.files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#exasol.bucketfs.MountedBucket.files" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.MountedBucket.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.MountedBucket.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.MountedBucket.udf_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">udf_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs.MountedBucket.udf_path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.MountedBucket.upload">
+<span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.13)"><span class="pre">BinaryIO</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#MountedBucket.upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.MountedBucket.upload" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-path-pathlike">
+<h2>exasol.bucketfs.path.PathLike<a class="headerlink" href="#exasol-bucketfs-path-pathlike" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs._path.</span></span><span class="sig-name descname"><span class="pre">PathLike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Protocol" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></a></p>
+<p>Definition of the PathLike view of the files in a Bucket.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.as_udf_path">
+<span class="sig-name descname"><span class="pre">as_udf_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.as_udf_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.as_udf_path" title="Link to this definition">¶</a></dt>
+<dd><p>This method is specific to a BucketFS flavour of the PathLike.
+It returns a corresponding path, as it’s seen from a UDF.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.as_uri">
+<span class="sig-name descname"><span class="pre">as_uri</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.as_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.as_uri" title="Link to this definition">¶</a></dt>
+<dd><p>Represent the path as a file URI. Can be used to reconstruct the location/path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.exists">
+<span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.exists" title="Link to this definition">¶</a></dt>
+<dd><p>Return True if the path points to an existing file or directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.is_dir">
+<span class="sig-name descname"><span class="pre">is_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.is_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.is_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Return True if the path points to a directory, False if it points to another kind of file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.is_file">
+<span class="sig-name descname"><span class="pre">is_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.is_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.is_file" title="Link to this definition">¶</a></dt>
+<dd><p>Return True if the path points to a regular file, False if it points to another kind of file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.iterdir">
+<span class="sig-name descname"><span class="pre">iterdir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generator" title="(in Python v3.13)"><span class="pre">Generator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#exasol.bucketfs._path.PathLike" title="exasol.bucketfs._path.PathLike"><span class="pre">PathLike</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.iterdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.iterdir" title="Link to this definition">¶</a></dt>
+<dd><p>When the path points to a directory, yield path objects of the directory contents.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <cite>path</cite> points to a file then <cite>iterdir()</cite> will yield nothing.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All direct children of the pathlike object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.joinpath">
+<span class="sig-name descname"><span class="pre">joinpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_segments</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#exasol.bucketfs._path.PathLike" title="exasol.bucketfs._path.PathLike"><span class="pre">PathLike</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.joinpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.joinpath" title="Link to this definition">¶</a></dt>
+<dd><p>Calling this method is equivalent to combining the path with each of the given path segments in turn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new pathlike object pointing the combined path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs._path.PathLike.name" title="Link to this definition">¶</a></dt>
+<dd><p>A string representing the final path component, excluding the drive and root, if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#exasol.bucketfs._path.PathLike" title="exasol.bucketfs._path.PathLike"><span class="pre">PathLike</span></a></em><a class="headerlink" href="#exasol.bucketfs._path.PathLike.parent" title="Link to this definition">¶</a></dt>
+<dd><p>The logical parent of this path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8192</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.read" title="Link to this definition">¶</a></dt>
+<dd><p>Read the content of the file behind this path.</p>
+<p>Only works for PathLike objects which return True for <cite>is_file()</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chunk_size</strong> – which will be yielded by the iterator.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns an iterator which can be used to read the contents of the path in chunks.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.13)"><strong>FileNotFoundError</strong></a> – If the file does not exist.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IsADirectoryError" title="(in Python v3.13)"><strong>IsADirectoryError</strong></a> – if the pathlike object points to a directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.rm">
+<span class="sig-name descname"><span class="pre">rm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.rm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.rm" title="Link to this definition">¶</a></dt>
+<dd><p>Remove this file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <cite>exists()</cite> and is_file yields true for this path, the path will be deleted,
+otherwise exception will be thrown.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.13)"><strong>FileNotFoundError</strong></a> – If the file does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.rmdir">
+<span class="sig-name descname"><span class="pre">rmdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.rmdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.rmdir" title="Link to this definition">¶</a></dt>
+<dd><p>Removes this directory.</p>
+<dl class="simple">
+<dt>Note: In order to stay close to pathlib, by default <cite>rmdir</cite> with <cite>recursive</cite></dt><dd><p>set to <cite>False</cite> won’t delete non-empty directories.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>recursive</strong> – if true the directory itself and its entire contents (files and subdirs)
+will be deleted. If false and the directory is not empty an error will be thrown.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.13)"><strong>FileNotFoundError</strong></a> – If the file does not exist.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#PermissionError" title="(in Python v3.13)"><strong>PermissionError</strong></a> – If recursive is false and the directory is not empty.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.root">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs._path.PathLike.root" title="Link to this definition">¶</a></dt>
+<dd><p>A string representing the root, if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.suffix">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">suffix</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#exasol.bucketfs._path.PathLike.suffix" title="Link to this definition">¶</a></dt>
+<dd><p>The file extension of the final component, if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.walk">
+<span class="sig-name descname"><span class="pre">walk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_down</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generator" title="(in Python v3.13)"><span class="pre">Generator</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#exasol.bucketfs._path.PathLike" title="exasol.bucketfs._path.PathLike"><span class="pre">PathLike</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.walk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.walk" title="Link to this definition">¶</a></dt>
+<dd><p>Generate the file names in a directory tree by walking the tree either top-down or bottom-up.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Try to mimik <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk">https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk</a> as closely as possible,
+except the functionality associated with the parameters of the <cite>pathlib</cite> walk.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A 3-tuple of (dirpath, dirnames, filenames).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.PathLike.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.13)"><span class="pre">BinaryIO</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#PathLike.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.PathLike.write" title="Link to this definition">¶</a></dt>
+<dd><p>Writes data to this path.</p>
+<p>Q. Should it create the parent directory if it doesn’t exit?
+A. Yes, it should.</p>
+<p>After successfully writing to this path <cite>exists</cite> will yield true for this path.
+If the file already existed it will be overwritten.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – which shall be writen to the path.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotAFileError</strong> – if the pathlike object is not a file path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-path-build-path">
+<h2>exasol.bucketfs.path.build_path<a class="headerlink" href="#exasol-bucketfs-path-build-path" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="exasol.bucketfs._path.build_path">
+<span class="sig-prename descclassname"><span class="pre">exasol.bucketfs._path.</span></span><span class="sig-name descname"><span class="pre">build_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#exasol.bucketfs._path.PathLike" title="exasol.bucketfs._path.PathLike"><span class="pre">PathLike</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_path.html#build_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs._path.build_path" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a PathLike object based on a bucket in one of the BucketFS storage backends.
+It provides the same interface for the following BucketFS implementations:
+- On-Premises
+- SaaS
+- BucketFS files mounted as read-only directory in a UDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backend</strong> – This is a mandatory parameter that indicates the BucketFS storage backend.
+The available backends are defined in the StorageBackend enumeration,
+Currently, these are “onprem”, “saas” and “mounted”. The parameter value
+can be provided either as a string, e.g. “onprem”, or as an enum, e.g.
+StorageBackend.onprem.</p></li>
+<li><p><strong>path</strong> – <p>Optional parameter that selects a path within the bucket. If not provided
+the returned PathLike objects corresponds to the root of the bucket. Hence,
+an alternative way of creating a PathLike pointing to a particular file or
+directory is as in the code below.
+path = build_path(…) / “the_desired_path”</p>
+<p>The rest of the arguments are backend specific.</p>
+<p>On-prem arguments:</p>
+</p></li>
+<li><p><strong>url</strong> – Url of the BucketFS service, e.g. <cite>http(s)://127.0.0.1:2580</cite>.</p></li>
+<li><p><strong>username</strong> – BucketFS username (generally, different from the DB username).</p></li>
+<li><p><strong>password</strong> – BucketFS user password.</p></li>
+<li><p><strong>bucket_name</strong> – Name of the bucket. Currently, a PathLike cannot span multiple buckets.</p></li>
+<li><p><strong>verify</strong> – Either a boolean, in which case it controls whether we verify the server’s
+TLS certificate, or a string, in which case it must be a path to a CA bundle
+to use. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>service_name</strong> – <p>Optional name of the BucketFS service.</p>
+<p>SaaS arguments:</p>
+</p></li>
+<li><p><strong>url</strong> – Url of the Exasol SaaS. Defaults to ‘<a class="reference external" href="https://cloud.exasol.com">https://cloud.exasol.com</a>’.</p></li>
+<li><p><strong>account_id</strong> – SaaS user account ID, e.g. ‘org_LVeOj4pwXhPatNz5’
+(given example is not a valid ID of an existing account).</p></li>
+<li><p><strong>database_id</strong> – Database ID, e.g. ‘msduZKlMR8QCP_MsLsVRwy’
+(given example is not a valid ID of an existing database).</p></li>
+<li><p><strong>pat</strong> – <p>Personal Access Token, e.g. ‘exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A’
+(given example is not a valid PAT).</p>
+<p>Mounted BucketFS directory arguments:</p>
+</p></li>
+<li><p><strong>service_name</strong> – Name of the BucketFS service (not a service url). Defaults to ‘bfsdefault’.</p></li>
+<li><p><strong>bucket_name</strong> – Name of the bucket. Currently, a PathLike cannot span multiple buckets.</p></li>
+<li><p><strong>base_path</strong> – Explicitly specified root path in a file system. This is an alternative to
+providing the service_name and the bucket_name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-as-bytes">
+<h2>exasol.bucketfs.as_bytes<a class="headerlink" href="#exasol-bucketfs-as-bytes" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="exasol.bucketfs.as_bytes">
+<span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">as_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_convert.html#as_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.as_bytes" title="Link to this definition">¶</a></dt>
+<dd><p>Transforms a set of byte chunks into a bytes like object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chunks</strong> – which shall be concatenated.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A single continues byte like object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-as-string">
+<h2>exasol.bucketfs.as_string<a class="headerlink" href="#exasol-bucketfs-as-string" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="exasol.bucketfs.as_string">
+<span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">as_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'utf-8'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_convert.html#as_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.as_string" title="Link to this definition">¶</a></dt>
+<dd><p>Transforms a set of byte chunks into a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chunks</strong> – which shall be converted into a single string.</p></li>
+<li><p><strong>encoding</strong> – which shall be used to convert the bytes to a string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representation of the converted bytes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-as-file">
+<h2>exasol.bucketfs.as_file<a class="headerlink" href="#exasol-bucketfs-as-file" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="exasol.bucketfs.as_file">
+<span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">as_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">Path</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_convert.html#as_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.as_file" title="Link to this definition">¶</a></dt>
+<dd><p>Transforms a set of byte chunks into a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chunks</strong> – which shall be written to file.</p></li>
+<li><p><strong>filename</strong> – for the file which is to be created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A path to the created file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-as-hash">
+<h2>exasol.bucketfs.as_hash<a class="headerlink" href="#exasol-bucketfs-as-hash" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="exasol.bucketfs.as_hash">
+<span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">as_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'sha1'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ByteString" title="(in Python v3.13)"><span class="pre">ByteString</span></a></span></span><a class="reference internal" href="_modules/exasol/bucketfs/_convert.html#as_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.as_hash" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the hash for a set of byte chunks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chunks</strong> – which shall be used as input for the checksum.</p></li>
+<li><p><strong>algorithm</strong> – which shall be used for calculating the checksum.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representing the hex digest.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-mappedbucket">
+<h2>exasol.bucketfs.MappedBucket<a class="headerlink" href="#exasol-bucketfs-mappedbucket" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="exasol.bucketfs.MappedBucket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">MappedBucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#exasol.bucketfs.Bucket" title="exasol.bucketfs._buckets.Bucket"><span class="pre">Bucket</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8192</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#MappedBucket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.MappedBucket" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Wraps a bucket and provides various convenience features to it (e.g. index based access).</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Even though this class provides a very convenient interface,
+the functionality of this class should be used with care.
+Even though it may not be obvious, all the provided features do involve interactions with a bucketfs service
+in the background (upload, download, sync, etc.).
+Keep this in mind when using this class.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="exasol.bucketfs.MappedBucket.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#exasol.bucketfs.Bucket" title="exasol.bucketfs._buckets.Bucket"><span class="pre">Bucket</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8192</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_buckets.html#MappedBucket.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.MappedBucket.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a new MappedBucket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bucket</strong> – which shall be wrapped.</p></li>
+<li><p><strong>chunk_size</strong> – which shall be used for downloads.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="exasol.bucketfs.MappedBucket.chunk_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chunk_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#exasol.bucketfs.MappedBucket.chunk_size" title="Link to this definition">¶</a></dt>
+<dd><p>Chunk size which will be used for downloads.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="exasol-bucketfs-bucketfserror">
+<h2>exasol.bucketfs.BucketFsError<a class="headerlink" href="#exasol-bucketfs-bucketfserror" title="Link to this heading">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="exasol.bucketfs.BucketFsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exasol.bucketfs.</span></span><span class="sig-name descname"><span class="pre">BucketFsError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exasol/bucketfs/_error.html#BucketFsError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exasol.bucketfs.BucketFsError" title="Link to this definition">¶</a></dt>
+<dd><p>Error occurred while interacting with the bucket fs service.</p>
+</dd></dl>
+
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="user_guide/upload_github_release_to_bucket.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Github Artifacts</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="developer_guide/developer_guide.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">🛠 Developer Guide</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2024, Exasol</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/tabs.js?v=3ee01567"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/shibuya.js?v=e2e99575"></script></body>
+</html>

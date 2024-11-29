@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="grass" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Uploading and downloading to/from the BucketFS - Bucketfs</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Uploading an artefact from a public Github Release into the BucketFS" href="upload_github_release_to_bucket.html" /><link rel="prev" title="User Guide" href="user_guide.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=83eaa723" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    
+    <meta property="og:type" content="website"/><meta property="og:title" content="Uploading and downloading to/from the BucketFS"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../light-exasol-logo.svg" alt="Exasol BucketFS" height="28" loading="lazy" />
+      <img class="dark-logo" src="../dark-exasol-logo.svg" alt="Exasol BucketFS" height="28" loading="lazy" />
+      <strong>Exasol BucketFS</strong>
+    </a>
+    <div class="sy-head-nav" id="HeadNav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="nav-versions">
+    <button type="button" aria-label="Versions">
+      <span class="md:hidden">Versions</span>
+      <span class="hidden md:inline">0.3.0</span>
+      <i class="i-lucide chevron-down"></i>
+    </button>
+    <div class="nav-versions-choices"><ul><li><a href="../../main/index.html">main</a></li><li><a href="../../0.14.0/index.html">0.14.0</a></li><li><a href="../../0.13.0/index.html">0.13.0</a></li><li><a href="../../0.12.0/index.html">0.12.0</a></li><li><a href="../../0.11.0/index.html">0.11.0</a></li><li><a href="../../0.10.0/index.html">0.10.0</a></li><li><a href="../../0.9.0/index.html">0.9.0</a></li><li><a href="../../0.8.0/index.html">0.8.0</a></li><li><a href="../../0.7.0/index.html">0.7.0</a></li><li><a href="../../0.6.0/index.html">0.6.0</a></li><li><a href="../../0.5.0/user_guide/upload_download_functions.html">0.5.0</a></li><li><a href="../../0.4.0/user_guide/upload_download_functions.html">0.4.0</a></li><li><a href="upload_download_functions.html">0.3.0</a></li><li><a href="../../0.2.0/user_guide/upload_download_functions.html">0.2.0</a></li><li><a href="../../0.1.0/user_guide/upload_download_functions.html">0.1.0</a></li></ul></div>
+  </div><div class="sy-head-socials">
+  <a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="HeadNav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide/developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes/changelog.html">Changes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#uploading-and-downloading-data-from-and-to-files">Uploading and downloading data from and to files</a></li>
+<li><a class="reference internal" href="#uploading-and-downloading-data-from-and-to-file-objects">Uploading and downloading data from and to file-objects</a></li>
+<li><a class="reference internal" href="#uploading-and-downloading-data-from-and-to-a-string">Uploading and downloading data from and to a string</a></li>
+<li><a class="reference internal" href="#serialize-and-deserialize-a-python-object-directly-into-or-from-bucketfs">Serialize and deserialize a Python object directly into or from BucketFS</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6"><div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Exasol BucketFS</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="user_guide.html"><span itemprop="name">User Guide</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Uploading and downloading to/from the BucketFS</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="uploading-and-downloading-to-from-the-bucketfs">
+<h1>Uploading and downloading to/from the BucketFS<a class="headerlink" href="#uploading-and-downloading-to-from-the-bucketfs" title="Link to this heading">¶</a></h1>
+<p>With these functions you can upload and download data to and from the BucketFS.
+The upload and download functions can have different sources or targets,
+such as files, file-objects, strings or Python objects.
+For more details, please refer to our</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><span class="xref std std-doc">Upload API</span></p></li>
+<li><p><span class="xref std std-doc">Download API</span></p></li>
+</ul>
+</div></blockquote>
+<section id="uploading-and-downloading-data-from-and-to-files">
+<h2>Uploading and downloading data from and to files<a class="headerlink" href="#uploading-and-downloading-data-from-and-to-files" title="Link to this heading">¶</a></h2>
+<p>In their simplest form the download and upload functions simply upload a local file to the BucketFS or
+download the data from the BucketFS into a local file.</p>
+<p>Example:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python</span> <span class="kn">import</span> <span class="n">upload</span><span class="p">,</span> <span class="n">download</span>
+</span><span data-line="4"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucket_config</span> <span class="kn">import</span> <span class="n">BucketConfig</span>
+</span><span data-line="5"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_config</span> <span class="kn">import</span> <span class="n">BucketFSConfig</span>
+</span><span data-line="6"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_connection_config</span> <span class="kn">import</span> <span class="n">BucketFSConnectionConfig</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="n">connection_config</span> <span class="o">=</span> <span class="n">BucketFSConnectionConfig</span><span class="p">(</span>
+</span><span data-line="9">    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6666</span><span class="p">,</span>
+</span><span data-line="10">    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">pwd</span><span class="o">=</span><span class="s2">&quot;write&quot;</span><span class="p">,</span>
+</span><span data-line="11">    <span class="n">is_https</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="12"><span class="n">bucketfs_config</span> <span class="o">=</span> <span class="n">BucketFSConfig</span><span class="p">(</span>
+</span><span data-line="13">    <span class="n">connection_config</span><span class="o">=</span><span class="n">connection_config</span><span class="p">,</span>
+</span><span data-line="14">    <span class="n">bucketfs_name</span><span class="o">=</span><span class="s2">&quot;bfsdefault&quot;</span><span class="p">)</span>
+</span><span data-line="15"><span class="n">bucket_config</span> <span class="o">=</span> <span class="n">BucketConfig</span><span class="p">(</span>
+</span><span data-line="16">    <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span data-line="17">    <span class="n">bucketfs_config</span><span class="o">=</span><span class="n">bucketfs_config</span><span class="p">)</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="n">local_input_file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;local_input_file.txt&quot;</span><span class="p">)</span>
+</span><span data-line="20"><span class="n">path_in_bucket</span> <span class="o">=</span> <span class="s2">&quot;path/in/bucket/file.txt&quot;</span>
+</span><span data-line="21"><span class="n">upload</span><span class="o">.</span><span class="n">upload_file_to_bucketfs</span><span class="p">(</span>
+</span><span data-line="22">    <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="23">    <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">,</span>
+</span><span data-line="24">    <span class="n">local_file_path</span><span class="o">=</span><span class="n">local_input_file_path</span><span class="p">)</span>
+</span><span data-line="25">
+</span><span data-line="26"><span class="n">local_output_file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;local_output_file.txt&quot;</span><span class="p">)</span>
+</span><span data-line="27"><span class="n">download</span><span class="o">.</span><span class="n">download_from_bucketfs_to_file</span><span class="p">(</span>
+</span><span data-line="28">    <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="29">    <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">,</span>
+</span><span data-line="30">    <span class="n">local_file_path</span><span class="o">=</span><span class="n">local_output_file_path</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="uploading-and-downloading-data-from-and-to-file-objects">
+<h2>Uploading and downloading data from and to file-objects<a class="headerlink" href="#uploading-and-downloading-data-from-and-to-file-objects" title="Link to this heading">¶</a></h2>
+<p>A more sophisticated version of the previous function allows you
+to upload from or download into a
+<a class="reference external" href="https://docs.python.org/3/glossary.html#term-file-object">file-object</a>.
+A file-object can be a local file you opened with the <a class="reference external" href="https://docs.python.org/3/library/functions.html#open" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> function or
+it could be also an in-memory stream such as <a class="reference external" href="https://docs.python.org/3/library/io.html#io.BytesIO" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.BytesIO</span></code></a>.
+Other modules may provide additional ways to create file-objects. See
+<a class="reference external" href="https://docs.python.org/3/library/socket.html#socket.socket.makefile" title="(in Python v3.13)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">socket.socket.makefile()</span></code></a> for example.</p>
+<p>Example:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+</span><span data-line="2"><span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">NamedTemporaryFile</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python</span> <span class="kn">import</span> <span class="n">upload</span><span class="p">,</span> <span class="n">download</span>
+</span><span data-line="5"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucket_config</span> <span class="kn">import</span> <span class="n">BucketConfig</span>
+</span><span data-line="6"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_config</span> <span class="kn">import</span> <span class="n">BucketFSConfig</span>
+</span><span data-line="7"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_connection_config</span> <span class="kn">import</span> <span class="n">BucketFSConnectionConfig</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="n">connection_config</span> <span class="o">=</span> <span class="n">BucketFSConnectionConfig</span><span class="p">(</span>
+</span><span data-line="10">    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6666</span><span class="p">,</span>
+</span><span data-line="11">    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">pwd</span><span class="o">=</span><span class="s2">&quot;write&quot;</span><span class="p">,</span>
+</span><span data-line="12">    <span class="n">is_https</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="13"><span class="n">bucketfs_config</span> <span class="o">=</span> <span class="n">BucketFSConfig</span><span class="p">(</span>
+</span><span data-line="14">    <span class="n">connection_config</span><span class="o">=</span><span class="n">connection_config</span><span class="p">,</span>
+</span><span data-line="15">    <span class="n">bucketfs_name</span><span class="o">=</span><span class="s2">&quot;bfsdefault&quot;</span><span class="p">)</span>
+</span><span data-line="16"><span class="n">bucket_config</span> <span class="o">=</span> <span class="n">BucketConfig</span><span class="p">(</span>
+</span><span data-line="17">    <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span data-line="18">    <span class="n">bucketfs_config</span><span class="o">=</span><span class="n">bucketfs_config</span><span class="p">)</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="k">with</span> <span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">input_temp_file</span><span class="p">:</span>
+</span><span data-line="21">    <span class="n">test_byte_string</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;test_byte_string&quot;</span>
+</span><span data-line="22">    <span class="n">input_temp_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">test_byte_string</span><span class="p">)</span>
+</span><span data-line="23">    <span class="n">input_temp_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span><span data-line="24">    <span class="n">input_temp_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span data-line="25">    <span class="n">path_in_bucket</span> <span class="o">=</span> <span class="s2">&quot;path/in/bucket/file.txt&quot;</span>
+</span><span data-line="26">    <span class="n">upload</span><span class="o">.</span><span class="n">upload_fileobj_to_bucketfs</span><span class="p">(</span>
+</span><span data-line="27">        <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="28">        <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">,</span>
+</span><span data-line="29">        <span class="n">fileobj</span><span class="o">=</span><span class="n">input_temp_file</span><span class="p">)</span>
+</span><span data-line="30">
+</span><span data-line="31"><span class="k">with</span> <span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">output_temp_file</span><span class="p">:</span>
+</span><span data-line="32">    <span class="n">download</span><span class="o">.</span><span class="n">download_from_bucketfs_to_fileobj</span><span class="p">(</span>
+</span><span data-line="33">        <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="34">        <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">,</span>
+</span><span data-line="35">        <span class="n">fileobj</span><span class="o">=</span><span class="n">output_temp_file</span><span class="p">)</span>
+</span><span data-line="36">    <span class="n">output_temp_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span><span data-line="37">    <span class="n">output_temp_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span data-line="38">    <span class="n">output_test_byte_string</span> <span class="o">=</span> <span class="n">output_temp_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="uploading-and-downloading-data-from-and-to-a-string">
+<h2>Uploading and downloading data from and to a string<a class="headerlink" href="#uploading-and-downloading-data-from-and-to-a-string" title="Link to this heading">¶</a></h2>
+<p>This library also provides functions to simply upload a Python string or download into a Python string.
+This for example, can be useful to upload or download configuration in json or yaml format from the BucketFS.</p>
+<p>Example:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python</span> <span class="kn">import</span> <span class="n">upload</span><span class="p">,</span> <span class="n">download</span>
+</span><span data-line="2"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucket_config</span> <span class="kn">import</span> <span class="n">BucketConfig</span>
+</span><span data-line="3"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_config</span> <span class="kn">import</span> <span class="n">BucketFSConfig</span>
+</span><span data-line="4"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_connection_config</span> <span class="kn">import</span> <span class="n">BucketFSConnectionConfig</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">connection_config</span> <span class="o">=</span> <span class="n">BucketFSConnectionConfig</span><span class="p">(</span>
+</span><span data-line="7">    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6666</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">pwd</span><span class="o">=</span><span class="s2">&quot;write&quot;</span><span class="p">,</span>
+</span><span data-line="9">    <span class="n">is_https</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="10"><span class="n">bucketfs_config</span> <span class="o">=</span> <span class="n">BucketFSConfig</span><span class="p">(</span>
+</span><span data-line="11">    <span class="n">connection_config</span><span class="o">=</span><span class="n">connection_config</span><span class="p">,</span>
+</span><span data-line="12">    <span class="n">bucketfs_name</span><span class="o">=</span><span class="s2">&quot;bfsdefault&quot;</span><span class="p">)</span>
+</span><span data-line="13"><span class="n">bucket_config</span> <span class="o">=</span> <span class="n">BucketConfig</span><span class="p">(</span>
+</span><span data-line="14">    <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span data-line="15">    <span class="n">bucketfs_config</span><span class="o">=</span><span class="n">bucketfs_config</span><span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="n">test_string</span> <span class="o">=</span> <span class="s2">&quot;test_string&quot;</span>
+</span><span data-line="18"><span class="n">path_in_bucket</span> <span class="o">=</span> <span class="s2">&quot;path/in/bucket/file.txt&quot;</span>
+</span><span data-line="19"><span class="n">upload</span><span class="o">.</span><span class="n">upload_string_to_bucketfs</span><span class="p">(</span>
+</span><span data-line="20">    <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="21">    <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">,</span>
+</span><span data-line="22">    <span class="n">string</span><span class="o">=</span><span class="n">test_string</span><span class="p">)</span>
+</span><span data-line="23">
+</span><span data-line="24"><span class="n">output_test_string</span> <span class="o">=</span> \
+</span><span data-line="25">    <span class="n">download</span><span class="o">.</span><span class="n">download_from_bucketfs_to_string</span><span class="p">(</span>
+</span><span data-line="26">        <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="27">        <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="serialize-and-deserialize-a-python-object-directly-into-or-from-bucketfs">
+<h2>Serialize and deserialize a Python object directly into or from BucketFS<a class="headerlink" href="#serialize-and-deserialize-a-python-object-directly-into-or-from-bucketfs" title="Link to this heading">¶</a></h2>
+<p>Sometimes it can be useful to directly upload a serialized Python object to the BucketFS
+and later download it and deserialize it. For example,
+Machine Learning Models are often stored as serialized objects.
+We use <a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.dump.html#">joblib.dump</a> and
+<a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.load.html#">joblib.load</a>
+for serialization and deserialization, because these functions are well suited also
+for Python objects containing large data and it supports compression for the output.</p>
+<p>Example:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python</span> <span class="kn">import</span> <span class="n">upload</span><span class="p">,</span> <span class="n">download</span>
+</span><span data-line="2"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucket_config</span> <span class="kn">import</span> <span class="n">BucketConfig</span>
+</span><span data-line="3"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_config</span> <span class="kn">import</span> <span class="n">BucketFSConfig</span>
+</span><span data-line="4"><span class="kn">from</span> <span class="nn">exasol_bucketfs_utils_python.bucketfs_connection_config</span> <span class="kn">import</span> <span class="n">BucketFSConnectionConfig</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">connection_config</span> <span class="o">=</span> <span class="n">BucketFSConnectionConfig</span><span class="p">(</span>
+</span><span data-line="7">    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6666</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">pwd</span><span class="o">=</span><span class="s2">&quot;write&quot;</span><span class="p">,</span>
+</span><span data-line="9">    <span class="n">is_https</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="10"><span class="n">bucketfs_config</span> <span class="o">=</span> <span class="n">BucketFSConfig</span><span class="p">(</span>
+</span><span data-line="11">    <span class="n">connection_config</span><span class="o">=</span><span class="n">connection_config</span><span class="p">,</span>
+</span><span data-line="12">    <span class="n">bucketfs_name</span><span class="o">=</span><span class="s2">&quot;bfsdefault&quot;</span><span class="p">)</span>
+</span><span data-line="13"><span class="n">bucket_config</span> <span class="o">=</span> <span class="n">BucketConfig</span><span class="p">(</span>
+</span><span data-line="14">    <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span data-line="15">    <span class="n">bucketfs_config</span><span class="o">=</span><span class="n">bucketfs_config</span><span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="k">class</span> <span class="nc">TestClass</span><span class="p">:</span>
+</span><span data-line="18">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="19">        <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span> <span class="o">=</span> <span class="n">attribute</span>
+</span><span data-line="20">
+</span><span data-line="21">    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;TestClass&quot;</span><span class="p">):</span>
+</span><span data-line="22">        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">TestClass</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">attribute</span>
+</span><span data-line="23">
+</span><span data-line="24">
+</span><span data-line="25"><span class="n">test_python_object</span> <span class="o">=</span> <span class="n">TestClass</span><span class="p">(</span><span class="s2">&quot;test_string&quot;</span><span class="p">)</span>
+</span><span data-line="26"><span class="n">path_in_bucket</span> <span class="o">=</span> <span class="s2">&quot;path/in/bucket/file.txt&quot;</span>
+</span><span data-line="27"><span class="n">upload</span><span class="o">.</span><span class="n">upload_object_to_bucketfs_via_joblib</span><span class="p">(</span>
+</span><span data-line="28">    <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="29">    <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">,</span>
+</span><span data-line="30">    <span class="nb">object</span><span class="o">=</span><span class="n">test_python_object</span><span class="p">)</span>
+</span><span data-line="31">
+</span><span data-line="32"><span class="n">output_test_python_object</span> <span class="o">=</span> \
+</span><span data-line="33">    <span class="n">download</span><span class="o">.</span><span class="n">download_object_from_bucketfs_via_joblib</span><span class="p">(</span>
+</span><span data-line="34">        <span class="n">bucket_config</span><span class="o">=</span><span class="n">bucket_config</span><span class="p">,</span>
+</span><span data-line="35">        <span class="n">bucket_file_path</span><span class="o">=</span><span class="n">path_in_bucket</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="user_guide.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">User Guide</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="upload_github_release_to_bucket.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Uploading an artefact from a public Github Release into the BucketFS</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2024, Exasol</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/shibuya.js?v=e2e99575"></script></body>
+</html>

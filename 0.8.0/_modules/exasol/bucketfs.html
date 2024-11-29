@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="grass" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>exasol.bucketfs - Bucketfs</title><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=83eaa723" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    
+    <meta property="og:type" content="website"/><meta property="og:title" content="exasol.bucketfs"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      <img class="light-logo" src="../../light-exasol-logo.svg" alt="Exasol BucketFS" height="28" loading="lazy" />
+      <img class="dark-logo" src="../../dark-exasol-logo.svg" alt="Exasol BucketFS" height="28" loading="lazy" />
+      <strong>Exasol BucketFS</strong>
+    </a>
+    <div class="sy-head-nav" id="HeadNav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="nav-versions">
+    <button type="button" aria-label="Versions">
+      <span class="md:hidden">Versions</span>
+      <span class="hidden md:inline">0.8.0</span>
+      <i class="i-lucide chevron-down"></i>
+    </button>
+    <div class="nav-versions-choices"><ul><li><a href="../../../main/index.html">main</a></li><li><a href="../../../0.14.0/index.html">0.14.0</a></li><li><a href="../../../0.13.0/index.html">0.13.0</a></li><li><a href="../../../0.12.0/index.html">0.12.0</a></li><li><a href="../../../0.11.0/index.html">0.11.0</a></li><li><a href="../../../0.10.0/index.html">0.10.0</a></li><li><a href="../../../0.9.0/index.html">0.9.0</a></li><li><a href="bucketfs.html">0.8.0</a></li><li><a href="../../../0.7.0/index.html">0.7.0</a></li><li><a href="../../../0.6.0/index.html">0.6.0</a></li><li><a href="../../../0.5.0/index.html">0.5.0</a></li><li><a href="../../../0.4.0/index.html">0.4.0</a></li><li><a href="../../../0.3.0/index.html">0.3.0</a></li><li><a href="../../../0.2.0/index.html">0.2.0</a></li><li><a href="../../../0.1.0/index.html">0.1.0</a></li></ul></div>
+  </div><div class="sy-head-socials">
+  <a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="HeadNav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/user_guide.html">👤 User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">🧰 API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_guide/developer_guide.html">🛠 Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes/changelog.html">📝 Changes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6"><div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">Exasol BucketFS</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">exasol.bucketfs</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <h1>Source code for exasol.bucketfs</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="2"><span class="sd">This module contains a python api to programmatically access exasol bucketfs service(s).</span>
+</span><span data-line="3">
+</span><span data-line="4">
+</span><span data-line="5"><span class="sd">.. attention:</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="sd">    If no python api is required, one can also use CLI tools like CURL and HTTPIE to access bucketfs services.</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="sd">    Example&#39;s using CURL and HTTPIE</span>
+</span><span data-line="10"><span class="sd">    -------------------------------</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="sd">    1. Listing buckets of a bucketfs service</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="sd">        HTTPIE:</span>
+</span><span data-line="15"><span class="sd">          $ http GET http://127.0.0.1:6666/</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="sd">        CURL:</span>
+</span><span data-line="18"><span class="sd">          $ curl -i http://127.0.0.1:6666/</span>
+</span><span data-line="19">
+</span><span data-line="20">
+</span><span data-line="21"><span class="sd">    2. List all files in the bucket &quot;default&quot;</span>
+</span><span data-line="22"><span class="sd">    </span>
+</span><span data-line="23"><span class="sd">        HTTPIE:</span>
+</span><span data-line="24"><span class="sd">          $  http --auth w:write --auth-type basic GET http://127.0.0.1:6666/default</span>
+</span><span data-line="25">
+</span><span data-line="26"><span class="sd">        CURL:</span>
+</span><span data-line="27"><span class="sd">          $ curl -i -u &quot;w:write&quot; http://127.0.0.1:6666/default</span>
+</span><span data-line="28">
+</span><span data-line="29">
+</span><span data-line="30"><span class="sd">    3. Upload file into a bucket</span>
+</span><span data-line="31">
+</span><span data-line="32"><span class="sd">        HTTPIE:</span>
+</span><span data-line="33"><span class="sd">          $  http --auth w:write --auth-type basic PUT http://127.0.0.1:6666/default/myfile.txt @some-file.txt</span>
+</span><span data-line="34">
+</span><span data-line="35"><span class="sd">        CURL:</span>
+</span><span data-line="36"><span class="sd">          $ curl -i -u &quot;w:write&quot; -X PUT --binary-data @some-file.txt  http://127.0.0.1:6666/default/myfile.txt</span>
+</span><span data-line="37">
+</span><span data-line="38"><span class="sd">    4. Download a file from a bucket</span>
+</span><span data-line="39">
+</span><span data-line="40"><span class="sd">        HTTPIE:</span>
+</span><span data-line="41"><span class="sd">          $  http --auth w:write --auth-type basic --download GET http://127.0.0.1:6666/default/myfile.txt</span>
+</span><span data-line="42">
+</span><span data-line="43"><span class="sd">        CURL:</span>
+</span><span data-line="44"><span class="sd">          $ curl -u &quot;w:write&quot; --output myfile.txt  http://127.0.0.1:6666/default/myfile.txt</span>
+</span><span data-line="45"><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="46"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span><span data-line="47"><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+</span><span data-line="48"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+</span><span data-line="49"><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="50">    <span class="n">BinaryIO</span><span class="p">,</span>
+</span><span data-line="51">    <span class="n">ByteString</span><span class="p">,</span>
+</span><span data-line="52">    <span class="n">Iterable</span><span class="p">,</span>
+</span><span data-line="53">    <span class="n">Iterator</span><span class="p">,</span>
+</span><span data-line="54">    <span class="n">Mapping</span><span class="p">,</span>
+</span><span data-line="55">    <span class="n">MutableMapping</span><span class="p">,</span>
+</span><span data-line="56">    <span class="n">Union</span><span class="p">,</span>
+</span><span data-line="57"><span class="p">)</span>
+</span><span data-line="58"><span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
+</span><span data-line="59">
+</span><span data-line="60"><span class="kn">import</span> <span class="nn">requests</span>
+</span><span data-line="61"><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+</span><span data-line="62"><span class="kn">from</span> <span class="nn">requests.auth</span> <span class="kn">import</span> <span class="n">HTTPBasicAuth</span>
+</span><span data-line="63">
+</span><span data-line="64"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="65">    <span class="s2">&quot;Service&quot;</span><span class="p">,</span>
+</span><span data-line="66">    <span class="s2">&quot;Bucket&quot;</span><span class="p">,</span>
+</span><span data-line="67">    <span class="s2">&quot;MappedBucket&quot;</span><span class="p">,</span>
+</span><span data-line="68">    <span class="s2">&quot;as_bytes&quot;</span><span class="p">,</span>
+</span><span data-line="69">    <span class="s2">&quot;as_string&quot;</span><span class="p">,</span>
+</span><span data-line="70">    <span class="s2">&quot;as_file&quot;</span><span class="p">,</span>
+</span><span data-line="71">    <span class="s2">&quot;as_hash&quot;</span><span class="p">,</span>
+</span><span data-line="72"><span class="p">]</span>
+</span><span data-line="73">
+</span><span data-line="74">
+<div class="viewcode-block" id="BucketFsError">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.BucketFsError">[docs]</a>
+</span><span data-line="75"><span class="k">class</span> <span class="nc">BucketFsError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+</span><span data-line="76"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Error occurred while interacting with the bucket fs service.&quot;&quot;&quot;</span>
+</span><span data-line="77">
+</span><span data-line="78">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="79">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="80">
+</span><span data-line="81">
+</span><span data-line="82"><span class="k">def</span> <span class="nf">_lines</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+</span><span data-line="83">    <span class="n">lines</span> <span class="o">=</span> <span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
+</span><span data-line="84">    <span class="k">return</span> <span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</span><span data-line="85">
+</span><span data-line="86">
+</span><span data-line="87"><span class="k">def</span> <span class="nf">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="88">    <span class="n">info</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">service_url</span><span class="p">)</span>
+</span><span data-line="89">    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="90">    <span class="k">if</span> <span class="n">bucket</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="91">        <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="92">    <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="93">        <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="94">    <span class="k">return</span> <span class="n">url</span>
+</span><span data-line="95">
+</span><span data-line="96">
+</span><span data-line="97"><span class="k">def</span> <span class="nf">_parse_service_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="98">    <span class="n">supported_schemes</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">,</span> <span class="s2">&quot;https&quot;</span><span class="p">)</span>
+</span><span data-line="99">    <span class="n">elements</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span data-line="100">    <span class="k">if</span> <span class="n">elements</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_schemes</span><span class="p">:</span>
+</span><span data-line="101">        <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span>
+</span><span data-line="102">            <span class="sa">f</span><span class="s2">&quot;Invalid scheme: </span><span class="si">{</span><span class="n">elements</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">. Supported schemes [</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">supported_schemes</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span>
+</span><span data-line="103">        <span class="p">)</span>
+</span><span data-line="104">    <span class="k">if</span> <span class="ow">not</span> <span class="n">elements</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
+</span><span data-line="105">        <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid location: </span><span class="si">{</span><span class="n">elements</span><span class="o">.</span><span class="n">netloc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="106">    <span class="c1"># use bucket fs default port if no explicit port was specified</span>
+</span><span data-line="107">    <span class="n">port</span> <span class="o">=</span> <span class="n">elements</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="n">elements</span><span class="o">.</span><span class="n">port</span> <span class="k">else</span> <span class="mi">2580</span>
+</span><span data-line="108">    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">elements</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">elements</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="109">
+</span><span data-line="110">
+<div class="viewcode-block" id="Service">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.Service">[docs]</a>
+</span><span data-line="111"><span class="k">class</span> <span class="nc">Service</span><span class="p">:</span>
+</span><span data-line="112"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides a simple to use api to access a bucketfs service.</span>
+</span><span data-line="113">
+</span><span data-line="114"><span class="sd">    Attributes:</span>
+</span><span data-line="115"><span class="sd">        buckets: lists all available buckets.</span>
+</span><span data-line="116"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="117">
+<div class="viewcode-block" id="Service.__init__">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.Service.__init__">[docs]</a>
+</span><span data-line="118">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+</span><span data-line="119"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new Service instance.</span>
+</span><span data-line="120">
+</span><span data-line="121"><span class="sd">        Args:</span>
+</span><span data-line="122"><span class="sd">            url: of the bucketfs service, e.g. `http(s)://127.0.0.1:2580`.</span>
+</span><span data-line="123"><span class="sd">            credentials: a mapping containing credentials (username and password) for buckets.</span>
+</span><span data-line="124"><span class="sd">                E.g. {&quot;bucket1&quot;: { &quot;username&quot;: &quot;foo&quot;, &quot;password&quot;: &quot;bar&quot; }}</span>
+</span><span data-line="125"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="126">        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">_parse_service_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span data-line="127">        <span class="bp">self</span><span class="o">.</span><span class="n">_authenticator</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span>
+</span><span data-line="128">            <span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;read&quot;</span><span class="p">},</span>
+</span><span data-line="129">            <span class="n">credentials</span> <span class="k">if</span> <span class="n">credentials</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{},</span>
+</span><span data-line="130">        <span class="p">)</span></div>
+
+</span><span data-line="131">
+</span><span data-line="132">    <span class="nd">@property</span>
+</span><span data-line="133">    <span class="k">def</span> <span class="nf">buckets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Bucket&quot;</span><span class="p">]:</span>
+</span><span data-line="134"><span class="w">        </span><span class="sd">&quot;&quot;&quot;List all available buckets.&quot;&quot;&quot;</span>
+</span><span data-line="135">        <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
+</span><span data-line="136">        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span data-line="137">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="138">            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span data-line="139">        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+</span><span data-line="140">            <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span>
+</span><span data-line="141">                <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t list of all buckets from: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="142">            <span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span>
+</span><span data-line="143">
+</span><span data-line="144">        <span class="n">buckets</span> <span class="o">=</span> <span class="n">_lines</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span><span data-line="145">        <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="146">            <span class="n">name</span><span class="p">:</span> <span class="n">Bucket</span><span class="p">(</span>
+</span><span data-line="147">                <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+</span><span data-line="148">                <span class="n">service</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span>
+</span><span data-line="149">                <span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_authenticator</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">],</span>
+</span><span data-line="150">                <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_authenticator</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;password&quot;</span><span class="p">],</span>
+</span><span data-line="151">            <span class="p">)</span>
+</span><span data-line="152">            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">buckets</span>
+</span><span data-line="153">        <span class="p">}</span>
+</span><span data-line="154">
+</span><span data-line="155">    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="156">        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Service&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+</span><span data-line="157">
+</span><span data-line="158">    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="s2">&quot;Bucket&quot;</span><span class="p">]:</span>
+</span><span data-line="159">        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">buckets</span>
+</span><span data-line="160">
+</span><span data-line="161">    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Bucket&quot;</span><span class="p">:</span>
+</span><span data-line="162">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buckets</span><span class="p">[</span><span class="n">item</span><span class="p">]</span></div>
+
+</span><span data-line="163">
+</span><span data-line="164">
+<div class="viewcode-block" id="Bucket">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket">[docs]</a>
+</span><span data-line="165"><span class="k">class</span> <span class="nc">Bucket</span><span class="p">:</span>
+<div class="viewcode-block" id="Bucket.__init__">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket.__init__">[docs]</a>
+</span><span data-line="166">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">service</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="167"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="168"><span class="sd">        Create a new bucket instance.</span>
+</span><span data-line="169">
+</span><span data-line="170"><span class="sd">        Args:</span>
+</span><span data-line="171"><span class="sd">            name: of the bucket.</span>
+</span><span data-line="172"><span class="sd">            service: url where this bucket is hosted on.</span>
+</span><span data-line="173"><span class="sd">            username: used for authentication.</span>
+</span><span data-line="174"><span class="sd">            password: used for authentication.</span>
+</span><span data-line="175"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="176">        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span data-line="177">        <span class="bp">self</span><span class="o">.</span><span class="n">_service</span> <span class="o">=</span> <span class="n">_parse_service_url</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+</span><span data-line="178">        <span class="bp">self</span><span class="o">.</span><span class="n">_username</span> <span class="o">=</span> <span class="n">username</span>
+</span><span data-line="179">        <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span></div>
+
+</span><span data-line="180">
+</span><span data-line="181">    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="182">        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Bucket&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | on: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+</span><span data-line="183">
+</span><span data-line="184">    <span class="nd">@property</span>
+</span><span data-line="185">    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="186">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+</span><span data-line="187">
+</span><span data-line="188">    <span class="nd">@property</span>
+</span><span data-line="189">    <span class="k">def</span> <span class="nf">_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTTPBasicAuth</span><span class="p">:</span>
+</span><span data-line="190">        <span class="k">return</span> <span class="n">HTTPBasicAuth</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">)</span>
+</span><span data-line="191">
+</span><span data-line="192">    <span class="nd">@property</span>
+</span><span data-line="193">    <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span data-line="194">        <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span data-line="195">        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">)</span>
+</span><span data-line="196">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="197">            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span data-line="198">        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+</span><span data-line="199">            <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span>
+</span><span data-line="200">                <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t retrieve file list form bucket: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="201">            <span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span>
+</span><span data-line="202">        <span class="k">return</span> <span class="p">{</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">_lines</span><span class="p">(</span><span class="n">response</span><span class="p">)}</span>
+</span><span data-line="203">
+</span><span data-line="204">    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span data-line="205">        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+</span><span data-line="206">
+<div class="viewcode-block" id="Bucket.upload">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket.upload">[docs]</a>
+</span><span data-line="207">    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span>
+</span><span data-line="208">        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ByteString</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]]</span>
+</span><span data-line="209">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="210"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="211"><span class="sd">        Uploads a file onto this bucket</span>
+</span><span data-line="212">
+</span><span data-line="213"><span class="sd">        Args:</span>
+</span><span data-line="214"><span class="sd">            path: in the bucket the file shall be associated with.</span>
+</span><span data-line="215"><span class="sd">            data: raw content of the file.</span>
+</span><span data-line="216"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="217">        <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</span><span data-line="218">        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">)</span>
+</span><span data-line="219">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="220">            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span data-line="221">        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+</span><span data-line="222">            <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t upload file: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span></div>
+
+</span><span data-line="223">
+<div class="viewcode-block" id="Bucket.delete">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket.delete">[docs]</a>
+</span><span data-line="224">    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="225"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="226"><span class="sd">        Deletes a specific file in this bucket.</span>
+</span><span data-line="227">
+</span><span data-line="228"><span class="sd">        Args:</span>
+</span><span data-line="229"><span class="sd">            path: points to the file which shall be deleted.</span>
+</span><span data-line="230">
+</span><span data-line="231"><span class="sd">        Raises:</span>
+</span><span data-line="232"><span class="sd">            A BucketFsError if the operation couldn&#39;t be executed successfully.</span>
+</span><span data-line="233"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="234">        <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</span><span data-line="235">        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">)</span>
+</span><span data-line="236">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="237">            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span data-line="238">        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+</span><span data-line="239">            <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t delete: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span></div>
+
+</span><span data-line="240">
+<div class="viewcode-block" id="Bucket.download">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.Bucket.download">[docs]</a>
+</span><span data-line="241">    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
+</span><span data-line="242"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="243"><span class="sd">        Downloads a specific file of this bucket.</span>
+</span><span data-line="244">
+</span><span data-line="245"><span class="sd">        Args:</span>
+</span><span data-line="246"><span class="sd">            path: which shall be downloaded.</span>
+</span><span data-line="247"><span class="sd">            chunk_size: which shall be used for downloading.</span>
+</span><span data-line="248">
+</span><span data-line="249"><span class="sd">        Returns:</span>
+</span><span data-line="250"><span class="sd">            An iterable of binary chunks representing the downloaded file.</span>
+</span><span data-line="251"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="252">        <span class="n">url</span> <span class="o">=</span> <span class="n">_build_url</span><span class="p">(</span><span class="n">service_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</span><span data-line="253">        <span class="k">with</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+</span><span data-line="254">            <span class="k">try</span><span class="p">:</span>
+</span><span data-line="255">                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span data-line="256">            <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+</span><span data-line="257">                <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t download: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span>
+</span><span data-line="258">
+</span><span data-line="259">            <span class="k">yield from</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">)</span></div>
+</div>
+
+</span><span data-line="260">
+</span><span data-line="261">
+<div class="viewcode-block" id="MappedBucket">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.MappedBucket">[docs]</a>
+</span><span data-line="262"><span class="k">class</span> <span class="nc">MappedBucket</span><span class="p">:</span>
+</span><span data-line="263"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="264"><span class="sd">    Wraps a bucket and provides various convenience features to it (e.g. index based access).</span>
+</span><span data-line="265">
+</span><span data-line="266"><span class="sd">    Attention:</span>
+</span><span data-line="267">
+</span><span data-line="268"><span class="sd">        Even though this class provides a very convenient interface,</span>
+</span><span data-line="269"><span class="sd">        the functionality of this class should be used with care.</span>
+</span><span data-line="270"><span class="sd">        Even though it may not be obvious, all the provided features do involve interactions with a bucketfs service</span>
+</span><span data-line="271"><span class="sd">        in the background (upload, download, sync, etc.).</span>
+</span><span data-line="272"><span class="sd">        Keep this in mind when using this class.</span>
+</span><span data-line="273"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="274">
+<div class="viewcode-block" id="MappedBucket.__init__">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.MappedBucket.__init__">[docs]</a>
+</span><span data-line="275">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="n">Bucket</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">):</span>
+</span><span data-line="276"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="277"><span class="sd">        Creates a new MappedBucket.</span>
+</span><span data-line="278">
+</span><span data-line="279"><span class="sd">        Args:</span>
+</span><span data-line="280"><span class="sd">            bucket: which shall be wrapped.</span>
+</span><span data-line="281"><span class="sd">            chunk_size: which shall be used for downloads.</span>
+</span><span data-line="282"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="283">        <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span> <span class="o">=</span> <span class="n">bucket</span>
+</span><span data-line="284">        <span class="bp">self</span><span class="o">.</span><span class="n">_chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span></div>
+
+</span><span data-line="285">
+</span><span data-line="286">    <span class="nd">@property</span>
+</span><span data-line="287">    <span class="k">def</span> <span class="nf">chunk_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span data-line="288"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Chunk size which will be used for downloads.&quot;&quot;&quot;</span>
+</span><span data-line="289">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chunk_size</span>
+</span><span data-line="290">
+</span><span data-line="291">    <span class="nd">@chunk_size</span><span class="o">.</span><span class="n">setter</span>
+</span><span data-line="292">    <span class="k">def</span> <span class="nf">chunk_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="293">        <span class="bp">self</span><span class="o">.</span><span class="n">_chunk_size</span> <span class="o">=</span> <span class="n">value</span>
+</span><span data-line="294">
+</span><span data-line="295">    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span data-line="296">        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">files</span>
+</span><span data-line="297">
+</span><span data-line="298">    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span>
+</span><span data-line="299">        <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ByteString</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]]</span>
+</span><span data-line="300">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="301"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="302"><span class="sd">        Uploads a file onto this bucket.</span>
+</span><span data-line="303">
+</span><span data-line="304"><span class="sd">        See also Bucket:upload</span>
+</span><span data-line="305"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="306">        <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+</span><span data-line="307">
+</span><span data-line="308">    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="309"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="310"><span class="sd">        Deletes a file from the bucket.</span>
+</span><span data-line="311">
+</span><span data-line="312"><span class="sd">        See also Bucket:delete</span>
+</span><span data-line="313"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="314">        <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+</span><span data-line="315">
+</span><span data-line="316">    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
+</span><span data-line="317"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="318"><span class="sd">        Downloads a file from this bucket.</span>
+</span><span data-line="319">
+</span><span data-line="320"><span class="sd">        See also Bucket::download</span>
+</span><span data-line="321"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="322">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chunk_size</span><span class="p">)</span>
+</span><span data-line="323">
+</span><span data-line="324">    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="325">        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;MappedBucket&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div>
+
+</span><span data-line="326">
+</span><span data-line="327">
+</span><span data-line="328"><span class="k">def</span> <span class="nf">_chunk_as_bytes</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="329"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="330"><span class="sd">    In some scenarios python converts single bytes to integers:</span>
+</span><span data-line="331"><span class="sd">    &gt;&gt;&gt; chunks = [type(chunk) for chunk in b&quot;abc&quot;]</span>
+</span><span data-line="332"><span class="sd">    &gt;&gt;&gt; chunks</span>
+</span><span data-line="333"><span class="sd">    ... [&lt;class &#39;int&#39;&gt;, &lt;class &#39;int&#39;&gt;, &lt;class &#39;int&#39;&gt;]</span>
+</span><span data-line="334"><span class="sd">    in order to cope with this transparently this wrapper can be used.</span>
+</span><span data-line="335"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="336">    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+</span><span data-line="337">        <span class="n">chunk</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">chunk</span><span class="p">])</span>
+</span><span data-line="338">    <span class="k">return</span> <span class="n">chunk</span>
+</span><span data-line="339">
+</span><span data-line="340">
+</span><span data-line="341"><span class="k">def</span> <span class="nf">_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="342">    <span class="n">chunks</span> <span class="o">=</span> <span class="p">(</span><span class="n">_chunk_as_bytes</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">)</span>
+</span><span data-line="343">    <span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+</span><span data-line="344">    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+</span><span data-line="345">        <span class="n">data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</span><span data-line="346">    <span class="k">return</span> <span class="n">data</span>
+</span><span data-line="347">
+</span><span data-line="348">
+<div class="viewcode-block" id="as_bytes">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_bytes">[docs]</a>
+</span><span data-line="349"><span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="350"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="351"><span class="sd">    Transforms a set of byte chunks into a bytes like object.</span>
+</span><span data-line="352">
+</span><span data-line="353"><span class="sd">    Args:</span>
+</span><span data-line="354"><span class="sd">        chunks: which shall be concatenated.</span>
+</span><span data-line="355">
+</span><span data-line="356"><span class="sd">    Return:</span>
+</span><span data-line="357"><span class="sd">        A single continues byte like object.</span>
+</span><span data-line="358"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="359">    <span class="k">return</span> <span class="n">_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span></div>
+
+</span><span data-line="360">
+</span><span data-line="361">
+<div class="viewcode-block" id="as_string">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_string">[docs]</a>
+</span><span data-line="362"><span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="363"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="364"><span class="sd">    Transforms a set of byte chunks into a string.</span>
+</span><span data-line="365">
+</span><span data-line="366"><span class="sd">    Args:</span>
+</span><span data-line="367"><span class="sd">        chunks: which shall be converted into a single string.</span>
+</span><span data-line="368"><span class="sd">        encoding: which shall be used to convert the bytes to a string.</span>
+</span><span data-line="369">
+</span><span data-line="370"><span class="sd">    Return:</span>
+</span><span data-line="371"><span class="sd">        A string representation of the converted bytes.</span>
+</span><span data-line="372"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="373">    <span class="k">return</span> <span class="n">_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span></div>
+
+</span><span data-line="374">
+</span><span data-line="375">
+<div class="viewcode-block" id="as_file">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_file">[docs]</a>
+</span><span data-line="376"><span class="k">def</span> <span class="nf">as_file</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+</span><span data-line="377"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="378"><span class="sd">    Transforms a set of byte chunks into a string.</span>
+</span><span data-line="379">
+</span><span data-line="380"><span class="sd">    Args:</span>
+</span><span data-line="381"><span class="sd">        chunks: which shall be written to file.</span>
+</span><span data-line="382"><span class="sd">        filename: for the file which is to be created.</span>
+</span><span data-line="383">
+</span><span data-line="384"><span class="sd">    Return:</span>
+</span><span data-line="385"><span class="sd">        A path to the created file.</span>
+</span><span data-line="386"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="387">    <span class="n">chunks</span> <span class="o">=</span> <span class="p">(</span><span class="n">_chunk_as_bytes</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">)</span>
+</span><span data-line="388">    <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span data-line="389">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span data-line="390">        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+</span><span data-line="391">            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</span><span data-line="392">    <span class="k">return</span> <span class="n">filename</span></div>
+
+</span><span data-line="393">
+</span><span data-line="394">
+<div class="viewcode-block" id="as_hash">
+<a class="viewcode-back" href="../../api.html#exasol.bucketfs.as_hash">[docs]</a>
+</span><span data-line="395"><span class="k">def</span> <span class="nf">as_hash</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sha1&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="396"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="397"><span class="sd">    Calculate the hash for a set of byte chunks.</span>
+</span><span data-line="398">
+</span><span data-line="399"><span class="sd">    Args:</span>
+</span><span data-line="400"><span class="sd">        chunks: which shall be used as input for the checksum.</span>
+</span><span data-line="401"><span class="sd">        algorithm: which shall be used for calculating the checksum.</span>
+</span><span data-line="402">
+</span><span data-line="403"><span class="sd">    Return:</span>
+</span><span data-line="404"><span class="sd">        A string representing the hex digest.</span>
+</span><span data-line="405"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="406">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="407">        <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span>
+</span><span data-line="408">    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+</span><span data-line="409">        <span class="k">raise</span> <span class="n">BucketFsError</span><span class="p">(</span>
+</span><span data-line="410">            <span class="s2">&quot;Algorithm (</span><span class="si">{algorithm}</span><span class="s2">) is not available, please use [</span><span class="si">{algorithms}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+</span><span data-line="411">                <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hashlib</span><span class="o">.</span><span class="n">algorithms_available</span><span class="p">)</span>
+</span><span data-line="412">            <span class="p">)</span>
+</span><span data-line="413">        <span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span>
+</span><span data-line="414">
+</span><span data-line="415">    <span class="n">chunks</span> <span class="o">=</span> <span class="p">(</span><span class="n">_chunk_as_bytes</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">)</span>
+</span><span data-line="416">    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+</span><span data-line="417">        <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</span><span data-line="418">    <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span></div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2024, Exasol</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+<a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
+  <iconify-icon icon="simple-icons:github"></iconify-icon>
+</a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/shibuya.js?v=e2e99575"></script></body>
+</html>

@@ -1,0 +1,13 @@
+﻿exasol\_bucketfs\_utils\_python
+===============================
+
+.. automodule:: exasol_bucketfs_utils_python
+
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      BucketFsDeprecationWarning
+      BucketFsError
+   
