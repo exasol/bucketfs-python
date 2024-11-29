@@ -4,7 +4,7 @@ Basic's
 The Bucketfs Service
 --------------------
 In the On-Prem database, a single bucketfs service can host multiple buckets. In order to interact with a
-bucketfs service one can use the :ref:`exasol.bucketfs.Service <api:exasol.bucketfs.Service>` class.
+bucketfs service one can use the ``exasol.bucketfs.Service`` class.
 
 List buckets
 ++++++++++++
@@ -25,7 +25,7 @@ Get a Bucket reference
 Bucket class
 ------------
 A Bucket contains a set of files which may be restricted, depending on the credentials of the requester.
-The Bucket class for an On-Prem database is :ref:`exasol.bucketfs.Bucket <api:exasol.bucketfs.Bucket>`.
+The Bucket class for an On-Prem database is ``exasol.bucketfs.Bucket``.
 The correspondent class for a SaaS database is exasol.bucketfs.SaaSBucket.
 Using these classes the user can interact with the files in the bucket (download, upload, list and delete them).
 
@@ -60,13 +60,13 @@ Download files from a Bucket
 Available Converters
 ____________________
 
-* :ref:`exasol.bucketfs.as_bytes <api:exasol.bucketfs.as_bytes>`
+* ``exasol.bucketfs.as_bytes``
 
-* :ref:`exasol.bucketfs.as_string <api:exasol.bucketfs.as_string>`
+* ``exasol.bucketfs.as_string``
 
-* :ref:`exasol.bucketfs.as_hash <api:exasol.bucketfs.as_hash>`
+* ``exasol.bucketfs.as_hash``
 
-* :ref:`exasol.bucketfs.as_file <api:exasol.bucketfs.as_file>`
+* ``exasol.bucketfs.as_file``
 
 .. literalinclude:: /examples/download.py
    :language: python3
