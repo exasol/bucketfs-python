@@ -1,5 +1,6 @@
 ### Submission Checklist
 
+* [ ] Did you mention the issue which this pull request closes ("Closes ...")?
 * [ ] Updated the changelog in file `doc/changes/unreleased.md`
 
 If required

@@ -30,8 +30,6 @@ keywords = ['exasol', 'bucketfs']
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 requests = ">=2.24.0"
-joblib=">=1.0.1"
-typeguard = ">=4.3.0"
 exasol-saas-api=">=0.3.0"
 # Temp.fix
 httpx=">=0.27.0"
