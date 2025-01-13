@@ -4,10 +4,3 @@
 .. automodule:: exasol_bucketfs_utils_python
 
    
-   .. rubric:: Exceptions
-
-   .. autosummary::
-   
-      BucketFsDeprecationWarning
-      BucketFsError
-   
