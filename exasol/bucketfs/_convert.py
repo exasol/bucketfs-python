@@ -6,6 +6,7 @@ from typing import (
     ByteString,
     Iterable,
 )
+from exasol.bucketfs._error import BucketFsError
 
 
 def _chunk_as_bytes(chunk: int | ByteString) -> ByteString:
