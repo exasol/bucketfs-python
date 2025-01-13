@@ -4,3 +4,4 @@
 
 * #175: Updated PTB incl. GitHub workflows
 * #43: Remove old BucketFs API and Package
+* #184: Fixed ITDE database version used in integration tests
