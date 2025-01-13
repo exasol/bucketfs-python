@@ -1,6 +1,6 @@
 ### Submission Checklist
 
-* [ ] Updated the changelog in file `doc/changes/unreleasd.md`
+* [ ] Updated the changelog in file `doc/changes/unreleased.md`
 
 If required
 * [ ] Updated Documentation
