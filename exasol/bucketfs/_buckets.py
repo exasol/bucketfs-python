@@ -416,7 +416,7 @@ class MountedBucket:
                 yield data
 
     def __str__(self):
-        return f"MountedBucket<{self.name} | on: {self._service_name}>"
+        return f"MountedBucket<{self.name} | on: {self.root}>"
 
 
 class MappedBucket:
