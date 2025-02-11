@@ -6,7 +6,7 @@
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=397bb51e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/shibuya.css?v=83eaa723" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/shibuya.css?v=10d1008b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -34,7 +34,7 @@
       <span class="hidden md:inline">0.13.0</span>
       <i class="i-lucide chevron-down"></i>
     </button>
-    <div class="nav-versions-choices"><ul><li><a href="../../../../1.0.1/index.html">1.0.1</a></li><li><a href="../../../../1.0.0/index.html">1.0.0</a></li><li><a href="../../../../0.14.0/index.html">0.14.0</a></li><li><a href="_convert.html">0.13.0</a></li><li><a href="../../../../0.12.0/index.html">0.12.0</a></li><li><a href="../../../../0.11.0/index.html">0.11.0</a></li><li><a href="../../../../0.10.0/index.html">0.10.0</a></li><li><a href="../../../../0.9.0/index.html">0.9.0</a></li><li><a href="../../../../0.8.0/index.html">0.8.0</a></li><li><a href="../../../../0.7.0/index.html">0.7.0</a></li><li><a href="../../../../0.6.0/index.html">0.6.0</a></li><li><a href="../../../../0.5.0/index.html">0.5.0</a></li><li><a href="../../../../0.4.0/index.html">0.4.0</a></li><li><a href="../../../../0.3.0/index.html">0.3.0</a></li><li><a href="../../../../0.2.0/index.html">0.2.0</a></li><li><a href="../../../../0.1.0/index.html">0.1.0</a></li></ul></div>
+    <div class="nav-versions-choices"><ul><li><a href="../../../../main/index.html">main</a></li><li><a href="../../../../1.0.1/index.html">1.0.1</a></li><li><a href="../../../../1.0.0/index.html">1.0.0</a></li><li><a href="../../../../0.14.0/index.html">0.14.0</a></li><li><a href="_convert.html">0.13.0</a></li><li><a href="../../../../0.12.0/index.html">0.12.0</a></li><li><a href="../../../../0.11.0/index.html">0.11.0</a></li><li><a href="../../../../0.10.0/index.html">0.10.0</a></li><li><a href="../../../../0.9.0/index.html">0.9.0</a></li><li><a href="../../../../0.8.0/index.html">0.8.0</a></li><li><a href="../../../../0.7.0/index.html">0.7.0</a></li><li><a href="../../../../0.6.0/index.html">0.6.0</a></li><li><a href="../../../../0.5.0/index.html">0.5.0</a></li><li><a href="../../../../0.4.0/index.html">0.4.0</a></li><li><a href="../../../../0.3.0/index.html">0.3.0</a></li><li><a href="../../../../0.2.0/index.html">0.2.0</a></li><li><a href="../../../../0.1.0/index.html">0.1.0</a></li></ul></div>
   </div><div class="sy-head-socials">
   <a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
     <iconify-icon icon="simple-icons:github"></iconify-icon>
@@ -60,11 +60,36 @@ data-aria-dark="Switch to auto color mode">
     <div class="sy-lside-inner md:sticky">
       <div class="sy-scrollbar p-6">
         <div class="globaltoc" data-expand-depth="0"><ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/user_guide.html">👤 User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/user_guide.html">👤 User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/basics.html">Basic’s</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/advanced.html">Advanced</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/upload_github_release_to_bucket.html">Github Artifacts</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">🧰 API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../developer_guide/developer_guide.html">🛠 Developer Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../design/design.html">📑 Design Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../changes/changelog.html">📝 Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design/design.html">📑 Design Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../design/bucketpath.html">Design Document Bucket Path(s)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changes/changelog.html">📝 Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/unreleased.html">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.13.0.html">0.13.0 - 2024-08-07</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.12.0.html">0.12.0 - 2024-07-11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.11.0.html">0.11.0 - 2024-05-23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.10.0.html">BucketFs Python 0.10.0, released 2024-05-15</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.9.0.html">BucketFs Python 0.9.0, released 2024-02-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.8.0.html">BucketFs Python 0.8.0, released 2023-03-21</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.8.0.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.7.0.html">BucketFs Python 0.7.0, released 2022-12-22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.6.0.html">BucketFs Python 0.6.0, released 2022-11-11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.5.0.html">BucketFs Python 0.5.0, released 2022-10-12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.4.0.html">BucketFs Python 0.4.0, released 2022-09-28</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.3.0.html">BucketFs Utils Python 0.3.0, released 2022-07-20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.2.0.html">BucketFs Utils Python 0.2.0, released 2022-04-29</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changes/changes_0.1.0.html">BucketFs Utils Python 0.1.0, released 2022-01-18</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -109,17 +134,17 @@ data-aria-dark="Switch to auto color mode">
       <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
         <article class="yue" role="main">
           <h1>Source code for exasol.bucketfs._convert</h1><div class="highlight"><pre>
-<span></span><span data-line="1"><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span data-line="2">
-</span><span data-line="3"><span class="kn">import</span> <span class="nn">hashlib</span>
-</span><span data-line="4"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-</span><span data-line="5"><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span data-line="6">    <span class="n">ByteString</span><span class="p">,</span>
 </span><span data-line="7">    <span class="n">Iterable</span><span class="p">,</span>
 </span><span data-line="8"><span class="p">)</span>
 </span><span data-line="9">
 </span><span data-line="10">
-</span><span data-line="11"><span class="k">def</span> <span class="nf">_chunk_as_bytes</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">ByteString</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="11"><span class="k">def</span><span class="w"> </span><span class="nf">_chunk_as_bytes</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">ByteString</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
 </span><span data-line="12"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="13"><span class="sd">    In some scenarios python converts single bytes to integers:</span>
 </span><span data-line="14"><span class="sd">    &gt;&gt;&gt; chunks = [type(chunk) for chunk in b&quot;abc&quot;]</span>
@@ -132,7 +157,7 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="21">    <span class="k">return</span> <span class="n">chunk</span>
 </span><span data-line="22">
 </span><span data-line="23">
-</span><span data-line="24"><span class="k">def</span> <span class="nf">_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="24"><span class="k">def</span><span class="w"> </span><span class="nf">_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
 </span><span data-line="25">    <span class="n">chunks</span> <span class="o">=</span> <span class="p">(</span><span class="n">_chunk_as_bytes</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">)</span>
 </span><span data-line="26">    <span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
 </span><span data-line="27">    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
@@ -142,7 +167,7 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="31">
 <div class="viewcode-block" id="as_bytes">
 <a class="viewcode-back" href="../../../api.html#exasol.bucketfs.as_bytes">[docs]</a>
-</span><span data-line="32"><span class="k">def</span> <span class="nf">as_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="32"><span class="k">def</span><span class="w"> </span><span class="nf">as_bytes</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
 </span><span data-line="33"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="34"><span class="sd">    Transforms a set of byte chunks into a bytes like object.</span>
 </span><span data-line="35">
@@ -158,7 +183,7 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="44">
 <div class="viewcode-block" id="as_string">
 <a class="viewcode-back" href="../../../api.html#exasol.bucketfs.as_string">[docs]</a>
-</span><span data-line="45"><span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="45"><span class="k">def</span><span class="w"> </span><span class="nf">as_string</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span data-line="46"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="47"><span class="sd">    Transforms a set of byte chunks into a string.</span>
 </span><span data-line="48">
@@ -175,7 +200,7 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="58">
 <div class="viewcode-block" id="as_file">
 <a class="viewcode-back" href="../../../api.html#exasol.bucketfs.as_file">[docs]</a>
-</span><span data-line="59"><span class="k">def</span> <span class="nf">as_file</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+</span><span data-line="59"><span class="k">def</span><span class="w"> </span><span class="nf">as_file</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 </span><span data-line="60"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="61"><span class="sd">    Transforms a set of byte chunks into a string.</span>
 </span><span data-line="62">
@@ -197,7 +222,7 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="77">
 <div class="viewcode-block" id="as_hash">
 <a class="viewcode-back" href="../../../api.html#exasol.bucketfs.as_hash">[docs]</a>
-</span><span data-line="78"><span class="k">def</span> <span class="nf">as_hash</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sha1&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="78"><span class="k">def</span><span class="w"> </span><span class="nf">as_hash</span><span class="p">(</span><span class="n">chunks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">],</span> <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sha1&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
 </span><span data-line="79"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="80"><span class="sd">    Calculate the hash for a set of byte chunks.</span>
 </span><span data-line="81">
@@ -215,7 +240,7 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="93">            <span class="s2">&quot;Algorithm (</span><span class="si">{algorithm}</span><span class="s2">) is not available, please use [</span><span class="si">{algorithms}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
 </span><span data-line="94">                <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hashlib</span><span class="o">.</span><span class="n">algorithms_available</span><span class="p">)</span>
 </span><span data-line="95">            <span class="p">)</span>
-</span><span data-line="96">        <span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span>
+</span><span data-line="96">        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ex</span>
 </span><span data-line="97">
 </span><span data-line="98">    <span class="n">chunks</span> <span class="o">=</span> <span class="p">(</span><span class="n">_chunk_as_bytes</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">)</span>
 </span><span data-line="99">    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
@@ -259,5 +284,5 @@ data-aria-dark="Switch to auto color mode">
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
       <script src="../../../_static/tabs.js?v=3ee01567"></script>
       <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
-      <script src="../../../_static/shibuya.js?v=e2e99575"></script></body>
+      <script src="../../../_static/shibuya.js?v=55e26b35"></script></body>
 </html>

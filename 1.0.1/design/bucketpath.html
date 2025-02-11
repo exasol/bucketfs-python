@@ -6,7 +6,7 @@
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
-    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=83eaa723" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=10d1008b" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -34,7 +34,7 @@
       <span class="hidden md:inline">1.0.1</span>
       <i class="i-lucide chevron-down"></i>
     </button>
-    <div class="nav-versions-choices"><ul><li><a href="bucketpath.html">1.0.1</a></li><li><a href="../../1.0.0/design/bucketpath.html">1.0.0</a></li><li><a href="../../0.14.0/design/bucketpath.html">0.14.0</a></li><li><a href="../../0.13.0/design/bucketpath.html">0.13.0</a></li><li><a href="../../0.12.0/design/bucketpath.html">0.12.0</a></li><li><a href="../../0.11.0/design/bucketpath.html">0.11.0</a></li><li><a href="../../0.10.0/design/bucketpath.html">0.10.0</a></li><li><a href="../../0.9.0/index.html">0.9.0</a></li><li><a href="../../0.8.0/index.html">0.8.0</a></li><li><a href="../../0.7.0/index.html">0.7.0</a></li><li><a href="../../0.6.0/index.html">0.6.0</a></li><li><a href="../../0.5.0/index.html">0.5.0</a></li><li><a href="../../0.4.0/index.html">0.4.0</a></li><li><a href="../../0.3.0/index.html">0.3.0</a></li><li><a href="../../0.2.0/index.html">0.2.0</a></li><li><a href="../../0.1.0/index.html">0.1.0</a></li></ul></div>
+    <div class="nav-versions-choices"><ul><li><a href="../../main/design/bucketpath.html">main</a></li><li><a href="bucketpath.html">1.0.1</a></li><li><a href="../../1.0.0/design/bucketpath.html">1.0.0</a></li><li><a href="../../0.14.0/design/bucketpath.html">0.14.0</a></li><li><a href="../../0.13.0/design/bucketpath.html">0.13.0</a></li><li><a href="../../0.12.0/design/bucketpath.html">0.12.0</a></li><li><a href="../../0.11.0/design/bucketpath.html">0.11.0</a></li><li><a href="../../0.10.0/design/bucketpath.html">0.10.0</a></li><li><a href="../../0.9.0/index.html">0.9.0</a></li><li><a href="../../0.8.0/index.html">0.8.0</a></li><li><a href="../../0.7.0/index.html">0.7.0</a></li><li><a href="../../0.6.0/index.html">0.6.0</a></li><li><a href="../../0.5.0/index.html">0.5.0</a></li><li><a href="../../0.4.0/index.html">0.4.0</a></li><li><a href="../../0.3.0/index.html">0.3.0</a></li><li><a href="../../0.2.0/index.html">0.2.0</a></li><li><a href="../../0.1.0/index.html">0.1.0</a></li></ul></div>
   </div><div class="sy-head-socials">
   <a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
     <iconify-icon icon="simple-icons:github"></iconify-icon>
@@ -60,11 +60,38 @@ data-aria-dark="Switch to auto color mode">
     <div class="sy-lside-inner md:sticky">
       <div class="sy-scrollbar p-6">
         <div class="globaltoc" data-expand-depth="0"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">👤 User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/user_guide.html">👤 User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/basics.html">Basic’s</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/advanced.html">Advanced</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">🧰 API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide/developer_guide.html">🛠 Developer Guide</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="design.html">📑 Design Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changes/changelog.html">📝 Changes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="design.html">📑 Design Documents</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Design Document Bucket Path(s)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changes/changelog.html">📝 Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changes/unreleased.html">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_1.0.1.html">1.0.1 - 2025-01-27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_1.0.0.html">1.0.0 - 2025-01-13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.14.0.html">0.14.0 - 2024-11-26</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.13.0.html">0.13.0 - 2024-08-07</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.12.0.html">0.12.0 - 2024-07-11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.11.0.html">0.11.0 - 2024-05-23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.10.0.html">BucketFs Python 0.10.0, released 2024-05-15</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.9.0.html">BucketFs Python 0.9.0, released 2024-02-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html">BucketFs Python 0.8.0, released 2023-03-21</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.7.0.html">BucketFs Python 0.7.0, released 2022-12-22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.6.0.html">BucketFs Python 0.6.0, released 2022-11-11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.5.0.html">BucketFs Python 0.5.0, released 2022-10-12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.4.0.html">BucketFs Python 0.4.0, released 2022-09-28</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.3.0.html">BucketFs Utils Python 0.3.0, released 2022-07-20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.2.0.html">BucketFs Utils Python 0.2.0, released 2022-04-29</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.1.0.html">BucketFs Utils Python 0.1.0, released 2022-01-18</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -263,55 +290,55 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </div>
 <section id="pathlike">
 <h4>Pathlike<a class="headerlink" href="#pathlike" title="Link to this heading">¶</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
 </span><span data-line="2">
-</span><span data-line="3"><span class="k">class</span> <span class="nc">Pathlike</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">Pathlike</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
 </span><span data-line="4">
 </span><span data-line="5">    <span class="nd">@property</span>
-</span><span data-line="6">    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span data-line="7"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="8"><span class="sd">        A string representing the final path component, excluding the drive and root, if any.</span>
 </span><span data-line="9"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="10">
 </span><span data-line="11">    <span class="nd">@property</span>
-</span><span data-line="12">    <span class="k">def</span> <span class="nf">suffix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="12">    <span class="k">def</span><span class="w"> </span><span class="nf">suffix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span data-line="13"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="14"><span class="sd">        The file extension of the final component, if any.</span>
 </span><span data-line="15"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="16">
 </span><span data-line="17">    <span class="nd">@property</span>
-</span><span data-line="18">    <span class="k">def</span> <span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="18">    <span class="k">def</span><span class="w"> </span><span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span data-line="19"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="20"><span class="sd">        A string representing the root, if any.</span>
 </span><span data-line="21"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="22">
 </span><span data-line="23">    <span class="nd">@property</span>
-</span><span data-line="24">    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathLike</span><span class="p">:</span>
+</span><span data-line="24">    <span class="k">def</span><span class="w"> </span><span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathLike</span><span class="p">:</span>
 </span><span data-line="25"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="26"><span class="sd">        The logical parent of this path.</span>
 </span><span data-line="27"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="28">
-</span><span data-line="29">    <span class="k">def</span> <span class="nf">as_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="29">    <span class="k">def</span><span class="w"> </span><span class="nf">as_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span data-line="30"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="31"><span class="sd">        Represent the path as a file URI. Can be used to reconstruct the location/path.</span>
 </span><span data-line="32"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="33">
-</span><span data-line="34">    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="34">    <span class="k">def</span><span class="w"> </span><span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span data-line="35"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="36"><span class="sd">        Return True if the path points to an existing file or directory.</span>
 </span><span data-line="37"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="38">
-</span><span data-line="39">    <span class="k">def</span> <span class="nf">is_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="39">    <span class="k">def</span><span class="w"> </span><span class="nf">is_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span data-line="40"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="41"><span class="sd">        Return True if the path points to a directory, False if it points to another kind of file.</span>
 </span><span data-line="42"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="43">
-</span><span data-line="44">    <span class="k">def</span> <span class="nf">is_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="44">    <span class="k">def</span><span class="w"> </span><span class="nf">is_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span data-line="45"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="46"><span class="sd">        Return True if the path points to a regular file, False if it points to another kind of file.</span>
 </span><span data-line="47"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="48">
-</span><span data-line="49">    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
+</span><span data-line="49">    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8192</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]:</span>
 </span><span data-line="50"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="51"><span class="sd">        Read the content of a the file behind this path.</span>
 </span><span data-line="52">
@@ -328,7 +355,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="63"><span class="sd">            FileNotFoundError: If the file does not exist.</span>
 </span><span data-line="64"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="65">
-</span><span data-line="66">    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]):</span>
+</span><span data-line="66">    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ByteString</span> <span class="o">|</span> <span class="n">BinaryIO</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ByteString</span><span class="p">]):</span>
 </span><span data-line="67"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="68"><span class="sd">        Writes data to a this path.</span>
 </span><span data-line="69">
@@ -342,7 +369,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="77"><span class="sd">            NotAFileError: if the pathlike object is not a file path.</span>
 </span><span data-line="78"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="79">
-</span><span data-line="80">    <span class="k">def</span> <span class="nf">rm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="80">    <span class="k">def</span><span class="w"> </span><span class="nf">rm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span data-line="81"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="82"><span class="sd">        Remove this file.</span>
 </span><span data-line="83">
@@ -354,7 +381,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="89"><span class="sd">            FileNotFoundError: If the file does not exist.</span>
 </span><span data-line="90"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="91">
-</span><span data-line="92">    <span class="k">def</span> <span class="nf">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span data-line="92">    <span class="k">def</span><span class="w"> </span><span class="nf">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 </span><span data-line="93"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="94"><span class="sd">        Removes this directory.</span>
 </span><span data-line="95">
@@ -370,7 +397,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="105"><span class="sd">            PermissionError: If recursive is false and the directory is not empty.</span>
 </span><span data-line="106"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="107">
-</span><span data-line="108">    <span class="k">def</span> <span class="nf">joinpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">pathsegements</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pathlike</span><span class="p">:</span>
+</span><span data-line="108">    <span class="k">def</span><span class="w"> </span><span class="nf">joinpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">pathsegements</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pathlike</span><span class="p">:</span>
 </span><span data-line="109"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="110"><span class="sd">        Calling this method is equivalent to combining the path with each of the given pathsegments in turn.</span>
 </span><span data-line="111">
@@ -378,7 +405,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="113"><span class="sd">            A new pathlike object pointing the combined path.</span>
 </span><span data-line="114"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="115">
-</span><span data-line="116">    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Pathlike</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+</span><span data-line="116">    <span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Pathlike</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 </span><span data-line="117"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="118"><span class="sd">        Generate the file names in a directory tree by walking the tree either top-down or bottom-up.</span>
 </span><span data-line="119">
@@ -390,7 +417,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="125"><span class="sd">            A 3-tuple of (dirpath, dirnames, filenames).</span>
 </span><span data-line="126"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="127">
-</span><span data-line="128">    <span class="k">def</span> <span class="nf">iterdir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Pathlike</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span data-line="128">    <span class="k">def</span><span class="w"> </span><span class="nf">iterdir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Pathlike</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 </span><span data-line="129"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="130"><span class="sd">        When the path points to a directory, yield path objects of the directory contents.</span>
 </span><span data-line="131">
@@ -402,7 +429,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="137"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="138">
 </span><span data-line="139">    <span class="c1"># Overload / for joining, see also joinpath or `pathlib.Path`.</span>
-</span><span data-line="140">    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+</span><span data-line="140">    <span class="k">def</span><span class="w"> </span><span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 </span><span data-line="141"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="142"><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
@@ -418,7 +445,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </ul>
 <p>Each backend must implement the <code class="docutils literal notranslate"><span class="pre">as_uri</span></code> method in a way that the location is clearly identifiable.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Attention: needs to provide/implment Pathlike protocol</span>
-</span><span data-line="2"><span class="k">class</span> <span class="nc">BucketPath</span><span class="p">:</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">BucketPath</span><span class="p">:</span>
 </span><span data-line="3"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="4"><span class="sd">    Provides access to a bucket path served via http or https.</span>
 </span><span data-line="5"><span class="sd">    &quot;&quot;&quot;</span>
@@ -426,7 +453,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="7">    <span class="c1"># uri protocol specifies associated with this class</span>
 </span><span data-line="8">    <span class="n">protocol</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bfs&#39;</span><span class="p">,</span> <span class="s1">&#39;bfss&#39;</span><span class="p">]</span>
 </span><span data-line="9">
-</span><span data-line="10">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">bucket</span><span class="p">:</span> <span class="n">Bucket</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="n">bucket</span><span class="p">:</span> <span class="n">Bucket</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span data-line="11"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="12"><span class="sd">    Creates a new BucketPath.</span>
 </span><span data-line="13">
@@ -440,7 +467,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="21">
 </span><span data-line="22">
 </span><span data-line="23"><span class="c1"># Attention: needs to provide/implment Pathlike protocol</span>
-</span><span data-line="24"><span class="k">class</span> <span class="nc">LocalPath</span><span class="p">:</span>
+</span><span data-line="24"><span class="k">class</span><span class="w"> </span><span class="nc">LocalPath</span><span class="p">:</span>
 </span><span data-line="25"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="26"><span class="sd">    Provides access to a bucket path served local file system paths.</span>
 </span><span data-line="27"><span class="sd">    &quot;&quot;&quot;</span>
@@ -448,7 +475,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="29">    <span class="c1"># uri protocol specifies associated with this class</span>
 </span><span data-line="30">    <span class="n">protocol</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bfsl&#39;</span><span class="p">]</span>
 </span><span data-line="31">
-</span><span data-line="32">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+</span><span data-line="32">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 </span><span data-line="33"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="34"><span class="sd">    Creates a new LocalPath.</span>
 </span><span data-line="35">
@@ -470,12 +497,12 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 - Must be designed to consider compatibility with other modifiers, potentially working in combination.
 - Must support the <code class="docutils literal notranslate"><span class="pre">Pathlike</span></code> interface/protocol</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Attention: needs to provide/implment Pathlike protocol</span>
-</span><span data-line="2"><span class="k">class</span> <span class="nc">Chroot</span><span class="p">:</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Chroot</span><span class="p">:</span>
 </span><span data-line="3"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="4"><span class="sd">    Modifies a pathlike object so it will be locked into a specified root.</span>
 </span><span data-line="5"><span class="sd">    &quot;&quot;&quot;</span>
 </span><span data-line="6">
-</span><span data-line="7">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Pathlike</span><span class="p">,</span> <span class="n">chroot</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+</span><span data-line="7">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Pathlike</span><span class="p">,</span> <span class="n">chroot</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
 </span><span data-line="8"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="9"><span class="sd">    Create a new Chroot.</span>
 </span><span data-line="10">
@@ -493,12 +520,12 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="22">
 </span><span data-line="23">
 </span><span data-line="24"><span class="c1"># Attention: needs to provide/implment Pathlike protocol</span>
-</span><span data-line="25"><span class="k">class</span> <span class="nc">ReadOnly</span><span class="p">:</span>
+</span><span data-line="25"><span class="k">class</span><span class="w"> </span><span class="nc">ReadOnly</span><span class="p">:</span>
 </span><span data-line="26"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="27"><span class="sd">    Modifies a pathlike object so it will be readonly.</span>
 </span><span data-line="28"><span class="sd">    &quot;&quot;&quot;</span>
 </span><span data-line="29">
-</span><span data-line="30">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Pathlike</span><span class="p">):</span>
+</span><span data-line="30">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Pathlike</span><span class="p">):</span>
 </span><span data-line="31"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="32"><span class="sd">        Create a new ReadOnly Pathlike object.</span>
 </span><span data-line="33">
@@ -518,9 +545,9 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </section>
 <section id="factory-builders">
 <h4>Factory &amp; Builders<a class="headerlink" href="#factory-builders" title="Link to this heading">¶</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span> <span class="nf">PathBuilder</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">PathBuilder</span><span class="p">:</span>
 </span><span data-line="2">
-</span><span data-line="3">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">credentails_store</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="n">credentails_store</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span data-line="4"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="5"><span class="sd">        Initalizes the factory with settings which are required besides the actual path uri.</span>
 </span><span data-line="6">
@@ -539,7 +566,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </span><span data-line="19"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="20">        <span class="k">pass</span>
 </span><span data-line="21">
-</span><span data-line="22">    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pathlike</span><span class="p">:</span>
+</span><span data-line="22">    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pathlike</span><span class="p">:</span>
 </span><span data-line="23"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="24"><span class="sd">        Creates a new Path (BucketPath, LocalPath, ...) based on the provided uri.</span>
 </span><span data-line="25">
@@ -566,7 +593,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 </div>
 <section id="examples">
 <h5>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h5>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">PathBuilder</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathBuilder</span>
 </span><span data-line="2">
 </span><span data-line="3"><span class="n">Path</span> <span class="o">=</span> <span class="n">PathBuilder</span><span class="p">(</span><span class="n">credentials</span><span class="p">)</span>
 </span><span data-line="4">
@@ -584,7 +611,7 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
 <h4>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">¶</a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Uri</span> <span class="o">=</span> <span class="nb">str</span>
 </span><span data-line="2">
-</span><span data-line="3"><span class="k">def</span> <span class="nf">as_udf_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Uri</span> <span class="o">|</span> <span class="n">BucketPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pathlike</span><span class="p">:</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">as_udf_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Uri</span> <span class="o">|</span> <span class="n">BucketPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pathlike</span><span class="p">:</span>
 </span><span data-line="4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="5"><span class="sd">    Convert a BucketPath to a LocalPath (UdfPath).</span>
 </span><span data-line="6">
@@ -652,5 +679,5 @@ Therefore, comments and docstrings within the sudo code may need adaptation for 
       <script src="../_static/copybutton.js?v=f281be69"></script>
       <script src="../_static/tabs.js?v=3ee01567"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
-      <script src="../_static/shibuya.js?v=e2e99575"></script></body>
+      <script src="../_static/shibuya.js?v=55e26b35"></script></body>
 </html>

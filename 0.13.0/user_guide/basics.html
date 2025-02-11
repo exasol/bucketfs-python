@@ -6,7 +6,7 @@
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
-    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=83eaa723" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=10d1008b" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -34,7 +34,7 @@
       <span class="hidden md:inline">0.13.0</span>
       <i class="i-lucide chevron-down"></i>
     </button>
-    <div class="nav-versions-choices"><ul><li><a href="../../1.0.1/user_guide/basics.html">1.0.1</a></li><li><a href="../../1.0.0/user_guide/basics.html">1.0.0</a></li><li><a href="../../0.14.0/user_guide/basics.html">0.14.0</a></li><li><a href="basics.html">0.13.0</a></li><li><a href="../../0.12.0/user_guide/basics.html">0.12.0</a></li><li><a href="../../0.11.0/user_guide/basics.html">0.11.0</a></li><li><a href="../../0.10.0/user_guide/basics.html">0.10.0</a></li><li><a href="../../0.9.0/user_guide/basics.html">0.9.0</a></li><li><a href="../../0.8.0/user_guide/basics.html">0.8.0</a></li><li><a href="../../0.7.0/user_guide/basics.html">0.7.0</a></li><li><a href="../../0.6.0/user_guide/basics.html">0.6.0</a></li><li><a href="../../0.5.0/index.html">0.5.0</a></li><li><a href="../../0.4.0/index.html">0.4.0</a></li><li><a href="../../0.3.0/index.html">0.3.0</a></li><li><a href="../../0.2.0/index.html">0.2.0</a></li><li><a href="../../0.1.0/index.html">0.1.0</a></li></ul></div>
+    <div class="nav-versions-choices"><ul><li><a href="../../main/user_guide/basics.html">main</a></li><li><a href="../../1.0.1/user_guide/basics.html">1.0.1</a></li><li><a href="../../1.0.0/user_guide/basics.html">1.0.0</a></li><li><a href="../../0.14.0/user_guide/basics.html">0.14.0</a></li><li><a href="basics.html">0.13.0</a></li><li><a href="../../0.12.0/user_guide/basics.html">0.12.0</a></li><li><a href="../../0.11.0/user_guide/basics.html">0.11.0</a></li><li><a href="../../0.10.0/user_guide/basics.html">0.10.0</a></li><li><a href="../../0.9.0/user_guide/basics.html">0.9.0</a></li><li><a href="../../0.8.0/user_guide/basics.html">0.8.0</a></li><li><a href="../../0.7.0/user_guide/basics.html">0.7.0</a></li><li><a href="../../0.6.0/user_guide/basics.html">0.6.0</a></li><li><a href="../../0.5.0/index.html">0.5.0</a></li><li><a href="../../0.4.0/index.html">0.4.0</a></li><li><a href="../../0.3.0/index.html">0.3.0</a></li><li><a href="../../0.2.0/index.html">0.2.0</a></li><li><a href="../../0.1.0/index.html">0.1.0</a></li></ul></div>
   </div><div class="sy-head-socials">
   <a href="https://github.com/exasol/bucketfs-python" aria-label="GitHub">
     <iconify-icon icon="simple-icons:github"></iconify-icon>
@@ -60,11 +60,36 @@ data-aria-dark="Switch to auto color mode">
     <div class="sy-lside-inner md:sticky">
       <div class="sy-scrollbar p-6">
         <div class="globaltoc" data-expand-depth="0"><ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="user_guide.html">👤 User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user_guide.html">👤 User Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Basic’s</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html">Advanced</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upload_github_release_to_bucket.html">Github Artifacts</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">🧰 API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide/developer_guide.html">🛠 Developer Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design/design.html">📑 Design Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changes/changelog.html">📝 Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design/design.html">📑 Design Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../design/bucketpath.html">Design Document Bucket Path(s)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changes/changelog.html">📝 Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changes/unreleased.html">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.13.0.html">0.13.0 - 2024-08-07</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.12.0.html">0.12.0 - 2024-07-11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.11.0.html">0.11.0 - 2024-05-23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.10.0.html">BucketFs Python 0.10.0, released 2024-05-15</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.9.0.html">BucketFs Python 0.9.0, released 2024-02-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html">BucketFs Python 0.8.0, released 2023-03-21</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.8.0.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.7.0.html">BucketFs Python 0.7.0, released 2022-12-22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.6.0.html">BucketFs Python 0.6.0, released 2022-11-11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.5.0.html">BucketFs Python 0.5.0, released 2022-10-12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.4.0.html">BucketFs Python 0.4.0, released 2022-09-28</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.3.0.html">BucketFs Utils Python 0.3.0, released 2022-07-20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.2.0.html">BucketFs Utils Python 0.2.0, released 2022-04-29</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changes/changes_0.1.0.html">BucketFs Utils Python 0.1.0, released 2022-01-18</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -139,7 +164,7 @@ data-aria-dark="Switch to auto color mode">
 bucketfs service one can use the <span class="xref std std-ref">exasol.bucketfs.Service</span> class.</p>
 <section id="list-buckets">
 <h3>List buckets<a class="headerlink" href="#list-buckets" title="Link to this heading">¶</a></h3>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 </span><span data-line="2">
 </span><span data-line="3"><span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:6666&quot;</span>
 </span><span data-line="4"><span class="n">CREDENTIALS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}}</span>
@@ -152,7 +177,7 @@ bucketfs service one can use the <span class="xref std std-ref">exasol.bucketfs.
 </section>
 <section id="get-a-bucket-reference">
 <h3>Get a Bucket reference<a class="headerlink" href="#get-a-bucket-reference" title="Link to this heading">¶</a></h3>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 </span><span data-line="2">
 </span><span data-line="3"><span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:6666&quot;</span>
 </span><span data-line="4"><span class="n">CREDENTIALS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}}</span>
@@ -178,7 +203,7 @@ object for the SaaS database is identical to that of the On-Prem database.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="2"><span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
 </span><span data-line="3"><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="4"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 </span><span data-line="5">
 </span><span data-line="6"><span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:6666&quot;</span>
 </span><span data-line="7"><span class="n">CREDENTIALS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}}</span>
@@ -195,9 +220,9 @@ object for the SaaS database is identical to that of the On-Prem database.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="2"><span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
 </span><span data-line="3"><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="4"><span class="kn">import</span> <span class="nn">io</span>
+</span><span data-line="4"><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
 </span><span data-line="5">
-</span><span data-line="6"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 </span><span data-line="7">
 </span><span data-line="8"><span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:6666&quot;</span>
 </span><span data-line="9"><span class="n">CREDENTIALS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}}</span>
@@ -247,7 +272,7 @@ to get a more tangible object from the download, in that case the bucketfs conve
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="2"><span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
 </span><span data-line="3"><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="4"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span data-line="5">    <span class="n">Service</span><span class="p">,</span>
 </span><span data-line="6">    <span class="n">as_bytes</span><span class="p">,</span>
 </span><span data-line="7">    <span class="n">as_file</span><span class="p">,</span>
@@ -282,7 +307,7 @@ to get a more tangible object from the download, in that case the bucketfs conve
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;</span>
 </span><span data-line="2"><span class="sd">These examples are relevant for the On-Prem Exasol database.</span>
 </span><span data-line="3"><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="4"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 </span><span data-line="5">
 </span><span data-line="6"><span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:6666&quot;</span>
 </span><span data-line="7"><span class="n">CREDENTIALS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}}</span>
@@ -302,9 +327,9 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </span><span data-line="2"><span class="sd">This example is relevant for the Exasol SaaS database.</span>
 </span><span data-line="3"><span class="sd">It demonstrates the creation of a bucket object for a SaaS database.</span>
 </span><span data-line="4"><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="5"><span class="kn">import</span> <span class="nn">os</span>
+</span><span data-line="5"><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 </span><span data-line="6">
-</span><span data-line="7"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">SaaSBucket</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">SaaSBucket</span>
 </span><span data-line="8">
 </span><span data-line="9"><span class="c1"># Let&#39;s assume that the required SaaS connection parameters</span>
 </span><span data-line="10"><span class="c1"># are stored in environment variables.</span>
@@ -327,11 +352,11 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </span><span data-line="2"><span class="sd">In this tutorial we will demonstrate the usage of the PathLike interface</span>
 </span><span data-line="3"><span class="sd">with an example of handling customer reviews.</span>
 </span><span data-line="4"><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="5"><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ByteString</span>
-</span><span data-line="6"><span class="kn">import</span> <span class="nn">tempfile</span>
-</span><span data-line="7"><span class="kn">import</span> <span class="nn">os</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ByteString</span>
+</span><span data-line="6"><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+</span><span data-line="7"><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 </span><span data-line="8">
-</span><span data-line="9"><span class="kn">import</span> <span class="nn">exasol.bucketfs</span> <span class="k">as</span> <span class="nn">bfs</span>
+</span><span data-line="9"><span class="kn">import</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bfs</span>
 </span><span data-line="10">
 </span><span data-line="11"><span class="c1"># First, we need to get a path in the BucketFS where we will store reviews.</span>
 </span><span data-line="12"><span class="c1"># We will use the build_path() function for that. This function takes different</span>
@@ -427,7 +452,7 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </span><span data-line="102">
 </span><span data-line="103"><span class="c1"># The read() method returns an iterator over chunks of content.</span>
 </span><span data-line="104"><span class="c1"># The function below reads the whole content of the specified file.</span>
-</span><span data-line="105"><span class="k">def</span> <span class="nf">read_content</span><span class="p">(</span><span class="n">bfs_path</span><span class="p">:</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
+</span><span data-line="105"><span class="k">def</span><span class="w"> </span><span class="nf">read_content</span><span class="p">(</span><span class="n">bfs_path</span><span class="p">:</span> <span class="n">bfs</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ByteString</span><span class="p">:</span>
 </span><span data-line="106">    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bfs_path</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </span><span data-line="107">
 </span><span data-line="108">
@@ -468,9 +493,9 @@ to get a more tangible object from the download, in that case the bucketfs conve
 </section>
 <section id="configure-logging">
 <h3>Configure logging<a class="headerlink" href="#configure-logging" title="Link to this heading">¶</a></h3>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 </span><span data-line="2">
-</span><span data-line="3"><span class="kn">from</span> <span class="nn">exasol.bucketfs</span> <span class="kn">import</span> <span class="n">Service</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">exasol.bucketfs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 </span><span data-line="4">
 </span><span data-line="5"><span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 </span><span data-line="6">
@@ -530,5 +555,5 @@ to get a more tangible object from the download, in that case the bucketfs conve
       <script src="../_static/copybutton.js?v=f281be69"></script>
       <script src="../_static/tabs.js?v=3ee01567"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
-      <script src="../_static/shibuya.js?v=e2e99575"></script></body>
+      <script src="../_static/shibuya.js?v=55e26b35"></script></body>
 </html>
