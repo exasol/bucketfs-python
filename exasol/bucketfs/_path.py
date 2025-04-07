@@ -245,7 +245,7 @@ class BucketPath:
         self._path = PurePath(path)
         self._bucket_api = bucket_api
 
-    def _get_relative_posix(self):
+    def _get_relative_posix(self) -> str:
         """
         Returns the pure path of this object as a string, in the format of a bucket
         file: 'dir/subdir/.../filename'.
@@ -267,7 +267,8 @@ class BucketPath:
         path_len = len(path_str)
         path_root: Optional[_BucketFile] = None
         for file_name in self._bucket_api.files:
-            if file_name.startswith(path_str):
+            if (file_name.startswith(f"{path_str}/") or file_name == path_str or
+                    (not path_str)):
                 path_root = path_root or _BucketFile(self._path.name, str(self.parent))
                 node = path_root
                 for part in file_name[path_len:].split('/'):
