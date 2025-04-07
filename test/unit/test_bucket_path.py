@@ -5,10 +5,12 @@ import exasol.bucketfs as bfs
 
 
 @pytest.mark.parametrize("test_path, should_exist", [
+    ('', True),
     ('dir1/file11.dat', True),
     ('dir1/dir11', True),
     ('dir1/file19.dat', False),
-    ('dir1/dir3', False)
+    ('dir1/dir3', False),
+    ('dir1/file11', False),
 ])
 def test_file_exists(bucket_fake, test_path, should_exist):
     path = bfs.path.BucketPath(test_path, bucket_api=bucket_fake)
