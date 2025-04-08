@@ -12,4 +12,4 @@
 
 ## Refactorings
 
-* #206: Updated exasol-toolbox to ^1.0.0
+* #206: Updated to poetry 2.1.2 and exasol-toolbox to ^1.0.0
