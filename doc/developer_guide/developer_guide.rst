@@ -23,7 +23,7 @@ Setup pre-commit hook(s)
 
 .. code-block:: shell
 
-    poetry run pre-commit install
+    poetry run -- pre-commit install
 
 Tests
 *****
