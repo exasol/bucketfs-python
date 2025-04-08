@@ -9,3 +9,7 @@
 # Bug fixing
 
 * #202: Fixed the bug in the `Pathlike._navigate()` resulting in false positive `exists`.
+
+## Refactorings
+
+* #206: Updated exasol-toolbox to ^1.0.0
