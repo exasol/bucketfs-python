@@ -3,6 +3,10 @@ import random
 import string
 from contextlib import contextmanager
 from inspect import cleandoc
+from test.integration.conftest import (
+    File,
+    delete_file,
+)
 from typing import (
     ByteString,
     Iterable,
@@ -13,10 +17,6 @@ from typing import (
 import pytest
 import requests
 
-from test.integration.conftest import (
-    File,
-    delete_file,
-)
 from exasol.bucketfs import (
     Bucket,
     Service,
@@ -74,7 +74,9 @@ def test_upload_to_bucket(
     file_name = "Uploaded-File-{random_string}.bin".format(
         random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
-    bucket = Bucket(name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password)
+    bucket = Bucket(
+        name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
+    )
 
     # run test scenario
     try:
@@ -111,7 +113,9 @@ def test_download_file_from_bucket(
     bucketfs_config,
 ):
     name, files = temporary_bucket_files
-    bucket = Bucket(name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password)
+    bucket = Bucket(
+        name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
+    )
 
     for file in files:
         expected = file.content
@@ -137,7 +141,9 @@ def test_list_files_in_bucket(
     bucketfs_config,
 ):
     name, files = temporary_bucket_files
-    bucket = Bucket(name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password)
+    bucket = Bucket(
+        name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
+    )
     expected = {file.name for file in files}
     actual = {file for file in bucket}
     assert expected.issubset(actual)

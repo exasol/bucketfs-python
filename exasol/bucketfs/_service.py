@@ -33,7 +33,7 @@ class Service:
         url: str,
         credentials: Mapping[str, Mapping[str, str]] | None = None,
         verify: bool | str = True,
-        service_name: Optional[str] = None
+        service_name: str | None = None,
     ):
         """Create a new Service instance.
 
@@ -79,7 +79,7 @@ class Service:
                 username=self._authenticator[name]["username"],
                 password=self._authenticator[name]["password"],
                 service_name=self._service_name,
-                verify=self._verify
+                verify=self._verify,
             )
             for name in buckets
         }

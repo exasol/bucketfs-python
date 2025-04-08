@@ -1,13 +1,32 @@
 from __future__ import annotations
-from typing import Protocol, ByteString, BinaryIO, Iterable, Generator, Optional
-from enum import Enum, auto
-from pathlib import PurePath, PureWindowsPath
+
 import errno
 import os
+from enum import (
+    Enum,
+    auto,
+)
 from io import IOBase
-from exasol.bucketfs._buckets import BucketLike, SaaSBucket, MountedBucket
-from exasol.bucketfs._service import Service
+from pathlib import (
+    PurePath,
+    PureWindowsPath,
+)
+from typing import (
+    BinaryIO,
+    ByteString,
+    Generator,
+    Iterable,
+    Optional,
+    Protocol,
+)
+
+from exasol.bucketfs._buckets import (
+    BucketLike,
+    MountedBucket,
+    SaaSBucket,
+)
 from exasol.bucketfs._error import BucketFsError
+from exasol.bucketfs._service import Service
 
 ARCHIVE_SUFFIXES = [".tar", ".gz", ".tgz", ".zip", ".tar"]
 
@@ -135,7 +154,7 @@ class PathLike(Protocol):
             PermissionError: If recursive is false and the directory is not empty.
         """
 
-    def joinpath(self, *path_segments) -> "PathLike":
+    def joinpath(self, *path_segments) -> PathLike:
         """
         Calling this method is equivalent to combining the path with each of the given path segments in turn.
 
@@ -143,7 +162,9 @@ class PathLike(Protocol):
             A new pathlike object pointing the combined path.
         """
 
-    def walk(self, top_down: bool = True) -> Generator[tuple["PathLike", list[str], list[str]], None, None]:
+    def walk(
+        self, top_down: bool = True
+    ) -> Generator[tuple[PathLike, list[str], list[str]]]:
         """
         Generate the file names in a directory tree by walking the tree either top-down or bottom-up.
 
@@ -155,7 +176,7 @@ class PathLike(Protocol):
             A 3-tuple of (dirpath, dirnames, filenames).
         """
 
-    def iterdir(self) -> Generator["PathLike", None, None]:
+    def iterdir(self) -> Generator[PathLike]:
         """
         When the path points to a directory, yield path objects of the directory contents.
 
@@ -174,7 +195,7 @@ class PathLike(Protocol):
 
 def _remove_archive_suffix(path: PurePath) -> PurePath:
     while path.suffix in ARCHIVE_SUFFIXES:
-        path = path.with_suffix('')
+        path = path.with_suffix("")
     return path
 
 
@@ -184,10 +205,10 @@ class _BucketFile:
     This can be a file, a directory or both.
     """
 
-    def __init__(self, name: str, parent: str = ''):
+    def __init__(self, name: str, parent: str = ""):
         self._name = name
-        self._path = f'{parent}/{name}' if parent else name
-        self._children: Optional[dict[str, "_BucketFile"]] = None
+        self._path = f"{parent}/{name}" if parent else name
+        self._children: dict[str, _BucketFile] | None = None
         self.is_file = False
 
     @property
@@ -209,14 +230,14 @@ class _BucketFile:
             return iter(())
         return iter(self._children.values())
 
-    def get_child(self, child_name: str) -> "_BucketFile":
+    def get_child(self, child_name: str) -> _BucketFile:
         """
         Returns a child object with the specified name.
         Creates one if it hasn't been created yet.
         """
         if self._children is None:
             self._children = {}
-            child: Optional["_BucketFile"] = None
+            child: _BucketFile | None = None
         else:
             child = self._children.get(child_name)
         if child is None:
@@ -250,14 +271,14 @@ class BucketPath:
         Returns the pure path of this object as a string, in the format of a bucket
         file: 'dir/subdir/.../filename'.
         """
-        path_str = str(self._path)[len(self._path.anchor):]
+        path_str = str(self._path)[len(self._path.anchor) :]
         if isinstance(self._path, PureWindowsPath):
-            path_str = path_str.replace('\\', '/')
-        if path_str == '.':
-            path_str = ''
+            path_str = path_str.replace("\\", "/")
+        if path_str == ".":
+            path_str = ""
         return path_str
 
-    def _navigate(self) -> Optional[_BucketFile]:
+    def _navigate(self) -> _BucketFile | None:
         """
         Reads the bucket file structure and navigates to the node corresponding to the
         pure path of this object. Returns None if such node doesn't exist, otherwise
@@ -265,13 +286,16 @@ class BucketPath:
         """
         path_str = self._get_relative_posix()
         path_len = len(path_str)
-        path_root: Optional[_BucketFile] = None
+        path_root: _BucketFile | None = None
         for file_name in self._bucket_api.files:
-            if (file_name.startswith(f"{path_str}/") or file_name == path_str or
-                    (not path_str)):
+            if (
+                file_name.startswith(f"{path_str}/")
+                or file_name == path_str
+                or (not path_str)
+            ):
                 path_root = path_root or _BucketFile(self._path.name, str(self.parent))
                 node = path_root
-                for part in file_name[path_len:].split('/'):
+                for part in file_name[path_len:].split("/"):
                     if part:
                         node = node.get_child(part)
                 node.is_file = True
@@ -297,8 +321,9 @@ class BucketPath:
         return self._path.as_uri()
 
     def as_udf_path(self) -> str:
-        return str(PurePath(self._bucket_api.udf_path) /
-                   _remove_archive_suffix(self._path))
+        return str(
+            PurePath(self._bucket_api.udf_path) / _remove_archive_suffix(self._path)
+        )
 
     def exists(self) -> bool:
         return self._navigate() is not None
@@ -315,17 +340,24 @@ class BucketPath:
         return self._bucket_api.download(str(self._path), chunk_size)
 
     def write(self, data: ByteString | BinaryIO | Iterable[ByteString]) -> None:
-        if (not isinstance(data, IOBase) and isinstance(data, Iterable) and
-                all(isinstance(chunk, ByteString) for chunk in data)):
-            data = b''.join(data)
+        if (
+            not isinstance(data, IOBase)
+            and isinstance(data, Iterable)
+            and all(isinstance(chunk, ByteString) for chunk in data)
+        ):
+            data = b"".join(data)
         self._bucket_api.upload(str(self._path), data)
 
     def rm(self) -> None:
         current_node = self._navigate()
         if current_node is None:
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
+            raise FileNotFoundError(
+                errno.ENOENT, os.strerror(errno.ENOENT), str(self._path)
+            )
         if not current_node.is_file:
-            raise IsADirectoryError(errno.EISDIR, os.strerror(errno.EISDIR), str(self._path))
+            raise IsADirectoryError(
+                errno.EISDIR, os.strerror(errno.EISDIR), str(self._path)
+            )
         self._bucket_api.delete(str(self._path))
 
     def rmdir(self, recursive: bool = False) -> None:
@@ -336,11 +368,15 @@ class BucketPath:
             # is considered empty.
             return
         if not current_node.is_dir:
-            raise NotADirectoryError(errno.ENOTDIR, os.strerror(errno.ENOTDIR), str(self._path))
+            raise NotADirectoryError(
+                errno.ENOTDIR, os.strerror(errno.ENOTDIR), str(self._path)
+            )
         if recursive:
             self._rmdir_recursive(current_node)
         else:
-            raise OSError(errno.ENOTEMPTY, os.strerror(errno.ENOTEMPTY), str(self._path))
+            raise OSError(
+                errno.ENOTEMPTY, os.strerror(errno.ENOTEMPTY), str(self._path)
+            )
 
     def _rmdir_recursive(self, node: _BucketFile):
         for child in node:
@@ -351,20 +387,27 @@ class BucketPath:
     def joinpath(self, *path_segments) -> PathLike:
         # The path segments can be of either this type or an os.PathLike.
         cls = type(self)
-        seg_paths = [seg._path if isinstance(seg, cls) else seg for seg in path_segments]
+        seg_paths = [
+            seg._path if isinstance(seg, cls) else seg for seg in path_segments
+        ]
         new_path = self._path.joinpath(*seg_paths)
         return cls(new_path, self._bucket_api)
 
-    def walk(self, top_down: bool = True) -> Generator[tuple[PathLike, list[str], list[str]], None, None]:
+    def walk(
+        self, top_down: bool = True
+    ) -> Generator[tuple[PathLike, list[str], list[str]]]:
         current_node = self._navigate()
         if current_node is None:
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
+            raise FileNotFoundError(
+                errno.ENOENT, os.strerror(errno.ENOENT), str(self._path)
+            )
 
         if current_node.is_dir:
             yield from self._walk_recursive(current_node, top_down)
 
-    def _walk_recursive(self, node: _BucketFile, top_down: bool) -> \
-            Generator[tuple[PathLike, list[str], list[str]], None, None]:
+    def _walk_recursive(
+        self, node: _BucketFile, top_down: bool
+    ) -> Generator[tuple[PathLike, list[str], list[str]]]:
 
         bucket_path = BucketPath(node.path, self._bucket_api)
         dir_list: list[str] = []
@@ -386,12 +429,16 @@ class BucketPath:
         if not top_down:
             yield bucket_path, dir_list, file_list
 
-    def iterdir(self) -> Generator[PathLike, None, None]:
+    def iterdir(self) -> Generator[PathLike]:
         current_node = self._navigate()
         if current_node is None:
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(self._path))
+            raise FileNotFoundError(
+                errno.ENOENT, os.strerror(errno.ENOENT), str(self._path)
+            )
         if not current_node.is_dir:
-            raise NotADirectoryError(errno.ENOTDIR, os.strerror(errno.ENOTDIR), str(self._path))
+            raise NotADirectoryError(
+                errno.ENOTDIR, os.strerror(errno.ENOTDIR), str(self._path)
+            )
 
         for child in current_node:
             yield BucketPath(self._path / child.name, self._bucket_api)
@@ -411,45 +458,47 @@ class BucketPath:
         return str(self._path)
 
 
-def _create_onprem_bucket(url: str,
-                          username: str,
-                          password: str,
-                          bucket_name: str = 'default',
-                          verify: bool | str = True,
-                          service_name: Optional[str] = None
-                          ) -> BucketLike:
+def _create_onprem_bucket(
+    url: str,
+    username: str,
+    password: str,
+    bucket_name: str = "default",
+    verify: bool | str = True,
+    service_name: str | None = None,
+) -> BucketLike:
     """
     Creates an on-prem bucket.
     """
-    credentials = {bucket_name: {'username': username, 'password': password}}
+    credentials = {bucket_name: {"username": username, "password": password}}
     service = Service(url, credentials, verify, service_name)
     buckets = service.buckets
     if bucket_name not in buckets:
-        raise BucketFsError(f'Bucket {bucket_name} does not exist.')
+        raise BucketFsError(f"Bucket {bucket_name} does not exist.")
     return buckets[bucket_name]
 
 
-def _create_saas_bucket(account_id: str,
-                        database_id: str,
-                        pat: str,
-                        url: str = 'https://cloud.exasol.com'
-                        ) -> BucketLike:
+def _create_saas_bucket(
+    account_id: str, database_id: str, pat: str, url: str = "https://cloud.exasol.com"
+) -> BucketLike:
     """
     Creates a SaaS bucket.
     """
     return SaaSBucket(url=url, account_id=account_id, database_id=database_id, pat=pat)
 
 
-def _create_mounted_bucket(service_name: str = 'bfsdefault',
-                           bucket_name: str = 'default',
-                           base_path: Optional[str] = None
-                           ) -> BucketLike:
+def _create_mounted_bucket(
+    service_name: str = "bfsdefault",
+    bucket_name: str = "default",
+    base_path: str | None = None,
+) -> BucketLike:
     """
     Creates a bucket mounted to a UDF.
     """
     bucket = MountedBucket(service_name, bucket_name, base_path)
     if not bucket.root.exists():
-        raise BucketFsError(f'Service {service_name} or bucket {bucket_name} do not exist.')
+        raise BucketFsError(
+            f"Service {service_name} or bucket {bucket_name} do not exist."
+        )
     return bucket
 
 
@@ -516,8 +565,8 @@ def build_path(**kwargs) -> PathLike:
             providing the service_name and the bucket_name.
     """
 
-    backend = kwargs.pop('backend', StorageBackend.onprem)
-    path = kwargs.pop('path') if 'path' in kwargs else ''
+    backend = kwargs.pop("backend", StorageBackend.onprem)
+    path = kwargs.pop("path") if "path" in kwargs else ""
 
     if isinstance(backend, str):
         backend = StorageBackend[backend.lower()]

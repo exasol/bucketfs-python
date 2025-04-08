@@ -19,7 +19,7 @@ This module contains a python api to programmatically access exasol bucketfs ser
 
 
     2. List all files in the bucket "default"
-    
+
         HTTPIE:
           $  http --auth w:write --auth-type basic GET http://127.0.0.1:6666/default
 
@@ -43,14 +43,16 @@ This module contains a python api to programmatically access exasol bucketfs ser
         CURL:
           $ curl -u "w:write" --output myfile.txt  http://127.0.0.1:6666/default/myfile.txt
 """
+
 from __future__ import annotations
 
+from exasol.bucketfs import _path as path
 from exasol.bucketfs._buckets import (
-    BucketLike,
     Bucket,
-    SaaSBucket,
-    MountedBucket,
+    BucketLike,
     MappedBucket,
+    MountedBucket,
+    SaaSBucket,
 )
 from exasol.bucketfs._convert import (
     as_bytes,
@@ -58,7 +60,6 @@ from exasol.bucketfs._convert import (
     as_hash,
     as_string,
 )
-from exasol.bucketfs import _path as path
 from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._service import Service
 
