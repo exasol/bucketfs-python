@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from typing import ByteString
+
 import pytest
 
 import exasol.bucketfs as bfs
@@ -35,42 +37,41 @@ def _collect_all_names(path: bfs.path.PathLike) -> set[str]:
     return all_names
 
 
-def test_write_read_back(backend_aware_bucketfs_params,
-                         children_poem):
+def test_write_read_back(backend_aware_bucketfs_params, children_poem):
 
     base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
-    file_name = 'test_bucket_path/test_write_read_back_saas/little_star.txt'
+    file_name = "test_bucket_path/test_write_read_back_saas/little_star.txt"
     poem_path = base_path / file_name
 
     poem_path.write(children_poem)
-    data_back = b''.join(poem_path.read(20))
+    data_back = b"".join(poem_path.read(20))
     assert data_back == children_poem
 
 
-def test_write_list_files(backend_aware_bucketfs_params,
-                          children_poem, classic_poem):
+def test_write_list_files(backend_aware_bucketfs_params, children_poem, classic_poem):
 
-    base_path = bfs.path.build_path(**backend_aware_bucketfs_params,
-                                    path='test_bucket_path/test_write_list_files_saas')
-    poem_path1 = base_path / 'children/little_star.txt'
-    poem_path2 = base_path / 'classic/highlands.txt'
+    base_path = bfs.path.build_path(
+        **backend_aware_bucketfs_params,
+        path="test_bucket_path/test_write_list_files_saas",
+    )
+    poem_path1 = base_path / "children/little_star.txt"
+    poem_path2 = base_path / "classic/highlands.txt"
 
     poem_path1.write(children_poem)
     poem_path2.write(classic_poem)
-    expected_names = {'children', 'classic', 'little_star.txt', 'highlands.txt'}
+    expected_names = {"children", "classic", "little_star.txt", "highlands.txt"}
     assert _collect_all_names(base_path) == expected_names
 
 
-def test_write_delete(backend_aware_bucketfs_params,
-                      children_poem, classic_poem):
+def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem):
 
     base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
-    poems_root = base_path / 'test_bucket_path/test_write_delete_saas'
-    poem_path1 = poems_root / 'children/little_star.txt'
-    poem_path2 = poems_root / 'classic/highlands.txt'
+    poems_root = base_path / "test_bucket_path/test_write_delete_saas"
+    poem_path1 = poems_root / "children/little_star.txt"
+    poem_path2 = poems_root / "classic/highlands.txt"
 
     poem_path1.write(children_poem)
     poem_path2.write(classic_poem)
     poem_path1.rm()
-    expected_names = {'classic', 'highlands.txt'}
+    expected_names = {"classic", "highlands.txt"}
     assert _collect_all_names(poems_root) == expected_names

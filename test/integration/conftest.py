@@ -7,11 +7,12 @@ from typing import (
     Tuple,
     Union,
 )
-from exasol.bucketfs._shared import _build_url
 
 import pytest
 import requests
 from requests.auth import HTTPBasicAuth
+
+from exasol.bucketfs._shared import _build_url
 
 
 def upload_file(

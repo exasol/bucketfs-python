@@ -1,6 +1,7 @@
 """
 These examples are relevant for the On-Prem Exasol database.
 """
+
 import io
 
 from exasol.bucketfs import Service

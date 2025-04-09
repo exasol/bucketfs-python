@@ -1,30 +1,37 @@
 from __future__ import annotations
 
+import errno
+import os
+import shutil
+from io import IOBase
+from pathlib import Path
 from typing import (
     BinaryIO,
     ByteString,
     Iterable,
     Iterator,
-    Protocol,
     Optional,
+    Protocol,
 )
-import os
-from io import IOBase
-import shutil
-import errno
-from pathlib import Path
-
-import requests
-from requests import HTTPError
-from requests.auth import HTTPBasicAuth
 from urllib.parse import quote_plus
 
-from exasol.saas.client.openapi.client import AuthenticatedClient as SaasAuthenticatedClient
-from exasol.saas.client.openapi.models.file import File as SaasFile
+import requests
+from exasol.saas.client.openapi.api.files.delete_file import (
+    sync_detailed as saas_delete_file,
+)
+from exasol.saas.client.openapi.api.files.download_file import (
+    sync_detailed as saas_download_file,
+)
 from exasol.saas.client.openapi.api.files.list_files import sync as saas_list_files
-from exasol.saas.client.openapi.api.files.delete_file import sync_detailed as saas_delete_file
-from exasol.saas.client.openapi.api.files.upload_file import sync_detailed as saas_upload_file
-from exasol.saas.client.openapi.api.files.download_file import sync_detailed as saas_download_file
+from exasol.saas.client.openapi.api.files.upload_file import (
+    sync_detailed as saas_upload_file,
+)
+from exasol.saas.client.openapi.client import (
+    AuthenticatedClient as SaasAuthenticatedClient,
+)
+from exasol.saas.client.openapi.models.file import File as SaasFile
+from requests import HTTPError
+from requests.auth import HTTPBasicAuth
 
 from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._logging import LOGGER
@@ -152,7 +159,7 @@ class Bucket:
         username: str,
         password: str,
         verify: bool | str = True,
-        service_name: Optional[str] = None
+        service_name: str | None = None,
     ):
         self._name = name
         self._service = _parse_service_url(service)
@@ -171,9 +178,11 @@ class Bucket:
     @property
     def udf_path(self) -> str:
         if self._service_name is None:
-            raise BucketFsError('The bucket cannot provide its udf_path '
-                                'as the service name is unknown.')
-        return f'/buckets/{self._service_name}/{self._name}'
+            raise BucketFsError(
+                "The bucket cannot provide its udf_path "
+                "as the service name is unknown."
+            )
+        return f"/buckets/{self._service_name}/{self._name}"
 
     @property
     def _auth(self) -> HTTPBasicAuth:
@@ -220,7 +229,9 @@ class Bucket:
         url = _build_url(service_url=self._service, bucket=self.name, path=path)
         LOGGER.info(
             "Downloading %s using a chunk size of %d bytes from bucket %s.",
-            path, chunk_size, self.name
+            path,
+            chunk_size,
+            self.name,
         )
         with requests.get(
             url, stream=True, auth=self._auth, verify=self._verify
@@ -256,21 +267,23 @@ class SaaSBucket:
 
     @property
     def name(self) -> str:
-        return 'default'
+        return "default"
 
     @property
     def udf_path(self) -> str:
-        return f'/buckets/uploads/{self.name}'
+        return f"/buckets/uploads/{self.name}"
 
     @property
     def files(self) -> Iterable[str]:
         LOGGER.info("Retrieving the bucket listing.")
-        with SaasAuthenticatedClient(base_url=self._url,
-                                     token=self._pat,
-                                     raise_on_unexpected_status=True) as client:
-            content = saas_list_files(account_id=self._account_id,
-                                      database_id=self._database_id,
-                                      client=client)
+        with SaasAuthenticatedClient(
+            base_url=self._url, token=self._pat, raise_on_unexpected_status=True
+        ) as client:
+            content = saas_list_files(
+                account_id=self._account_id,
+                database_id=self._database_id,
+                client=client,
+            )
 
         file_list: list[str] = []
 
@@ -288,51 +301,63 @@ class SaaSBucket:
 
     def delete(self, path: str) -> None:
         LOGGER.info("Deleting %s from the bucket.", path)
-        with SaasAuthenticatedClient(base_url=self._url,
-                                     token=self._pat,
-                                     raise_on_unexpected_status=True) as client:
-            saas_delete_file(account_id=self._account_id,
-                             database_id=self._database_id,
-                             key=quote_plus(path),
-                             client=client)
+        with SaasAuthenticatedClient(
+            base_url=self._url, token=self._pat, raise_on_unexpected_status=True
+        ) as client:
+            saas_delete_file(
+                account_id=self._account_id,
+                database_id=self._database_id,
+                key=quote_plus(path),
+                client=client,
+            )
 
     def upload(self, path: str, data: ByteString | BinaryIO) -> None:
         LOGGER.info("Uploading %s to the bucket.", path)
         # Q. The service can handle any characters in the path.
         #    Do we need to check this path for presence of characters deemed
         #    invalid in the BucketLike protocol?
-        with SaasAuthenticatedClient(base_url=self._url,
-                                     token=self._pat,
-                                     raise_on_unexpected_status=False) as client:
-            response = saas_upload_file(account_id=self._account_id,
-                                        database_id=self._database_id,
-                                        key=quote_plus(path),
-                                        client=client)
+        with SaasAuthenticatedClient(
+            base_url=self._url, token=self._pat, raise_on_unexpected_status=False
+        ) as client:
+            response = saas_upload_file(
+                account_id=self._account_id,
+                database_id=self._database_id,
+                key=quote_plus(path),
+                client=client,
+            )
             if response.status_code >= 400:
                 # Q. Is it the right type of exception?
-                raise RuntimeError(f'Request for a presigned url to upload the file {path} '
-                                   f'failed with the status code {response.status_code}')
-            upload_url = response.parsed.url.replace(r'\u0026', '&')
+                raise RuntimeError(
+                    f"Request for a presigned url to upload the file {path} "
+                    f"failed with the status code {response.status_code}"
+                )
+            upload_url = response.parsed.url.replace(r"\u0026", "&")
 
         response = requests.put(upload_url, data=data)
         response.raise_for_status()
 
     def download(self, path: str, chunk_size: int = 8192) -> Iterable[ByteString]:
         LOGGER.info("Downloading %s from the bucket.", path)
-        with SaasAuthenticatedClient(base_url=self._url,
-                                     token=self._pat,
-                                     raise_on_unexpected_status=False) as client:
-            response = saas_download_file(account_id=self._account_id,
-                                          database_id=self._database_id,
-                                          key=quote_plus(path),
-                                          client=client)
+        with SaasAuthenticatedClient(
+            base_url=self._url, token=self._pat, raise_on_unexpected_status=False
+        ) as client:
+            response = saas_download_file(
+                account_id=self._account_id,
+                database_id=self._database_id,
+                key=quote_plus(path),
+                client=client,
+            )
             if response.status_code == 404:
-                raise BucketFsError("The file {path} doesn't exist in the SaaS BucketFs.")
+                raise BucketFsError(
+                    "The file {path} doesn't exist in the SaaS BucketFs."
+                )
             elif response.status_code >= 400:
                 # Q. Is it the right type of exception?
-                raise RuntimeError(f'Request for a presigned url to download the file {path} '
-                                   f'failed with the status code {response.status_code}')
-            download_url = response.parsed.url.replace(r'\u0026', '&')
+                raise RuntimeError(
+                    f"Request for a presigned url to download the file {path} "
+                    f"failed with the status code {response.status_code}"
+                )
+            download_url = response.parsed.url.replace(r"\u0026", "&")
 
         response = requests.get(download_url, stream=True)
         response.raise_for_status()
@@ -362,15 +387,17 @@ class MountedBucket:
             buckets/<service_name>/<bucket_name>.
     """
 
-    def __init__(self,
-                 service_name: str = 'bfsdefault',
-                 bucket_name: str = 'default',
-                 base_path: Optional[str] = None):
+    def __init__(
+        self,
+        service_name: str = "bfsdefault",
+        bucket_name: str = "default",
+        base_path: str | None = None,
+    ):
         self._name = bucket_name
         if base_path:
             self.root = Path(base_path)
         else:
-            self.root = Path('/buckets') / service_name / bucket_name
+            self.root = Path("/buckets") / service_name / bucket_name
 
     @property
     def name(self) -> str:
@@ -382,7 +409,7 @@ class MountedBucket:
 
     @property
     def files(self) -> list[str]:
-        return [str(pth.relative_to(self.root)) for pth in self.root.rglob('*.*')]
+        return [str(pth.relative_to(self.root)) for pth in self.root.rglob("*.*")]
 
     def delete(self, path: str) -> None:
         try:
@@ -395,20 +422,22 @@ class MountedBucket:
         full_path = self.root / path
         if not full_path.parent.exists():
             full_path.parent.mkdir(parents=True)
-        with full_path.open('wb') as f:
+        with full_path.open("wb") as f:
             if isinstance(data, IOBase):
                 shutil.copyfileobj(data, f)
             elif isinstance(data, ByteString):
                 f.write(data)
             else:
-                raise ValueError('upload called with unrecognised data type. ' 
-                                 'A valid data should be either ByteString or BinaryIO')
+                raise ValueError(
+                    "upload called with unrecognised data type. "
+                    "A valid data should be either ByteString or BinaryIO"
+                )
 
     def download(self, path: str, chunk_size: int) -> Iterable[ByteString]:
         full_path = self.root / path
         if (not full_path.exists()) or (not full_path.is_file()):
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), str(path))
-        with full_path.open('rb') as f:
+        with full_path.open("rb") as f:
             while True:
                 data = f.read(chunk_size)
                 if not data:

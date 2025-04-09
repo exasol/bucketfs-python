@@ -1,47 +1,46 @@
+[project]
+name = "exasol-bucketfs"
+version = "1.0.1"
+description = "BucketFS utilities for the Python programming language"
+authors = [
+    {name="Torsten Kilias", email="torsten.kilias@exasol.com"},
+    {name="Nicola Coretti", email="nicola.coretti@exasol.com"},
+    {name="Anastasiia Sergienko", email="anastasiia.sergienko@exasol.com"},
+]
+readme = 'README.rst'
+license = "MIT"
+keywords = ['exasol', 'bucketfs']
+
+[project.urls]
+repository = "https://github.com/exasol/bucketfs-python"
+homepage = "https://github.com/exasol/bucketfs-python"
+
 [build-system]
 requires = [
-    "poetry>=1.0.0",
+    "poetry>=2.0.0",
 ]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "exasol-bucketfs"
 packages  = [
     {include = "exasol"},
 ]
-version = "1.0.1"
-description = "BucketFS utilities for the Python programming language"
-
-license = "MIT"
-
-authors = [
-    "Torsten Kilias <torsten.kilias@exasol.com>",
-    "Nicola Coretti <nicola.coretti@exasol.com>",
-    "Anastasiia Sergienko <anastasiia.sergienko@exasol.com>"
-]
-
-readme = 'README.rst'
-
-repository = "https://github.com/exasol/bucketfs-python"
-homepage = "https://github.com/exasol/bucketfs-python"
-
-keywords = ['exasol', 'bucketfs']
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.9.2,<4.0"
 requests = ">=2.24.0"
 exasol-saas-api=">=0.3.0"
 # Temp.fix
 httpx=">=0.27.0"
 attrs=">=23.2.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pyexasol = "^0.25.2"
 dill = "^0.3.4"
 exasol-udf-mock-python = ">=0.2.0"
 toml = ">=0.10.2"
 sphinx-copybutton = "^0.5.0"
-exasol-toolbox = ">=0.16.0,<1"
+exasol-toolbox = "^1.0.0"
 pytest-localserver = "^0.8.1"
 pytest-exasol-backend = ">=0.3.2,<1"
 
