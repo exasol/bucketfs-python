@@ -6,7 +6,7 @@
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
-    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=10d1008b" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=c516b45e" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -108,7 +108,10 @@ data-aria-dark="Switch to auto color mode">
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
 <li><a class="reference internal" href="#">Unreleased</a></li>
 <li><a class="reference internal" href="#security">Security</a></li>
-<li><a class="reference internal" href="#bug-fixing">Bug fixing</a></li>
+<li><a class="reference internal" href="#bug-fixing">Bug fixing</a><ul>
+<li><a class="reference internal" href="#refactorings">Refactorings</a></li>
+</ul>
+</li>
 </ul>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
@@ -149,6 +152,11 @@ data-aria-dark="Switch to auto color mode">
 <h1>Security<a class="headerlink" href="#security" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>#193: Dependency updates, notably Jinja2 (3.1.4 -&gt; 3.1.5), luigi (-&gt; 3.6.0)</p></li>
+<li><p>#206: Dependency updates, notably cryptography(43.0.3-&gt;44.0.2), Jinja2 (3.1.5 -&gt; 3.1.6)</p>
+<ul>
+<li><p>Due to changes in cryptography’s Python support (!=3.9.0 and 3.9.1), we updated our support to Python ^3.9.2.</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="bug-fixing">
@@ -156,6 +164,12 @@ data-aria-dark="Switch to auto color mode">
 <ul class="simple">
 <li><p>#202: Fixed the bug in the <code class="docutils literal notranslate"><span class="pre">Pathlike._navigate()</span></code> resulting in false positive <code class="docutils literal notranslate"><span class="pre">exists</span></code>.</p></li>
 </ul>
+<section id="refactorings">
+<h2>Refactorings<a class="headerlink" href="#refactorings" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>#206: Updated to poetry 2.1.2 and exasol-toolbox to ^1.0.0</p></li>
+</ul>
+</section>
 </section>
 
         </article><button class="back-to-top" type="button">
@@ -208,5 +222,5 @@ data-aria-dark="Switch to auto color mode">
       <script src="../_static/copybutton.js?v=f281be69"></script>
       <script src="../_static/tabs.js?v=3ee01567"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
-      <script src="../_static/shibuya.js?v=55e26b35"></script></body>
+      <script src="../_static/shibuya.js?v=e2230717"></script></body>
 </html>
