@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import ByteString
 import io
 import tarfile
+from typing import ByteString
 
 import pytest
 
@@ -57,7 +57,7 @@ def test_write_read_back_tar_gz(backend_aware_bucketfs_params, children_poem, tm
     with tarfile.open(poem_tar_gz, "w:gz") as tar:
         info = tarfile.TarInfo(name="poem.txt")
         info.size = len(children_poem)
-        tar.addfile(info, io.BytesIO(children_poem))    # type: ignore
+        tar.addfile(info, io.BytesIO(children_poem))  # type: ignore
 
     # Open the location at the bucket-fs
     bfs_base_path = bfs.path.build_path(**backend_aware_bucketfs_params)

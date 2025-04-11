@@ -9,6 +9,7 @@
 # Bug fixing
 
 * #202: Fixed the bug in the `Pathlike._navigate()` resulting in false positive `exists`.
+* #204: Fixed the automatic decompression when downloading a tar.gz file.
 
 ## Refactorings
 
