@@ -241,7 +241,11 @@ class Bucket:
             except HTTPError as ex:
                 raise BucketFsError(f"Couldn't download: {path}") from ex
 
-            yield from response.raw.stream(chunk_size=chunk_size, decode_content=False)
+            while True:
+                chunk = response.raw.read(chunk_size)
+                if not chunk:
+                    break
+                yield chunk
 
 
 class SaaSBucket:
