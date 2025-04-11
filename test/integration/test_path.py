@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import io
+import tarfile
 from typing import ByteString
 
 import pytest
@@ -46,6 +48,30 @@ def test_write_read_back(backend_aware_bucketfs_params, children_poem):
     poem_path.write(children_poem)
     data_back = b"".join(poem_path.read(20))
     assert data_back == children_poem
+
+
+def test_write_read_back_tar_gz(backend_aware_bucketfs_params, children_poem, tmp_path):
+
+    # Write the content into a tar.gz file
+    poem_tar_gz = tmp_path / "poem.tar.gz"
+    with tarfile.open(poem_tar_gz, "w:gz") as tar:
+        info = tarfile.TarInfo(name="poem.txt")
+        info.size = len(children_poem)
+        tar.addfile(info, io.BytesIO(children_poem))  # type: ignore
+
+    # Open the location at the bucket-fs
+    bfs_base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
+    bfs_file_name = "test_bucket_path/test_write_read_back/little_star.tar.gz"
+    bfs_file_path = bfs_base_path / bfs_file_name
+
+    # Read the tar.gz file into memory and write to the bucket-fs location.
+    with open(poem_tar_gz, "rb") as tar_gz_file:
+        tar_gz_content = tar_gz_file.read()
+    bfs_file_path.write(tar_gz_content)
+
+    # Read back the tar.gz and check that the content hasn't changed.
+    content_back = b"".join(bfs_file_path.read(20))
+    assert content_back == tar_gz_content
 
 
 def test_write_list_files(backend_aware_bucketfs_params, children_poem, classic_poem):
