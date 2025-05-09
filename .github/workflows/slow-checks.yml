@@ -1,0 +1,36 @@
+name: Slow-Checks
+
+on:
+  workflow_call:
+
+jobs:
+
+  slow-checks:
+    name: Slow
+    runs-on: ubuntu-24.04
+    environment: slow-tests
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+    steps:
+      - name: SCM Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python & Poetry Environment
+        uses: exasol/python-toolbox/.github/actions/python-environment@1.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Tests
+        env:
+          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
+          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
+          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
+        run: poetry run -- pytest --backend=all test/integration
+
+#      - name: Upload Artifacts
+#        uses: actions/upload-artifact@v4.6.2
+#        with:
+#          name: coverage-python${{ matrix.python-version }}-slow
+#          path: .coverage
+#          include-hidden-files: true
