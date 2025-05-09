@@ -17,10 +17,10 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Python & Poetry Environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@1.0.0
+        uses: exasol/python-toolbox/.github/actions/python-environment@1.1.0
 
       - name: Download Artifacts
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v4.3.0
         with:
           path: ./artifacts
 
@@ -41,7 +41,7 @@ jobs:
         run: poetry run -- nox -s project:report -- --format json | tee metrics.json
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4.6.0
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: metrics.json
           path: metrics.json

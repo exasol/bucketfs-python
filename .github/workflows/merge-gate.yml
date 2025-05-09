@@ -2,9 +2,6 @@ name: Merge-Gate
 
 on:
   workflow_call:
-    secrets:
-      ALTERNATIVE_GITHUB_TOKEN:
-        required: false
 
 jobs:
 
@@ -14,23 +11,8 @@ jobs:
 
   slow-checks:
     name: Slow
-    runs-on: ubuntu-24.04
-    environment: slow-tests
-    steps:
-      - name: SCM Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python & Poetry Environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@1.0.0
-        with:
-          python-version: "3.10"
-
-      - name: Tests
-        env:
-          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
-          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
-          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
-        run: poetry run -- pytest --backend=all test/integration
+    uses: ./.github/workflows/slow-checks.yml
+    secrets: inherit
 
   # This job ensures inputs have been executed successfully.
   approve-merge:
