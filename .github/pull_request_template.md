@@ -8,4 +8,4 @@ If required
 * [ ] Updated API Documentation
 
 If doing a release
-* [ ] Bumped version number using `poetry run -- nox -s prepare-release`
+* [ ] Bumped version number using `poetry run -- nox -s release:prepare`

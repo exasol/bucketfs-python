@@ -95,7 +95,7 @@ This can be achieved by running the following command:
 
 .. code-block:: shell
 
-   nox -s prepare-release -- <major>.<minor>.<patch>
+   nox -s release:prepare -- --type major, minor, patch
 
 Replace `<major>`, `<minor>`, and `<patch>` with the appropriate version numbers.
 Once the PR is successfully merged, the release can be triggered (see next section).
@@ -155,4 +155,3 @@ One of the release steps failed (Partial Release)
     **Scenario**: Publishing of the release on Github was successfully but during the PyPi release, the upload step got interrupted.
 
     **Solution**: Manually push the package to PyPi
-
