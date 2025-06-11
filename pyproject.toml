@@ -31,7 +31,7 @@ packages  = [
 
 [tool.poetry.dependencies]
 requests = ">=2.32.4"
-exasol-saas-api=">=0.3.0"
+exasol-saas-api=">=0.3.0,<1.0.0"
 # Temp.fix
 httpx=">=0.27.0"
 attrs=">=23.2.0"
@@ -44,7 +44,7 @@ toml = ">=0.10.2"
 sphinx-copybutton = "^0.5.0"
 exasol-toolbox = "^1.4.0"
 pytest-localserver = "^0.8.1"
-pytest-exasol-backend = ">=0.3.2,<1"
+pytest-exasol-backend = ">=0.3.2,<0.4.0"
 
 [tool.coverage.run]
 source = [
