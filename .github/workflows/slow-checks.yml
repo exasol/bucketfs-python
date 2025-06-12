@@ -9,6 +9,8 @@ jobs:
     name: Slow
     runs-on: ubuntu-24.04
     environment: slow-tests
+    permissions:
+      contents: read
     strategy:
       matrix:
         python-version: ["3.10"]
