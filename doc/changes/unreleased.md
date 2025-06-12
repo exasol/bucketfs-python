@@ -14,6 +14,7 @@
 * #202: Fixed the bug in the `Pathlike._navigate()` resulting in false positive `exists`.
 * #204: Fixed the automatic decompression when downloading a tar.gz file.
 
-## Refactorings
+## Internal
 
 * #206: Updated to poetry 2.1.2 and exasol-toolbox to ^1.0.0
+* #223: Updated to exasol-toolbox ^1.4.0
