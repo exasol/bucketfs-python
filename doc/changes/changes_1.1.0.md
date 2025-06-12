@@ -1,4 +1,4 @@
-# 1.0.2 - 2025-06-12
+# 1.1.0 - 2025-06-12
 
 # Security
 
@@ -18,3 +18,4 @@
 
 * #206: Updated to poetry 2.1.2 and exasol-toolbox to ^1.0.0
 * #223: Updated to exasol-toolbox ^1.4.0
+* #220: Updated exasol-saas-api (0.7.0 -> 1.1.1) and dropped support for Python 3.9
