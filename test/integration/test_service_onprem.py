@@ -1,6 +1,10 @@
 import logging
 import random
 import string
+from collections.abc import (
+    ByteString,
+    Iterable,
+)
 from contextlib import contextmanager
 from inspect import cleandoc
 from test.integration.conftest import (
@@ -8,8 +12,6 @@ from test.integration.conftest import (
     delete_file,
 )
 from typing import (
-    ByteString,
-    Iterable,
     Tuple,
     Union,
 )
@@ -109,7 +111,7 @@ def test_upload_to_bucket(
     indirect=True,
 )
 def test_download_file_from_bucket(
-    temporary_bucket_files: Tuple[str, Union[File, Iterable[File]]],
+    temporary_bucket_files: tuple[str, Union[File, Iterable[File]]],
     bucketfs_config,
 ):
     name, files = temporary_bucket_files
@@ -137,7 +139,7 @@ def test_download_file_from_bucket(
     indirect=True,
 )
 def test_list_files_in_bucket(
-    temporary_bucket_files: Tuple[str, Union[File, Iterable[File]]],
+    temporary_bucket_files: tuple[str, Union[File, Iterable[File]]],
     bucketfs_config,
 ):
     name, files = temporary_bucket_files

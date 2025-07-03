@@ -22,7 +22,7 @@ Exasol Bucketfs
     :alt: Formatter - Isort
 
 .. image:: https://img.shields.io/pypi/l/exasol-bucketfs
-     :target: https://opensource.org/licenses/MIT
+     :target: https://opensource.org/license/MIT
      :alt: License
 
 .. image:: https://img.shields.io/github/last-commit/exasol/bucketfs-python
@@ -30,7 +30,7 @@ Exasol Bucketfs
      :alt: Last Commit
 
 
-Exasol Bucketfs is a python library to interact with Exasol `Bucketfs-Service(s) <https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm>`_.
+Exasol Bucketfs is a Python library to interact with Exasol `Bucketfs-Service(s) <https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm>`_.
 
 🚀 Features
 ------------
@@ -42,10 +42,6 @@ Exasol Bucketfs is a python library to interact with Exasol `Bucketfs-Service(s)
 * Delete files from bucketfs
 * Pythonic API
 
-🔌️ Prerequisites
------------------
-
-- `Python <https://www.python.org/>`_ >= 3.8
 
 💾 Installation
 ----------------

@@ -5,7 +5,7 @@ with an example of handling customer reviews.
 
 import os
 import tempfile
-from typing import ByteString
+from collections.abc import ByteString
 
 import exasol.bucketfs as bfs
 

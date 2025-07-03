@@ -35,8 +35,8 @@ BFSPY declares a dependency to pytest plugin ``pytest-exasol-backend`` which is
 maintained in GitHub repository `pytest-plugins/pytest_backend
 <https://github.com/exasol/pytest-plugins/tree/main/pytest-backend/>`_.  This
 plugin makes additional fixtures available that are used in the saas
-integration tests of BFSPY, see files in folder `test_saas/integration
-<https://github.com/exasol/bucketfs-python/tree/main/test_saas/integration/>`_.
+integration tests of BFSPY, see files in folder `test_service_saas.py
+<https://github.com/exasol/bucketfs-python/blob/main/test/integration/test_service_saas.py>`_.
 
 Running Tests in CI Builds
 --------------------------
@@ -59,7 +59,7 @@ infrastructure which are creating costs for the database instances temporarily
 created during test execution.
 
 Group G2 is guarded by a dedicated `GitHub Enviroment
-<https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#required-reviewers>`_
+<https://docs.github.com/en/actions/how-tos/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment#required-reviewers>`_
 requiring **manual approval** before these tests are executed.
 
 Each of the groups results in a final gating GitHub workflow job that is added to the branch protection of branch ``main``.

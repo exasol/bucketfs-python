@@ -2,6 +2,11 @@ from __future__ import annotations
 
 import errno
 import os
+from collections.abc import (
+    ByteString,
+    Generator,
+    Iterable,
+)
 from enum import (
     Enum,
     auto,
@@ -13,9 +18,6 @@ from pathlib import (
 )
 from typing import (
     BinaryIO,
-    ByteString,
-    Generator,
-    Iterable,
     Optional,
     Protocol,
 )
