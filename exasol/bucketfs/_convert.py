@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
-from typing import (
+from collections.abc import (
     ByteString,
     Iterable,
 )
+from pathlib import Path
 
 from exasol.bucketfs._error import BucketFsError
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import io
 import tarfile
-from typing import ByteString
+from collections.abc import ByteString
 
 import pytest
 

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import (
+from collections.abc import (
     Iterator,
     Mapping,
     MutableMapping,
+)
+from typing import (
     Optional,
 )
 

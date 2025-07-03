@@ -1,9 +1,11 @@
-from dataclasses import dataclass
-from typing import (
-    BinaryIO,
+from collections.abc import (
     ByteString,
     Iterable,
     Sequence,
+)
+from dataclasses import dataclass
+from typing import (
+    BinaryIO,
     Tuple,
     Union,
 )
@@ -22,7 +24,7 @@ def upload_file(
     password: str,
     filename: str,
     content: Union[ByteString, BinaryIO, Iterable[ByteString]],
-) -> Tuple[str, str]:
+) -> tuple[str, str]:
     auth = HTTPBasicAuth(username, password)
     url = f"{service.rstrip('/')}/{bucket}/{filename}"
     response = requests.put(url, data=content, auth=auth)
@@ -32,7 +34,7 @@ def upload_file(
 
 def delete_file(
     service: str, bucket: str, username: str, password: str, filename: str
-) -> Tuple[str, str]:
+) -> tuple[str, str]:
     auth = HTTPBasicAuth(username, password)
     url = _build_url(service_url=service, bucket=bucket, path=filename)
     response = requests.delete(url, auth=auth)
@@ -47,7 +49,7 @@ class File:
 
 
 @pytest.fixture
-def temporary_bucket_files(request) -> Tuple[str, Iterable[File]]:
+def temporary_bucket_files(request) -> tuple[str, Iterable[File]]:
     """
     Create temporary files within a bucket and clean them once the test is done.
 
@@ -56,7 +58,7 @@ def temporary_bucket_files(request) -> Tuple[str, Iterable[File]]:
         This fixture expects the using test to be parameterized using `pytest.mark.parameterize`
         together with the `indirect` parameter, for further details see `Indirect parameterization  <https://docs.pytest.org/en/7.2.x/example/parametrize.html#indirect-parametrization>`_.
     """
-    params: Tuple[str, Union[File, Iterable[File]]] = request.param
+    params: tuple[str, Union[File, Iterable[File]]] = request.param
     options = request.config.option
     bucket, files = params
     # support for a single file argument

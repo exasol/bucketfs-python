@@ -3,13 +3,15 @@ from __future__ import annotations
 import errno
 import os
 import shutil
+from collections.abc import (
+    ByteString,
+    Iterable,
+    Iterator,
+)
 from io import IOBase
 from pathlib import Path
 from typing import (
     BinaryIO,
-    ByteString,
-    Iterable,
-    Iterator,
     Optional,
     Protocol,
 )
