@@ -22,7 +22,7 @@ Exasol Bucketfs
     :alt: Formatter - Isort
 
 .. image:: https://img.shields.io/pypi/l/exasol-bucketfs
-     :target: https://opensource.org/licenses/MIT
+     :target: https://opensource.org/license/MIT
      :alt: License
 
 .. image:: https://img.shields.io/github/last-commit/exasol/bucketfs-python
