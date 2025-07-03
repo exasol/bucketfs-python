@@ -82,3 +82,8 @@ module = [
     "test.*",
 ]
 ignore_errors = true
+
+[tool.sonar]
+projectKey = "com.exasol:bucketfs-python"
+hostUrl = "https://sonarcloud.io"
+organization = "exasol"
