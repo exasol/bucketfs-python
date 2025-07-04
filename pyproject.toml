@@ -1,6 +1,6 @@
 [project]
 name = "exasol-bucketfs"
-version = "1.1.0"
+version = "2.0.0"
 requires-python = ">=3.10,<4.0"
 description = "BucketFS utilities for the Python programming language"
 authors = [
@@ -31,7 +31,7 @@ packages  = [
 
 [tool.poetry.dependencies]
 requests = ">=2.32.4"
-exasol-saas-api=">1.0,<2.0"
+exasol-saas-api=">2.0.0,<3.0"
 # Temp.fix
 httpx=">=0.27.0"
 attrs=">=23.2.0"
@@ -44,7 +44,7 @@ toml = ">=0.10.2"
 sphinx-copybutton = "^0.5.0"
 exasol-toolbox = "^1.6.0"
 pytest-localserver = "^0.8.1"
-pytest-exasol-backend = ">=0.3.2,<1"
+pytest-exasol-backend = ">=1.0.0,<2"
 
 [tool.coverage.run]
 source = [
