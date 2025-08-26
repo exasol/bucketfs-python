@@ -26,6 +26,11 @@ from exasol.bucketfs import (
     as_string,
 )
 
+import pyexasol
+from contextlib import closing
+from textwrap import dedent
+
+
 
 @contextmanager
 def does_not_raise(exception_type: Exception = Exception):
@@ -315,3 +320,126 @@ def test_any_log_message_get_emitted(httpserver, caplog):
     ]
     # The log level DEBUG should emit at least one log message
     assert log_records
+
+
+def random_string(length=10):
+    return "".join(random.choice(string.hexdigits) for _ in range(length))
+
+
+
+@pytest.mark.parametrize(
+    "name,data",
+    [
+        (
+            "default",
+            bytes([65, 66, 67, 68, 69, 70]),
+        ),
+        (
+            "default",
+            [b"12", b"34", b"56", b"78"],
+        ),
+        (
+            "default",
+            (b"1" for _ in range(0, 10)),
+        ),
+    ],
+)
+def test_upload_and_udf_path(backend_aware_bucketfs_params,
+    bucketfs_config,
+    name: str,
+    data: Union[ByteString, Iterable[ByteString], Iterable[int]],
+):
+    print(backend_aware_bucketfs_params)
+    # Upload file to BucketFS
+    file_name = "Uploaded-File-{random_string}.bin".format(
+        random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
+    )
+    bucket = Bucket(
+        name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
+    )
+
+    bucket = Bucket(
+        name=backend_aware_bucketfs_params["bucket_name"],
+        service_name=backend_aware_bucketfs_params["service_name"],
+        password=backend_aware_bucketfs_params["password"],
+        username=backend_aware_bucketfs_params["username"],
+        verify=backend_aware_bucketfs_params["verify"],
+        service=backend_aware_bucketfs_params["url"]
+    )
+    print("before  try")
+    try:
+        bucket.upload(file_name, data)
+        print("#"*50,bucket.files)
+        assert file_name in bucket.files, "File upload failed"
+
+        # Generate UDF path
+        udf_path = bucket.udf_path
+        assert udf_path is not None, "UDF path generation failed"
+        print(f"UDF path: {udf_path}")
+
+        # Create minimal UDF that accesses this file
+
+
+        # NOTE: Example for Python UDF. Adjust as needed for your Exasol UDF engine.
+        # Register a UDF (using the Exasol connection and SQL)
+        # You may need to use pyexasol or similar library for this
+        import pyexasol
+        # conn = pyexasol.connect(dsn="localhost:8563", user="sys", password="exasol")
+        conn = pyexasol.connect(dsn="172.23.142.48:8563", user="sys", password="exasol")
+
+        conn.execute("CREATE SCHEMA IF NOT EXISTS transact;")
+        conn.execute("open schema transact;")
+        udf_name = f"CHECK_FILE_IN_UDF_{random.randint(1000,9999)}"
+
+        # Create UDF SQL
+        create_udf_sql = dedent(f"""
+        --/
+        CREATE OR REPLACE PYTHON3 SCALAR 
+        SCRIPT CHECK_FILE_EXISTS_UDF(file_path VARCHAR(200000)) 
+        RETURNS BOOLEAN AS
+        import os
+        def run(ctx):
+            return os.path.exists(ctx.file_path)
+        /
+        """)
+        print("UDF Successfully run...!!!")
+        conn.execute(create_udf_sql)
+        print(bucket.files)
+        # Verify the path exists inside the UDF
+        result = conn.execute(f"SELECT CHECK_FILE_EXISTS_UDF('{udf_path}')").fetchone()[0]
+        assert result == True
+
+        #TODO:
+        # return the content fo the file
+
+        # return the content of the file
+        create_read_udf_sql = dedent(f"""
+               --/
+               CREATE OR REPLACE PYTHON3 SCALAR 
+               SCRIPT READ_FILE_CONTENT_UDF(file_path VARCHAR(200000)) 
+               RETURNS VARCHAR(200000) AS
+               def run(ctx):
+                   with open(ctx.file_path, 'rb') as f:
+                       return f.read().decode('utf-8', errors='replace')
+               /
+               """)
+        conn.execute(create_read_udf_sql)
+
+        file_content = conn.execute(f"SELECT READ_FILE_CONTENT_UDF('{udf_path}')").fetchone()[0]
+        print(f"Uploaded file content: {file_content}")
+        return file_content
+    except Exception as e:
+        print(e)
+
+    finally:
+        # cleanup
+        _, _ = delete_file(
+            bucketfs_config.url,
+            bucket.name,
+            bucketfs_config.username,
+            bucketfs_config.password,
+            file_name,
+        )
+
+
+
