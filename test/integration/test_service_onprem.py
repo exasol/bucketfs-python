@@ -31,6 +31,8 @@ from exasol.bucketfs import (
     as_string,
 )
 
+from exasol.pytest_backend import BACKEND_ONPREM, BACKEND_SAAS
+
 
 @contextmanager
 def does_not_raise(exception_type: Exception = Exception):
@@ -352,7 +354,7 @@ def test_upload_and_udf_path(
         service=backend_aware_bucketfs_params["url"]
       )
     elif backend == BACKEND_SAAS:
-          bucket = SaaSBucket(
+      bucket = SaaSBucket(
         url=backend_aware_bucketfs_params["url"],
         account_id=backend_aware_bucketfs_params["account_id"],
         database_id=backend_aware_bucketfs_params["database_id"],
@@ -423,9 +425,10 @@ def test_upload_and_udf_path(
     finally:
         # cleanup
         _, _ = delete_file(
-            bucketfs_config.url,
+            bucket._service,
             bucket.name,
-            bucketfs_config.username,
-            bucketfs_config.password,
+            bucket._username,
+            bucket._password,
             file_name,
         )
+        pass
