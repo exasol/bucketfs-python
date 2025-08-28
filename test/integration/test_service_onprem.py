@@ -23,6 +23,10 @@ from typing import (
 import pyexasol
 import pytest
 import requests
+from exasol.pytest_backend import (
+    BACKEND_ONPREM,
+    BACKEND_SAAS,
+)
 
 from exasol.bucketfs import (
     Bucket,
@@ -30,8 +34,6 @@ from exasol.bucketfs import (
     as_bytes,
     as_string,
 )
-
-from exasol.pytest_backend import BACKEND_ONPREM, BACKEND_SAAS
 
 
 @contextmanager
@@ -324,7 +326,6 @@ def test_any_log_message_get_emitted(httpserver, caplog):
     assert log_records
 
 
-
 @pytest.mark.parametrize(
     "name,data",
     [
@@ -345,22 +346,21 @@ def test_upload_and_udf_path(
     file_name = "Uploaded-File-1234.bin"
 
     if backend == BACKEND_ONPREM:
-      bucket = Bucket(
-        name=backend_aware_bucketfs_params["bucket_name"],
-        service_name=backend_aware_bucketfs_params["service_name"],
-        password=backend_aware_bucketfs_params["password"],
-        username=backend_aware_bucketfs_params["username"],
-        verify=backend_aware_bucketfs_params["verify"],
-        service=backend_aware_bucketfs_params["url"]
-      )
+        bucket = Bucket(
+            name=backend_aware_bucketfs_params["bucket_name"],
+            service_name=backend_aware_bucketfs_params["service_name"],
+            password=backend_aware_bucketfs_params["password"],
+            username=backend_aware_bucketfs_params["username"],
+            verify=backend_aware_bucketfs_params["verify"],
+            service=backend_aware_bucketfs_params["url"],
+        )
     elif backend == BACKEND_SAAS:
-      bucket = SaaSBucket(
-        url=backend_aware_bucketfs_params["url"],
-        account_id=backend_aware_bucketfs_params["account_id"],
-        database_id=backend_aware_bucketfs_params["database_id"],
-        pat=backend_aware_bucketfs_params["pat"],
-    )
-     
+        bucket = SaaSBucket(
+            url=backend_aware_bucketfs_params["url"],
+            account_id=backend_aware_bucketfs_params["account_id"],
+            database_id=backend_aware_bucketfs_params["database_id"],
+            pat=backend_aware_bucketfs_params["pat"],
+        )
 
     try:
         bucket.upload(file_name, data)
