@@ -322,9 +322,6 @@ def test_any_log_message_get_emitted(httpserver, caplog):
     assert log_records
 
 
-def random_string(length=10):
-    return "".join(random.choice(string.hexdigits) for _ in range(length))
-
 
 @pytest.mark.parametrize(
     "name,data",
