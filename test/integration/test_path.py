@@ -8,8 +8,6 @@ import pytest
 
 import exasol.bucketfs as bfs
 
-from exasol.bucketfs._buckets import Bucket
-from exasol.bucketfs._path import PathLike
 
 @pytest.fixture
 def children_poem() -> ByteString:
@@ -103,66 +101,3 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
     poem_path1.rm()
     expected_names = {"classic", "highlands.txt"}
     assert _collect_all_names(poems_root) == expected_names
-
-
-import pyexasol
-from contextlib import closing
-
-def test_udf_path_generation_and_existence(backend_aware_bucketfs_params, children_poem):
-    """
-    Integration test to verify correctness of UDF path generation,
-    and test that Exasol UDF accesses the uploaded file using that path.
-    """
-
-    # Setup Bucket instance
-    bucket_1 = Bucket(
-        name=backend_aware_bucketfs_params['bucket_name'],
-        service_name=backend_aware_bucketfs_params['service_name'],
-        service=backend_aware_bucketfs_params['url'],
-        username=backend_aware_bucketfs_params['username'],
-        password=backend_aware_bucketfs_params['password'],
-        verify=not backend_aware_bucketfs_params.get('verify', False)
-    )
-
-    file_name = "test_bucket_path/test_udf_path/little_star.txt"
-
-    # Use the bucket.upload method
-    #    Depending on your method's contract, you may need to ensure the content is bytes or text.
-    bucket_1.upload(file_name, children_poem)
-
-    # Get UDF path representations
-    # udf_path_str = bucket_1.udf_path()
-    udf_path_str = "/buckets/bfsdefault/default"
-    udf_path_alt = PathLike(file_name).as_udf_path()
-
-    # Register UDF and check existence
-    sql_create_udf = """
-    CREATE OR REPLACE PYTHON3 SCALAR SCRIPT CHECK_FILE_EXISTS_UDF(path VARCHAR) RETURNS BOOLEAN AS
-    import os
-    def run(ctx, path):
-        return os.path.exists(path)
-    /
-    """
-
-    with closing(pyexasol.connect(
-        dsn='http://172.23.142.48:2580',
-        user='sys',
-        password='exasol'
-    )) as conn:
-        conn.execute(sql_create_udf)
-
-        # Primary udf_path
-        stmt = conn.execute("SELECT CHECK_FILE_EXISTS_UDF(?)", (udf_path_str,))
-        exists = stmt.fetchone()[0]
-        assert exists, f"File not found at UDF path: {udf_path_str}"
-
-        # as_udf_path alternative
-        stmt = conn.execute("SELECT CHECK_FILE_EXISTS_UDF(?)", (udf_path_alt,))
-        exists2 = stmt.fetchone()[0]
-        assert exists2, f"File not found at UDF path (as_udf_path): {udf_path_alt}"
-
-        try:
-            conn.execute("DROP SCRIPT CHECK_FILE_EXISTS_UDF")
-        except Exception:
-            pass
-

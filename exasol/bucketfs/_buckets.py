@@ -184,7 +184,6 @@ class Bucket:
                 "The bucket cannot provide its udf_path "
                 "as the service name is unknown."
             )
-        print(f"/buckets/{self._service_name}/{self._name}")
         return f"/buckets/{self._service_name}/{self._name}"
 
     @property
