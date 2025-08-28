@@ -326,24 +326,12 @@ def test_any_log_message_get_emitted(httpserver, caplog):
     assert log_records
 
 
-@pytest.mark.parametrize(
-    "name,data",
-    [
-        (
-            "default",
-            (b"1" for _ in range(0, 10)),
-        ),
-    ],
-)
 def test_upload_and_udf_path(
-    backend_aware_bucketfs_params,
-    backend_aware_database_params,
-    backend,
-    name: str,
-    data: Union[ByteString, Iterable[ByteString], Iterable[int]],
-):
+        backend_aware_bucketfs_params,
+        backend_aware_database_params,
+        backend):
     # Upload file to BucketFS
-    file_name = "Uploaded-File-1234.bin"
+    file_name = "Uploaded-File-From-Integration-test.bin"
 
     if backend == BACKEND_ONPREM:
         bucket = Bucket(
@@ -361,24 +349,19 @@ def test_upload_and_udf_path(
             database_id=backend_aware_bucketfs_params["database_id"],
             pat=backend_aware_bucketfs_params["pat"],
         )
-
+    content = "".join("1" for _ in range(0, 10))
     try:
-        bucket.upload(file_name, data)
+        bucket.upload(file_name, content)
         assert file_name in bucket.files, "File upload failed"
 
         # Generate UDF path
         udf_path = bucket.udf_path
         assert udf_path is not None, "UDF path generation failed"
 
-        # NOTE: Example for Python UDF. Adjust as needed for your Exasol UDF engine.
-        # Register a UDF (using the Exasol connection and SQL)
-        # You may need to use pyexasol or similar library for this
-        # conn = pyexasol.connect(dsn="localhost:8563", user="sys", password="exasol")
         conn = pyexasol.connect(**backend_aware_database_params)
 
         conn.execute("CREATE SCHEMA IF NOT EXISTS transact;")
         conn.execute("open schema transact;")
-        udf_name = f"CHECK_FILE_IN_UDF_{random.randint(1000, 9999)}"
 
         # Create UDF SQL
         create_udf_sql = dedent(
@@ -418,7 +401,7 @@ def test_upload_and_udf_path(
         file_content = conn.execute(
             f"SELECT READ_FILE_CONTENT_UDF('{udf_path}/{file_name}')"
         ).fetchone()[0]
-        assert file_content == "".join("1" for _ in range(0, 10))
+        assert file_content == content
     except Exception as e:
         print(e)
 
