@@ -327,9 +327,8 @@ def test_any_log_message_get_emitted(httpserver, caplog):
 
 
 def test_upload_and_udf_path(
-        backend_aware_bucketfs_params,
-        backend_aware_database_params,
-        backend):
+    backend_aware_bucketfs_params, backend_aware_database_params, backend
+):
     # Upload file to BucketFS
     file_name = "Uploaded-File-From-Integration-test.bin"
 
