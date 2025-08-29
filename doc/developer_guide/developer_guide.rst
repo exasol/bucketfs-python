@@ -59,7 +59,7 @@ infrastructure which are creating costs for the database instances temporarily
 created during test execution.
 
 Group G2 is guarded by a dedicated `GitHub Enviroment
-<https://docs.github.com/en/actions/how-tos/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment#required-reviewers>`_
+<https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments>`_
 requiring **manual approval** before these tests are executed.
 
 Each of the groups results in a final gating GitHub workflow job that is added to the branch protection of branch ``main``.
@@ -93,4 +93,4 @@ The `exasol-toolbox` provides nox tasks to semi-automate the release process:
     nox -s release:trigger
 
 For further information, please refer to the `exasol-toolbox`'s page `How to Release
-<https://exasol.github.io/python-toolbox/main/user_guide/how_to_release.html>`_.
+<https://exasol.github.io/python-toolbox/main/>`_.

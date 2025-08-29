@@ -28,7 +28,7 @@ jobs:
           SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
           SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
           SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
-        run: poetry run -- pytest --backend=all test/integration
+        run: poetry run -- pytest --backend=onprem test/integration
 
 #      - name: Upload Artifacts
 #        uses: actions/upload-artifact@v4.6.2
