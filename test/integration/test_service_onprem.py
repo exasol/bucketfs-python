@@ -354,8 +354,13 @@ def test_upload_and_udf_path(
         assert file_name in bucket.files, "File upload failed"
 
         # Generate UDF path
-        udf_path = bucket.udf_path
-        assert udf_path is not None, "UDF path generation failed"
+        bucket_udf_path = bucket.udf_path
+        assert bucket_udf_path is not None, "UDF path generation failed"
+
+        file_pathlike = bucket / file_name
+        file_udf_path = file_pathlike.as_udf_path()
+
+        print("#"*200,file_udf_path)
 
         conn = pyexasol.connect(**backend_aware_database_params)
 
@@ -377,9 +382,7 @@ def test_upload_and_udf_path(
         )
         conn.execute(create_udf_sql)
         # Verify the path exists inside the UDF
-        result = conn.execute(f"SELECT CHECK_FILE_EXISTS_UDF('{udf_path}')").fetchone()[
-            0
-        ]
+        result = conn.execute(f"SELECT CHECK_FILE_EXISTS_UDF('{bucket_udf_path}')").fetchone()[0]
         assert result == True
 
         # return the content of the file
@@ -398,7 +401,7 @@ def test_upload_and_udf_path(
         conn.execute(create_read_udf_sql)
 
         file_content = conn.execute(
-            f"SELECT READ_FILE_CONTENT_UDF('{udf_path}/{file_name}')"
+            f"SELECT READ_FILE_CONTENT_UDF('{bucket_udf_path}/{file_name}')"
         ).fetchone()[0]
         assert file_content == content
     except Exception as e:
