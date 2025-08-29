@@ -34,6 +34,7 @@ from exasol.bucketfs import (
     as_bytes,
     as_string,
 )
+import exasol.bucketfs as bfs
 
 
 @contextmanager
@@ -341,6 +342,16 @@ def test_upload_and_udf_path(
             verify=backend_aware_bucketfs_params["verify"],
             service=backend_aware_bucketfs_params["url"],
         )
+        file_pathlike = bfs.path.build_path(
+            backend=bfs.path.StorageBackend.onprem,
+            url=backend_aware_bucketfs_params["url"],
+            bucket_name=backend_aware_bucketfs_params["bucket_name"],
+            service_name=backend_aware_bucketfs_params["service_name"],
+            path=file_name,
+            username=backend_aware_bucketfs_params["username"],
+            password=backend_aware_bucketfs_params["password"],
+            verify=backend_aware_bucketfs_params["verify"],
+        )
     elif backend == BACKEND_SAAS:
         bucket = SaaSBucket(
             url=backend_aware_bucketfs_params["url"],
@@ -348,14 +359,25 @@ def test_upload_and_udf_path(
             database_id=backend_aware_bucketfs_params["database_id"],
             pat=backend_aware_bucketfs_params["pat"],
         )
+        file_pathlike = bfs.path.build_path(
+            backend=bfs.path.StorageBackend.saas,
+            url=backend_aware_bucketfs_params["url"],
+            account_id=backend_aware_bucketfs_params["account_id"],
+            database_id=backend_aware_bucketfs_params["database_id"],
+            pat=backend_aware_bucketfs_params["pat"],
+            path=file_name,  # <--- The file here, too!
+        )
     content = "".join("1" for _ in range(0, 10))
     try:
         bucket.upload(file_name, content)
         assert file_name in bucket.files, "File upload failed"
 
         # Generate UDF path
-        udf_path = bucket.udf_path
-        assert udf_path is not None, "UDF path generation failed"
+        bucket_udf_path = bucket.udf_path
+        assert bucket_udf_path is not None, "UDF path generation failed"
+
+        file_udf_path = file_pathlike.as_udf_path()
+        assert file_udf_path is not None, "UDF path like udf path generation failed"
 
         conn = pyexasol.connect(**backend_aware_database_params)
 
@@ -377,10 +399,10 @@ def test_upload_and_udf_path(
         )
         conn.execute(create_udf_sql)
         # Verify the path exists inside the UDF
-        result = conn.execute(f"SELECT CHECK_FILE_EXISTS_UDF('{udf_path}')").fetchone()[
-            0
-        ]
-        assert result == True
+        res1 = conn.execute(f"SELECT CHECK_FILE_EXISTS_UDF('{bucket_udf_path}/{file_name}')").fetchone()[0]
+        res2 = conn.execute(f"SELECT CHECK_FILE_EXISTS_UDF('{file_udf_path}')").fetchone()[0]
+        assert res1 is True
+        assert res2 is True
 
         # return the content of the file
         create_read_udf_sql = dedent(
@@ -397,10 +419,11 @@ def test_upload_and_udf_path(
         )
         conn.execute(create_read_udf_sql)
 
-        file_content = conn.execute(
-            f"SELECT READ_FILE_CONTENT_UDF('{udf_path}/{file_name}')"
-        ).fetchone()[0]
-        assert file_content == content
+        content1 = conn.execute(f"SELECT READ_FILE_CONTENT_UDF('{bucket_udf_path}/{file_name}')").fetchone()[0]
+        content2 = conn.execute(f"SELECT READ_FILE_CONTENT_UDF('{file_udf_path}')").fetchone()[0]
+        assert content1 == content
+        assert content2 == content
+
     except Exception as e:
         print(e)
 
