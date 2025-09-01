@@ -37,7 +37,7 @@ from exasol.bucketfs import (
 )
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def uploaded_file_and_paths(
     backend_aware_bucketfs_params, backend, backend_aware_database_params, request
 ):
