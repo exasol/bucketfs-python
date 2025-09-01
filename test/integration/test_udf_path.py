@@ -39,7 +39,7 @@ from exasol.bucketfs import (
 
 @pytest.fixture
 def uploaded_file_and_paths(
-        backend_aware_bucketfs_params, backend, backend_aware_database_params, request
+    backend_aware_bucketfs_params, backend, backend_aware_database_params, request
 ):
     file_name = "Uploaded-File-From-Integration-test.bin"
     content = "".join("1" for _ in range(0, 10))
@@ -81,12 +81,14 @@ def uploaded_file_and_paths(
         )
     else:
         pytest.fail(f"Unknown backend: {backend}")
-    print(bucket,content)
+    print(bucket, content)
     # Upload file to BucketFS/Bucket
     bucket.upload(file_name, content)
 
     udf_path = bucket.udf_path
-    pathlike_udf_path = pathlike.as_udf_path() if hasattr(pathlike, 'as_udf_path') else None
+    pathlike_udf_path = (
+        pathlike.as_udf_path() if hasattr(pathlike, "as_udf_path") else None
+    )
 
     # Setup teardown for cleanup
     def cleanup():
@@ -119,7 +121,8 @@ def setup_schema_and_udfs(backend_aware_database_params):
     conn.execute("CREATE SCHEMA IF NOT EXISTS transact;")
     conn.execute("OPEN SCHEMA transact;")
     # Check file exists UDF
-    create_check_udf_sql = dedent("""
+    create_check_udf_sql = dedent(
+        """
         --/
         CREATE OR REPLACE PYTHON3 SCALAR 
         SCRIPT CHECK_FILE_EXISTS_UDF(file_path VARCHAR(200000)) 
@@ -128,10 +131,12 @@ def setup_schema_and_udfs(backend_aware_database_params):
         def run(ctx):
             return os.path.exists(ctx.file_path)
         /
-    """)
+    """
+    )
     conn.execute(create_check_udf_sql)
     # Read file content UDF
-    create_read_udf_sql = dedent("""
+    create_read_udf_sql = dedent(
+        """
         --/
         CREATE OR REPLACE PYTHON3 SCALAR 
         SCRIPT READ_FILE_CONTENT_UDF(file_path VARCHAR(200000)) 
@@ -140,7 +145,8 @@ def setup_schema_and_udfs(backend_aware_database_params):
             with open(ctx.file_path, 'rb') as f:
                 return f.read().decode('utf-8', errors='replace')
         /
-    """)
+    """
+    )
     conn.execute(create_read_udf_sql)
     return conn
 
