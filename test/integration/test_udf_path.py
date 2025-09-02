@@ -191,7 +191,7 @@ def test_upload_and_udf_path(uploaded_file, setup_schema_and_udfs, exa_bucket):
     assert content_from_udf_path == content
 
 
-def test_upload_and_udf_pathlike(uploaded_file_and_paths, setup_schema_and_udfs):
+def test_upload_and_udf_pathlike(uploaded_file, setup_schema_and_udfs, exa_pathlike):
     """
     Test that verifies upload and pathlike UDF path availability using the uploaded_file_and_paths fixture.
     """
