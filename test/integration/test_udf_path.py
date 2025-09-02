@@ -38,59 +38,74 @@ from exasol.bucketfs import (
 
 
 @pytest.fixture(scope="module")
-def uploaded_file_and_paths(
-    backend_aware_bucketfs_params, backend, backend_aware_database_params, request
-):
-    file_name = "Uploaded-File-From-Integration-test.bin"
-    content = "".join("1" for _ in range(0, 10))
-    # ONPREM settings
+def exa_bucket(backend_aware_bucketfs_params, backend):
+    # create and return a Bucket or SaaSBucket depending on backend
+    params = backend_aware_bucketfs_params
     if backend == BACKEND_ONPREM:
         bucket = Bucket(
-            name=backend_aware_bucketfs_params["bucket_name"],
-            service_name=backend_aware_bucketfs_params["service_name"],
-            password=backend_aware_bucketfs_params["password"],
-            username=backend_aware_bucketfs_params["username"],
-            verify=backend_aware_bucketfs_params["verify"],
-            service=backend_aware_bucketfs_params["url"],
+            name=params["bucket_name"],
+            service_name=params["service_name"],
+            password=params["password"],
+            username=params["username"],
+            verify=params["verify"],
+            service=params["url"],
         )
-        pathlike = bfs.path.build_path(
-            backend=bfs.path.StorageBackend.onprem,
-            url=backend_aware_bucketfs_params["url"],
-            bucket_name=backend_aware_bucketfs_params["bucket_name"],
-            service_name=backend_aware_bucketfs_params["service_name"],
-            path=file_name,
-            username=backend_aware_bucketfs_params["username"],
-            password=backend_aware_bucketfs_params["password"],
-            verify=backend_aware_bucketfs_params["verify"],
-        )
-    # SAAS settings
     elif backend == BACKEND_SAAS:
         bucket = SaaSBucket(
-            url=backend_aware_bucketfs_params["url"],
-            account_id=backend_aware_bucketfs_params["account_id"],
-            database_id=backend_aware_bucketfs_params["database_id"],
-            pat=backend_aware_bucketfs_params["pat"],
+            url=params["url"],
+            account_id=params["account_id"],
+            database_id=params["database_id"],
+            pat=params["pat"],
         )
-        pathlike = bfs.path.build_path(
+    else:
+        pytest.fail(f"Unknown backend: {backend}")
+    return bucket
+
+
+@pytest.fixture(scope="module")
+def exa_pathlike(backend_aware_bucketfs_params, backend):
+    # build the pathlike
+    params = backend_aware_bucketfs_params
+    file_name = "Uploaded-File-From-Integration-test.bin"
+    if backend == BACKEND_ONPREM:
+        return bfs.path.build_path(
+            backend=bfs.path.StorageBackend.onprem,
+            url=params["url"],
+            bucket_name=params["bucket_name"],
+            service_name=params["service_name"],
+            path=file_name,
+            username=params["username"],
+            password=params["password"],
+            verify=params["verify"],
+        )
+    elif backend == BACKEND_SAAS:
+        return bfs.path.build_path(
             backend=bfs.path.StorageBackend.saas,
-            url=backend_aware_bucketfs_params["url"],
-            account_id=backend_aware_bucketfs_params["account_id"],
-            database_id=backend_aware_bucketfs_params["database_id"],
-            pat=backend_aware_bucketfs_params["pat"],
+            url=params["url"],
+            account_id=params["account_id"],
+            database_id=params["database_id"],
+            pat=params["pat"],
             path=file_name,
         )
     else:
         pytest.fail(f"Unknown backend: {backend}")
-    print(bucket, content)
-    # Upload file to BucketFS/Bucket
-    bucket.upload(file_name, content)
 
-    udf_path = bucket.udf_path
-    pathlike_udf_path = (
-        pathlike.as_udf_path() if hasattr(pathlike, "as_udf_path") else None
-    )
 
-    # Setup teardown for cleanup
+@pytest.fixture(scope="module")
+def uploaded_file_and_paths(
+    exa_bucket, exa_pathlike, backend_aware_bucketfs_params, request
+):
+    file_name = "Uploaded-File-From-Integration-test.bin"
+    content = "1" * 10
+
+    exa_bucket.upload(file_name, content)
+
+    # udf_path = exa_bucket.udf_path
+    # pathlike_udf_path = (
+    #     exa_pathlike.as_udf_path() if hasattr(exa_pathlike, "as_udf_path") else None
+    # )
+    #
+
     def cleanup():
         try:
             delete_file(
@@ -99,6 +114,7 @@ def uploaded_file_and_paths(
                 backend_aware_bucketfs_params.get("username"),
                 backend_aware_bucketfs_params.get("password"),
                 file_name,
+                # TODO: try exa_bucket delete
             )
         except Exception:
             pass
@@ -106,12 +122,12 @@ def uploaded_file_and_paths(
     request.addfinalizer(cleanup)
 
     return {
-        "bucket": bucket,
-        "pathlike": pathlike,
+        "bucket": exa_bucket,
+        "pathlike": exa_pathlike,
         "file_name": file_name,
         "content": content,
-        "udf_path": udf_path,
-        "pathlike_udf_path": pathlike_udf_path,
+        # "udf_path": udf_path,
+        # "pathlike_udf_path": pathlike_udf_path,
     }
 
 
@@ -152,13 +168,15 @@ def setup_schema_and_udfs(backend_aware_database_params):
 
 
 def test_upload_and_udf_path(uploaded_file_and_paths, setup_schema_and_udfs):
-    bucket = uploaded_file_and_paths["bucket"]
+    """
+    Test that verifies upload and UDF path availability using the uploaded_file_and_paths fixture.
+    """
     file_name = uploaded_file_and_paths["file_name"]
     content = uploaded_file_and_paths["content"]
-    bucket_udf_path = uploaded_file_and_paths["udf_path"]
+    bucket = uploaded_file_and_paths["bucket"]
+    bucket_udf_path = bucket.udf_path
 
     assert bucket_udf_path is not None, "UDF path generation failed"
-
     conn = setup_schema_and_udfs
 
     # Verify existence in UDF
@@ -176,9 +194,13 @@ def test_upload_and_udf_path(uploaded_file_and_paths, setup_schema_and_udfs):
 
 
 def test_upload_and_udf_pathlike(uploaded_file_and_paths, setup_schema_and_udfs):
-    file_name = uploaded_file_and_paths["file_name"]
+    """
+    Test that verifies upload and pathlike UDF path availability using the uploaded_file_and_paths fixture.
+    """
     content = uploaded_file_and_paths["content"]
-    file_udf_path = uploaded_file_and_paths["pathlike_udf_path"]
+    pathlike = uploaded_file_and_paths["pathlike"]
+    file_udf_path = pathlike.as_udf_path() if hasattr(pathlike, "as_udf_path") else None
+
     assert file_udf_path is not None, "Pathlike udf path generation failed"
     conn = setup_schema_and_udfs
 
