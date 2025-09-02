@@ -92,9 +92,7 @@ def exa_pathlike(backend_aware_bucketfs_params, backend):
 
 
 @pytest.fixture(scope="module")
-def uploaded_file(
-    exa_bucket, request
-):
+def uploaded_file(exa_bucket, request):
     file_name = "Uploaded-File-From-Integration-test.bin"
     content = "1" * 10
 
