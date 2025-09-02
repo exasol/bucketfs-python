@@ -165,7 +165,7 @@ def setup_schema_and_udfs(backend_aware_database_params):
     return conn
 
 
-def test_upload_and_udf_path(uploaded_file_and_paths, setup_schema_and_udfs):
+def test_upload_and_udf_path(uploaded_file, setup_schema_and_udfs, exa_bucket):
     """
     Test that verifies upload and UDF path availability using the uploaded_file_and_paths fixture.
     """
