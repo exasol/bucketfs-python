@@ -122,8 +122,6 @@ def uploaded_file(
     request.addfinalizer(cleanup)
 
     return {
-        "bucket": exa_bucket,
-        "pathlike": exa_pathlike,
         "file_name": file_name,
         "content": content,
         # "udf_path": udf_path,
