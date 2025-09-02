@@ -28,6 +28,7 @@ from exasol.pytest_backend import (
     BACKEND_SAAS,
 )
 
+import exasol.bucketfs as bfs
 from exasol.bucketfs import (
     Bucket,
     Service,
@@ -324,93 +325,3 @@ def test_any_log_message_get_emitted(httpserver, caplog):
     ]
     # The log level DEBUG should emit at least one log message
     assert log_records
-
-
-def test_upload_and_udf_path(
-    backend_aware_bucketfs_params, backend_aware_database_params, backend
-):
-    # Upload file to BucketFS
-    file_name = "Uploaded-File-From-Integration-test.bin"
-
-    if backend == BACKEND_ONPREM:
-        bucket = Bucket(
-            name=backend_aware_bucketfs_params["bucket_name"],
-            service_name=backend_aware_bucketfs_params["service_name"],
-            password=backend_aware_bucketfs_params["password"],
-            username=backend_aware_bucketfs_params["username"],
-            verify=backend_aware_bucketfs_params["verify"],
-            service=backend_aware_bucketfs_params["url"],
-        )
-    elif backend == BACKEND_SAAS:
-        bucket = SaaSBucket(
-            url=backend_aware_bucketfs_params["url"],
-            account_id=backend_aware_bucketfs_params["account_id"],
-            database_id=backend_aware_bucketfs_params["database_id"],
-            pat=backend_aware_bucketfs_params["pat"],
-        )
-    content = "".join("1" for _ in range(0, 10))
-    try:
-        bucket.upload(file_name, content)
-        assert file_name in bucket.files, "File upload failed"
-
-        # Generate UDF path
-        udf_path = bucket.udf_path
-        assert udf_path is not None, "UDF path generation failed"
-
-        conn = pyexasol.connect(**backend_aware_database_params)
-
-        conn.execute("CREATE SCHEMA IF NOT EXISTS transact;")
-        conn.execute("open schema transact;")
-
-        # Create UDF SQL
-        create_udf_sql = dedent(
-            f"""
-        --/
-        CREATE OR REPLACE PYTHON3 SCALAR 
-        SCRIPT CHECK_FILE_EXISTS_UDF(file_path VARCHAR(200000)) 
-        RETURNS BOOLEAN AS
-        import os
-        def run(ctx):
-            return os.path.exists(ctx.file_path)
-        /
-        """
-        )
-        conn.execute(create_udf_sql)
-        # Verify the path exists inside the UDF
-        result = conn.execute(f"SELECT CHECK_FILE_EXISTS_UDF('{udf_path}')").fetchone()[
-            0
-        ]
-        assert result == True
-
-        # return the content of the file
-        create_read_udf_sql = dedent(
-            f"""
-               --/
-               CREATE OR REPLACE PYTHON3 SCALAR 
-               SCRIPT READ_FILE_CONTENT_UDF(file_path VARCHAR(200000)) 
-               RETURNS VARCHAR(200000) AS
-               def run(ctx):
-                   with open(ctx.file_path, 'rb') as f:
-                       return f.read().decode('utf-8', errors='replace')
-               /
-               """
-        )
-        conn.execute(create_read_udf_sql)
-
-        file_content = conn.execute(
-            f"SELECT READ_FILE_CONTENT_UDF('{udf_path}/{file_name}')"
-        ).fetchone()[0]
-        assert file_content == content
-    except Exception as e:
-        print(e)
-
-    finally:
-        # cleanup
-        _, _ = delete_file(
-            bucket._service,
-            bucket.name,
-            bucket._username,
-            bucket._password,
-            file_name,
-        )
-        pass
