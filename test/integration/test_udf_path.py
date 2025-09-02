@@ -100,22 +100,9 @@ def uploaded_file(
 
     exa_bucket.upload(file_name, content)
 
-    # udf_path = exa_bucket.udf_path
-    # pathlike_udf_path = (
-    #     exa_pathlike.as_udf_path() if hasattr(exa_pathlike, "as_udf_path") else None
-    # )
-    #
-
     def cleanup():
         try:
-            delete_file(
-                backend_aware_bucketfs_params["url"],
-                backend_aware_bucketfs_params["bucket_name"],
-                backend_aware_bucketfs_params.get("username"),
-                backend_aware_bucketfs_params.get("password"),
-                file_name,
-                # TODO: try exa_bucket delete
-            )
+            exa_bucket.delete(file_name)
         except Exception:
             pass
 
@@ -124,8 +111,6 @@ def uploaded_file(
     return {
         "file_name": file_name,
         "content": content,
-        # "udf_path": udf_path,
-        # "pathlike_udf_path": pathlike_udf_path,
     }
 
 
@@ -169,10 +154,9 @@ def test_upload_and_udf_path(uploaded_file, setup_schema_and_udfs, exa_bucket):
     """
     Test that verifies upload and UDF path availability using the uploaded_file_and_paths fixture.
     """
-    file_name = uploaded_file_and_paths["file_name"]
-    content = uploaded_file_and_paths["content"]
-    bucket = uploaded_file_and_paths["bucket"]
-    bucket_udf_path = bucket.udf_path
+    file_name = uploaded_file["file_name"]
+    content = uploaded_file["content"]
+    bucket_udf_path = exa_bucket.udf_path
 
     assert bucket_udf_path is not None, "UDF path generation failed"
     conn = setup_schema_and_udfs
@@ -195,9 +179,8 @@ def test_upload_and_udf_pathlike(uploaded_file, setup_schema_and_udfs, exa_pathl
     """
     Test that verifies upload and pathlike UDF path availability using the uploaded_file_and_paths fixture.
     """
-    content = uploaded_file_and_paths["content"]
-    pathlike = uploaded_file_and_paths["pathlike"]
-    file_udf_path = pathlike.as_udf_path() if hasattr(pathlike, "as_udf_path") else None
+    content = uploaded_file["content"]
+    file_udf_path = exa_pathlike.as_udf_path()
 
     assert file_udf_path is not None, "Pathlike udf path generation failed"
     conn = setup_schema_and_udfs
