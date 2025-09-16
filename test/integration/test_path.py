@@ -7,6 +7,9 @@ from collections.abc import ByteString
 import pytest
 
 import exasol.bucketfs as bfs
+from exasol.bucketfs._path import infer_path
+
+
 
 
 @pytest.fixture
@@ -101,3 +104,38 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
     poem_path1.rm()
     expected_names = {"classic", "highlands.txt"}
     assert _collect_all_names(poems_root) == expected_names
+
+
+
+def test_infer_path_onprem():
+    url = infer_path(
+        bucketfs_host="localhost",
+        bucketfs_port=2580,
+        bucketfs_name="bfsdefault",
+        bucket="default",
+        bucketfs_user="w",
+        bucketfs_password="write",
+        path_in_bucket="foo/"
+    )
+    assert "localhost:2580" in url
+    assert "bfsdefault" in url
+    assert "default" in url
+    assert "foo" in url
+#
+# def test_infer_path_saas(monkeypatch):
+#     # monkeypatch get_database_id to always return "mocked-id"
+#     monkeypatch.setattr(
+#         "exasol.bucketfs._path.get_database_id",
+#         lambda *args, **kwargs: "mocked-id"
+#     )
+#
+#     url = infer_path(
+#         saas_url="https://api.example.com",
+#         saas_account_id="acc-1",
+#         saas_database_name="test_db",
+#         saas_token="abc",
+#         path_in_bucket="bar/",
+#     )
+#     assert "https://api.example.com" in url
+#     assert "mocked-id" in url
+#     assert "bar" in url

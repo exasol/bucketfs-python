@@ -29,6 +29,7 @@ from exasol.bucketfs._buckets import (
 )
 from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._service import Service
+from typing import Optional
 
 ARCHIVE_SUFFIXES = [".tar", ".gz", ".tgz", ".zip", ".tar"]
 
@@ -580,3 +581,104 @@ def build_path(**kwargs) -> PathLike:
         bucket = _create_mounted_bucket(**kwargs)
 
     return BucketPath(path, bucket)
+
+
+
+
+
+
+
+def infer_backend(
+    bucketfs_host: Optional[str] = None,
+    bucketfs_port: Optional[int] = None,
+    bucketfs_name: Optional[str] = None,
+    bucket: Optional[str] = None,
+    bucketfs_user: Optional[str] = None,
+    bucketfs_password: Optional[str] = None,
+    saas_url: Optional[str] = None,
+    saas_account_id: Optional[str] = None,
+    saas_database_id: Optional[str] = None,
+    saas_database_name: Optional[str] = None,
+    saas_token: Optional[str] = None
+):
+    """Infer backend: returns 'onprem' or 'saas', or raises if incomplete."""
+    # On-prem required fields
+    onprem_fields = [bucketfs_host, bucketfs_port, bucketfs_name, bucket, bucketfs_user, bucketfs_password]
+    # SaaS required fields
+    saas_fields_minimal = [saas_url, saas_account_id, saas_token]
+    if all(onprem_fields):
+        return "onprem"
+    elif all(saas_fields_minimal) and (saas_database_id or saas_database_name):
+        return "saas"
+    else:
+        raise ValueError("Insufficient parameters to infer backend")
+
+
+def get_database_id(
+    host: str,
+    account_id: str,
+    pat: str,
+    database_name: str
+) -> str:
+    database_id = some_saas_lookup_api(host, account_id, pat, database_name)
+    if not database_id:
+        raise ValueError(f"Could not find database_id for name {database_name}")
+    return database_id
+
+def infer_path(
+    bucketfs_host: Optional[str] = None,
+    bucketfs_port: Optional[int] = None,
+    bucketfs_name: Optional[str] = None,
+    bucket: Optional[str] = None,
+    bucketfs_user: Optional[str] = None,
+    bucketfs_password: Optional[str] = None,
+    bucketfs_use_https: bool = True,
+    saas_url: Optional[str] = None,
+    saas_account_id: Optional[str] = None,
+    saas_database_id: Optional[str] = None,
+    saas_database_name: Optional[str] = None,
+    saas_token: Optional[str] = None,
+    path_in_bucket: str = "",
+    use_ssl_cert_validation: bool = True,
+    ssl_trusted_ca: Optional[str] = None,
+) -> str:
+    backend = infer_backend(
+        bucketfs_host, bucketfs_port, bucketfs_name, bucket, bucketfs_user, bucketfs_password,
+        saas_url, saas_account_id, saas_database_id, saas_database_name, saas_token
+    )
+    if backend == "onprem":
+        bfs_url = f"{'https' if bucketfs_use_https else 'http'}://{bucketfs_host}:{bucketfs_port}"
+        verify = ssl_trusted_ca or use_ssl_cert_validation
+        return build_path(
+            backend=StorageBackend.onprem,
+            url=bfs_url,
+            username=bucketfs_user,
+            password=bucketfs_password,
+            service_name=bucketfs_name,
+            bucket_name=bucket,
+            verify=verify,
+            path=path_in_bucket,
+        )
+    elif backend == "saas":
+        if not saas_database_id and saas_database_name:
+            saas_database_id = get_database_id(
+                host=saas_url,
+                account_id=saas_account_id,
+                pat=saas_token,
+                database_name=saas_database_name,
+            )
+        elif not saas_database_id and not saas_database_name:
+            raise ValueError(
+                "Incomplete parameter list. "
+                "Please either provide saas_database_id or saas_database_name."
+            )
+        return build_path(
+            backend=StorageBackend.saas,
+            url=saas_url,
+            account_id=saas_account_id,
+            database_id=saas_database_id,
+            pat=saas_token,
+            path=path_in_bucket,
+        )
+
+
