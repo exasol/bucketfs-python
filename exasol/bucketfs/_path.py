@@ -22,6 +22,8 @@ from typing import (
     Protocol,
 )
 
+from exasol.saas.client.api_access import get_database_id
+
 from exasol.bucketfs._buckets import (
     BucketLike,
     MountedBucket,
@@ -29,7 +31,6 @@ from exasol.bucketfs._buckets import (
 )
 from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._service import Service
-from typing import Optional
 
 ARCHIVE_SUFFIXES = [".tar", ".gz", ".tgz", ".zip", ".tar"]
 
@@ -567,7 +568,6 @@ def build_path(**kwargs) -> PathLike:
             Explicitly specified root path in a file system. This is an alternative to
             providing the service_name and the bucket_name.
     """
-
     backend = kwargs.pop("backend", StorageBackend.onprem)
     path = kwargs.pop("path") if "path" in kwargs else ""
 
@@ -579,31 +579,32 @@ def build_path(**kwargs) -> PathLike:
         bucket = _create_saas_bucket(**kwargs)
     else:
         bucket = _create_mounted_bucket(**kwargs)
-
     return BucketPath(path, bucket)
 
 
-
-
-
-
-
 def infer_backend(
-    bucketfs_host: Optional[str] = None,
-    bucketfs_port: Optional[int] = None,
-    bucketfs_name: Optional[str] = None,
-    bucket: Optional[str] = None,
-    bucketfs_user: Optional[str] = None,
-    bucketfs_password: Optional[str] = None,
-    saas_url: Optional[str] = None,
-    saas_account_id: Optional[str] = None,
-    saas_database_id: Optional[str] = None,
-    saas_database_name: Optional[str] = None,
-    saas_token: Optional[str] = None
+    bucketfs_host: str | None = None,
+    bucketfs_port: int | None = None,
+    bucketfs_name: str | None = None,
+    bucket: str | None = None,
+    bucketfs_user: str | None = None,
+    bucketfs_password: str | None = None,
+    saas_url: str | None = None,
+    saas_account_id: str | None = None,
+    saas_database_id: str | None = None,
+    saas_database_name: str | None = None,
+    saas_token: str | None = None,
 ):
     """Infer backend: returns 'onprem' or 'saas', or raises if incomplete."""
     # On-prem required fields
-    onprem_fields = [bucketfs_host, bucketfs_port, bucketfs_name, bucket, bucketfs_user, bucketfs_password]
+    onprem_fields = [
+        bucketfs_host,
+        bucketfs_port,
+        bucketfs_name,
+        bucket,
+        bucketfs_user,
+        bucketfs_password,
+    ]
     # SaaS required fields
     saas_fields_minimal = [saas_url, saas_account_id, saas_token]
     if all(onprem_fields):
@@ -614,37 +615,49 @@ def infer_backend(
         raise ValueError("Insufficient parameters to infer backend")
 
 
-def get_database_id(
-    host: str,
-    account_id: str,
-    pat: str,
-    database_name: str
+def get_database_id_by_name(
+    host: str, account_id: str, pat: str, database_name: str
 ) -> str:
-    database_id = some_saas_lookup_api(host, account_id, pat, database_name)
+    database_id = get_database_id(
+        host=host, account_id=account_id, pat=pat, database_name=database_name
+    )
     if not database_id:
         raise ValueError(f"Could not find database_id for name {database_name}")
     return database_id
 
+
 def infer_path(
-    bucketfs_host: Optional[str] = None,
-    bucketfs_port: Optional[int] = None,
-    bucketfs_name: Optional[str] = None,
-    bucket: Optional[str] = None,
-    bucketfs_user: Optional[str] = None,
-    bucketfs_password: Optional[str] = None,
+    bucketfs_host: str | None = None,
+    bucketfs_port: int | None = None,
+    bucketfs_name: str | None = None,
+    bucket: str | None = None,
+    bucketfs_user: str | None = None,
+    bucketfs_password: str | None = None,
     bucketfs_use_https: bool = True,
-    saas_url: Optional[str] = None,
-    saas_account_id: Optional[str] = None,
-    saas_database_id: Optional[str] = None,
-    saas_database_name: Optional[str] = None,
-    saas_token: Optional[str] = None,
+    saas_url: str | None = None,
+    saas_account_id: str | None = None,
+    saas_database_id: str | None = None,
+    saas_database_name: str | None = None,
+    saas_token: str | None = None,
     path_in_bucket: str = "",
     use_ssl_cert_validation: bool = True,
-    ssl_trusted_ca: Optional[str] = None,
-) -> str:
+    ssl_trusted_ca: str | None = None,
+):
+    """
+    return Bucket based on onprem or SaaS
+    """
     backend = infer_backend(
-        bucketfs_host, bucketfs_port, bucketfs_name, bucket, bucketfs_user, bucketfs_password,
-        saas_url, saas_account_id, saas_database_id, saas_database_name, saas_token
+        bucketfs_host,
+        bucketfs_port,
+        bucketfs_name,
+        bucket,
+        bucketfs_user,
+        bucketfs_password,
+        saas_url,
+        saas_account_id,
+        saas_database_id,
+        saas_database_name,
+        saas_token,
     )
     if backend == "onprem":
         bfs_url = f"{'https' if bucketfs_use_https else 'http'}://{bucketfs_host}:{bucketfs_port}"
@@ -661,7 +674,7 @@ def infer_path(
         )
     elif backend == "saas":
         if not saas_database_id and saas_database_name:
-            saas_database_id = get_database_id(
+            saas_database_id = get_database_id_by_name(
                 host=saas_url,
                 account_id=saas_account_id,
                 pat=saas_token,
@@ -680,5 +693,3 @@ def infer_path(
             pat=saas_token,
             path=path_in_bucket,
         )
-
-

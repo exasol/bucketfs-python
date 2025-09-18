@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import re
 import tarfile
 from collections.abc import ByteString
 
@@ -8,8 +9,6 @@ import pytest
 
 import exasol.bucketfs as bfs
 from exasol.bucketfs._path import infer_path
-
-
 
 
 @pytest.fixture
@@ -106,36 +105,50 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
     assert _collect_all_names(poems_root) == expected_names
 
 
-
-def test_infer_path_onprem():
-    url = infer_path(
-        bucketfs_host="localhost",
-        bucketfs_port=2580,
-        bucketfs_name="bfsdefault",
-        bucket="default",
-        bucketfs_user="w",
-        bucketfs_password="write",
-        path_in_bucket="foo/"
+def test_infer_path_onprem(backend_aware_bucketfs_params):
+    """
+    Creates the PathLike and validates it.
+    """
+    host_port = re.search(
+        r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", backend_aware_bucketfs_params["url"]
     )
-    assert "localhost:2580" in url
-    assert "bfsdefault" in url
-    assert "default" in url
-    assert "foo" in url
-#
-# def test_infer_path_saas(monkeypatch):
-#     # monkeypatch get_database_id to always return "mocked-id"
-#     monkeypatch.setattr(
-#         "exasol.bucketfs._path.get_database_id",
-#         lambda *args, **kwargs: "mocked-id"
-#     )
-#
-#     url = infer_path(
-#         saas_url="https://api.example.com",
-#         saas_account_id="acc-1",
-#         saas_database_name="test_db",
-#         saas_token="abc",
-#         path_in_bucket="bar/",
-#     )
-#     assert "https://api.example.com" in url
-#     assert "mocked-id" in url
-#     assert "bar" in url
+    url = infer_path(
+        bucketfs_host=host_port.group(1),
+        bucketfs_port=host_port.group(2),
+        bucketfs_name=backend_aware_bucketfs_params["service_name"],
+        bucket=backend_aware_bucketfs_params["bucket_name"],
+        bucketfs_user=backend_aware_bucketfs_params["username"],
+        bucketfs_password=backend_aware_bucketfs_params["password"],
+        path_in_bucket="onpremtest/",
+        bucketfs_use_https=backend_aware_bucketfs_params["verify"],
+    )
+    assert isinstance(url, bfs.path.BucketPath)
+    assert backend_aware_bucketfs_params["url"] == url._bucket_api._service
+    assert (
+        backend_aware_bucketfs_params["service_name"] == url._bucket_api._service_name
+    )
+    assert backend_aware_bucketfs_params["bucket_name"] == url._bucket_api._name
+    assert "onpremtest" == str(url._path)
+
+
+def test_infer_path_saas(
+    backend, saas_host, saas_pat, saas_account_id, backend_aware_saas_database_id
+):
+    """
+    Creates the SaasBucket with fixture details realted to Saas and validates it.
+    """
+    if backend != "saas":
+        pytest.skip("The test runs only with SaaS database")
+    url = infer_path(
+        saas_url=saas_host,
+        saas_account_id=saas_account_id,
+        saas_database_id=backend_aware_saas_database_id,
+        saas_token=saas_pat,
+        path_in_bucket="saastest/",
+    )
+    assert isinstance(url, bfs.path.BucketPath)
+    assert saas_host == url._bucket_api._url
+    assert saas_account_id == url._bucket_api._account_id
+    assert backend_aware_saas_database_id == url._bucket_api._database_id
+    assert saas_pat == url._bucket_api._pat
+    assert "saastest" in str(url._path)
