@@ -105,10 +105,12 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
     assert _collect_all_names(poems_root) == expected_names
 
 
-def test_infer_path_onprem(backend_aware_bucketfs_params):
+def test_infer_path_onprem(backend,backend_aware_bucketfs_params):
     """
     Creates the PathLike and validates it.
     """
+    if backend != "saas":
+        pytest.skip("The test runs only with SaaS database")
     host_port = re.search(
         r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", backend_aware_bucketfs_params["url"]
     )
@@ -152,3 +154,60 @@ def test_infer_path_saas(
     assert backend_aware_saas_database_id == url._bucket_api._database_id
     assert saas_pat == url._bucket_api._pat
     assert "saastest" in str(url._path)
+
+
+def test_infer_path_and_write(
+    backend,
+    backend_aware_bucketfs_params,
+    children_poem,
+    saas_host,
+    saas_pat,
+    saas_account_id,
+    backend_aware_saas_database_id,
+):
+    print(backend)
+    print(backend_aware_bucketfs_params)
+    print(children_poem)
+    print(saas_host)
+    print(saas_pat)
+    print(saas_account_id)
+    print(backend_aware_saas_database_id)
+    """
+    Combines the onprem and saas path inference tests
+    and validates the path by uploading and reading data.
+    """
+    if backend == "saas":
+        if not saas_host or not saas_pat or not saas_account_id or not backend_aware_saas_database_id:
+            print(saas_host,saas_pat,saas_account_id,backend_aware_saas_database_id)
+            pytest.skip("Skipping SaaS test due to missing parameters.")
+        # Infer SaaS path
+        path = infer_path(
+            saas_url=saas_host,
+            saas_account_id=saas_account_id,
+            saas_database_id=backend_aware_saas_database_id,
+            saas_token=saas_pat,
+            path_in_bucket="test/",
+        )
+    else:
+        # On-prem inference, extract host/port as needed
+        host_port = re.search(
+            r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", backend_aware_bucketfs_params["url"]
+        )
+        print("JS23-backend_aware_bucketfs_params['url']",backend_aware_bucketfs_params["url"])
+        path = infer_path(
+            bucketfs_host=host_port.group(1),
+            bucketfs_port=host_port.group(2),
+            bucketfs_name=backend_aware_bucketfs_params["service_name"],
+            bucket=backend_aware_bucketfs_params["bucket_name"],
+            bucketfs_user=backend_aware_bucketfs_params["username"],
+            bucketfs_password=backend_aware_bucketfs_params["password"],
+            path_in_bucket="test/",
+            bucketfs_use_https=backend_aware_bucketfs_params["verify"],
+        )
+    # Actually try uploading
+    write_path = path / "test_file.txt"
+    write_path.write(children_poem)
+
+    # Read it back for verification
+    read_back = b"".join(write_path.read(20))
+    assert read_back == children_poem
