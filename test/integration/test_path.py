@@ -109,8 +109,8 @@ def test_infer_path_onprem(backend,backend_aware_bucketfs_params):
     """
     Creates the PathLike and validates it.
     """
-    if backend != "saas":
-        pytest.skip("The test runs only with SaaS database")
+    if backend == "saas":
+        pytest.skip()
     host_port = re.search(
         r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", backend_aware_bucketfs_params["url"]
     )
@@ -165,13 +165,6 @@ def test_infer_path_and_write(
     saas_account_id,
     backend_aware_saas_database_id,
 ):
-    print(backend)
-    print(backend_aware_bucketfs_params)
-    print(children_poem)
-    print(saas_host)
-    print(saas_pat)
-    print(saas_account_id)
-    print(backend_aware_saas_database_id)
     """
     Combines the onprem and saas path inference tests
     and validates the path by uploading and reading data.
