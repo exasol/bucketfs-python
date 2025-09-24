@@ -594,7 +594,7 @@ def infer_backend(
     saas_database_id: str | None = None,
     saas_database_name: str | None = None,
     saas_token: str | None = None,
-):
+) -> str:
     """Infer backend: returns 'onprem' or 'saas', or raises if incomplete."""
     # On-prem required fields
     onprem_fields = [
@@ -642,7 +642,7 @@ def infer_path(
     path_in_bucket: str = "",
     use_ssl_cert_validation: bool = True,
     ssl_trusted_ca: str | None = None,
-):
+) -> PathLike | None:
     """
     return Bucket based on onprem or SaaS
     """
@@ -693,3 +693,4 @@ def infer_path(
             pat=saas_token,
             path=path_in_bucket,
         )
+    return None

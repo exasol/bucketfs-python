@@ -171,7 +171,6 @@ def test_infer_path_and_write(
     """
     if backend == "saas":
         if not saas_host or not saas_pat or not saas_account_id or not backend_aware_saas_database_id:
-            print(saas_host,saas_pat,saas_account_id,backend_aware_saas_database_id)
             pytest.skip("Skipping SaaS test due to missing parameters.")
         # Infer SaaS path
         path = infer_path(
@@ -186,7 +185,6 @@ def test_infer_path_and_write(
         host_port = re.search(
             r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", backend_aware_bucketfs_params["url"]
         )
-        print("JS23-backend_aware_bucketfs_params['url']",backend_aware_bucketfs_params["url"])
         path = infer_path(
             bucketfs_host=host_port.group(1),
             bucketfs_port=host_port.group(2),
