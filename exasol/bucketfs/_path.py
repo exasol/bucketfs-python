@@ -610,7 +610,7 @@ def infer_backend(
     # SaaS required fields
     saas_fields_minimal = [saas_url, saas_account_id, saas_token]
     if all(onprem_fields):
-        return "onprem"
+        return StorageBackend.onprem
     elif all(saas_fields_minimal) and (saas_database_id or saas_database_name):
         return "saas"
     else:
