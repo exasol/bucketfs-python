@@ -594,8 +594,10 @@ def infer_backend(
     saas_database_id: str | None = None,
     saas_database_name: str | None = None,
     saas_token: str | None = None,
-) -> str:
-    """Infer the backend from the provided parameters: returns 'onprem' or 'saas', or raises a ValueError if the list of parameters is insufficient for either of the backends."""
+) -> StorageBackend:
+    """Infer the backend from the provided parameters: returns 'onprem' or 'saas',
+    or raises a ValueError if the list of parameters is insufficient for either of the backends.
+    """
     # On-prem required fields
     onprem_fields = [
         bucketfs_host,
@@ -644,7 +646,11 @@ def infer_path(
     ssl_trusted_ca: str | None = None,
 ) -> PathLike | None:
     """
-    return PathLike based on onprem or SaaS
+    Infers the correct storage backend (on-premises BucketFS or SaaS) from the provided parameters
+    and returns a PathLike object for accessing the specified resource.
+
+    Raises:
+        ValueError: If the parameters are insufficient or inconsistent and the backend cannot be determined.
     """
     backend = infer_backend(
         bucketfs_host,
@@ -693,4 +699,5 @@ def infer_path(
             pat=saas_token,
             path=path_in_bucket,
         )
-    return None
+    else:
+        raise ValueError("Insufficient parameters to infer correct storage backend.")
