@@ -644,7 +644,7 @@ def infer_path(
     ssl_trusted_ca: str | None = None,
 ) -> PathLike | None:
     """
-    return Bucket based on onprem or SaaS
+    return PathLike based on onprem or SaaS
     """
     backend = infer_backend(
         bucketfs_host,
