@@ -700,4 +700,7 @@ def infer_path(
             path=path_in_bucket,
         )
     else:
-        raise ValueError("Insufficient parameters to infer correct storage backend.")
+        raise ValueError(
+            "Unsupported backend"
+            "Insufficient parameters to infer correct storage backend."
+        )
