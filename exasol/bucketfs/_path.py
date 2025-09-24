@@ -595,7 +595,7 @@ def infer_backend(
     saas_database_name: str | None = None,
     saas_token: str | None = None,
 ) -> str:
-    """Infer backend: returns 'onprem' or 'saas', or raises if incomplete."""
+    """Infer the backend from the provided parameters: returns 'onprem' or 'saas', or raises a ValueError if the list of parameters is insufficient for either of the backends."""
     # On-prem required fields
     onprem_fields = [
         bucketfs_host,
