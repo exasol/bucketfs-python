@@ -116,7 +116,7 @@ def test_infer_path_onprem(backend, backend_aware_bucketfs_params):
     )
     url = infer_path(
         bucketfs_host=host_port.group(1),
-        bucketfs_port=host_port.group(2),
+        bucketfs_port=int(host_port.group(2)),
         bucketfs_name=backend_aware_bucketfs_params["service_name"],
         bucket=backend_aware_bucketfs_params["bucket_name"],
         bucketfs_user=backend_aware_bucketfs_params["username"],
