@@ -70,7 +70,8 @@ def test_infer_backend_no_fields():
 
 @patch("exasol.bucketfs._path.build_path", side_effect=build_path)
 def test_infer_path_onprem_with_ssl_ca(mock_build):
-    # Should pass ssl_trusted_ca as verify
+    # Should pass ssl_trusted_ca as argument verify to exasol.bucketfs._path.build_path()
+
     result = infer_path(
         bucketfs_host="host",
         bucketfs_port=123,
