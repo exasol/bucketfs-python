@@ -34,6 +34,7 @@ from exasol.saas.client.openapi.client import (
 from exasol.saas.client.openapi.models.file import File as SaasFile
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
+
 from exasol.bucketfs._error import BucketFsError
 from exasol.bucketfs._logging import LOGGER
 from exasol.bucketfs._shared import (

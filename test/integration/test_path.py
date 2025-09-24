@@ -105,7 +105,7 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
     assert _collect_all_names(poems_root) == expected_names
 
 
-def test_infer_path_onprem(backend,backend_aware_bucketfs_params):
+def test_infer_path_onprem(backend, backend_aware_bucketfs_params):
     """
     Creates the PathLike and validates it.
     """
@@ -170,7 +170,12 @@ def test_infer_path_and_write(
     and validates the path by uploading and reading data.
     """
     if backend == "saas":
-        if not saas_host or not saas_pat or not saas_account_id or not backend_aware_saas_database_id:
+        if (
+            not saas_host
+            or not saas_pat
+            or not saas_account_id
+            or not backend_aware_saas_database_id
+        ):
             pytest.skip("Skipping SaaS test due to missing parameters.")
         # Infer SaaS path
         path = infer_path(
@@ -183,7 +188,8 @@ def test_infer_path_and_write(
     else:
         # On-prem inference, extract host/port as needed
         host_port = re.search(
-            r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", backend_aware_bucketfs_params["url"]
+            r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)",
+            backend_aware_bucketfs_params["url"],
         )
         path = infer_path(
             bucketfs_host=host_port.group(1),
