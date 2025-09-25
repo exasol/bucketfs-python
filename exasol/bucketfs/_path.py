@@ -612,7 +612,7 @@ def infer_backend(
     if all(onprem_fields):
         return StorageBackend.onprem
     elif all(saas_fields_minimal) and (saas_database_id or saas_database_name):
-        return "saas"
+        return StorageBackend.saas
     else:
         raise ValueError("Insufficient parameters to infer backend")
 
