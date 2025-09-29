@@ -140,9 +140,14 @@ def test_infer_path_onprem(require_onprem_bucketfs_params):
     assert "onpremtest" == str(url._path)
 
 
-def test_infer_path_saas(
-    backend, saas_host, saas_pat, saas_account_id, backend_aware_saas_database_id
-):
+@pytest.fixture
+def require_saas_params(backend_aware_saas_bucketfs_params, use_saas):
+    if not use_saas:
+        pytest.skip("Skipped as SaaS backend is not selected")
+    return backend_aware_saas_bucketfs_params
+
+
+def test_infer_path_saas(require_saas_params):
     """
     Creates the SaasBucket with fixture details realted to Saas and validates it.
     """
