@@ -105,7 +105,14 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
     assert _collect_all_names(poems_root) == expected_names
 
 
-def test_infer_path_onprem(backend, backend_aware_bucketfs_params):
+@pytest.fixture
+def require_saas_params(backend_aware_onprem_bucketfs_params, use_onprem):
+    if not use_onprem:
+        pytest.skip("Skipped as on-premise backend is not selected")
+    return backend_aware_onprem_bucketfs_params
+
+
+def test_infer_path_onprem(require_onprem_bucketfs_params):
     """
     Creates the PathLike and validates it.
     """
