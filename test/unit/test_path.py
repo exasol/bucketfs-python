@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 from unittest.mock import (
     patch,
 )
@@ -8,12 +8,9 @@ import pytest
 from exasol.bucketfs._path import (
     infer_backend,
     infer_path,
+    StorageBackend,
 )
 
-
-class StorageBackend(Enum):
-    onprem = "onprem"
-    saas = "saas"
 
 
 # Dummy PathLike
@@ -35,7 +32,8 @@ def test_infer_backend_onprem():
         bucketfs_user="user",
         bucketfs_password="pw",
     )
-    assert result == "onprem"
+    print(result)
+    assert result == StorageBackend.onprem
 
 
 def test_infer_backend_saas_with_id():
@@ -45,7 +43,7 @@ def test_infer_backend_saas_with_id():
         saas_database_id="dbid",
         saas_token="token",
     )
-    assert result == "saas"
+    assert result == StorageBackend.saas
 
 
 def test_infer_backend_saas_with_name():
@@ -55,7 +53,7 @@ def test_infer_backend_saas_with_name():
         saas_database_name="dbname",
         saas_token="token",
     )
-    assert result == "saas"
+    assert result == StorageBackend.saas
 
 
 def test_infer_backend_missing_fields():

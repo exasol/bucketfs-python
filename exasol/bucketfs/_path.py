@@ -29,7 +29,7 @@ from exasol.bucketfs._buckets import (
     MountedBucket,
     SaaSBucket,
 )
-from exasol.bucketfs._error import BucketFsError
+from exasol.bucketfs._error import BucketFsError, InferBfsPathError
 from exasol.bucketfs._service import Service
 
 ARCHIVE_SUFFIXES = [".tar", ".gz", ".tgz", ".zip", ".tar"]
@@ -594,9 +594,10 @@ def infer_backend(
     saas_database_id: str | None = None,
     saas_database_name: str | None = None,
     saas_token: str | None = None,
+    base_path: str | None = None,
 ) -> StorageBackend:
     """Infer the backend from the provided parameters: returns 'onprem' or 'saas',
-    or raises a ValueError if the list of parameters is insufficient for either of the backends.
+    or raises a InferBfsPathError if the list of parameters is insufficient for either of the backends.
     """
     # On-prem required fields
     onprem_fields = [
@@ -613,8 +614,10 @@ def infer_backend(
         return StorageBackend.onprem
     elif all(saas_fields_minimal) and (saas_database_id or saas_database_name):
         return StorageBackend.saas
+    elif (bucketfs_name and bucket) or base_path:
+        return StorageBackend.mounted
     else:
-        raise ValueError("Insufficient parameters to infer backend")
+        raise InferBfsPathError("Insufficient parameters to infer backend")
 
 
 def get_database_id_by_name(
@@ -624,7 +627,7 @@ def get_database_id_by_name(
         host=host, account_id=account_id, pat=pat, database_name=database_name
     )
     if not database_id:
-        raise ValueError(f"Could not find database_id for name {database_name}")
+        raise InferBfsPathError(f"Could not find database_id for name {database_name}")
     return database_id
 
 
@@ -644,13 +647,14 @@ def infer_path(
     path_in_bucket: str = "",
     use_ssl_cert_validation: bool = True,
     ssl_trusted_ca: str | None = None,
-) -> PathLike | None:
+    base_path: str | None = None,
+) -> PathLike:
     """
     Infers the correct storage backend (on-premises BucketFS or SaaS) from the provided parameters
     and returns a PathLike object for accessing the specified resource.
 
     Raises:
-        ValueError: If the parameters are insufficient or inconsistent and the backend cannot be determined.
+        InferBfsPathError: If the parameters are insufficient or inconsistent and the backend cannot be determined.
     """
     backend = infer_backend(
         bucketfs_host,
@@ -664,8 +668,9 @@ def infer_path(
         saas_database_id,
         saas_database_name,
         saas_token,
+        base_path
     )
-    if backend == "onprem":
+    if backend == StorageBackend.onprem:
         bfs_url = f"{'https' if bucketfs_use_https else 'http'}://{bucketfs_host}:{bucketfs_port}"
         verify = ssl_trusted_ca or use_ssl_cert_validation
         return build_path(
@@ -678,7 +683,7 @@ def infer_path(
             verify=verify,
             path=path_in_bucket,
         )
-    elif backend == "saas":
+    elif backend == StorageBackend.saas:
         if not saas_database_id and saas_database_name:
             saas_database_id = get_database_id_by_name(
                 host=saas_url,
@@ -687,7 +692,7 @@ def infer_path(
                 database_name=saas_database_name,
             )
         elif not saas_database_id and not saas_database_name:
-            raise ValueError(
+            raise InferBfsPathError(
                 "Incomplete parameter list. "
                 "Please either provide saas_database_id or saas_database_name."
             )
@@ -699,8 +704,13 @@ def infer_path(
             pat=saas_token,
             path=path_in_bucket,
         )
+    elif backend == StorageBackend.mounted:
+        return build_path(
+            service_name= bucketfs_name,
+            bucket_name= bucket,
+            base_path= path_in_bucket,
+        )
     else:
-        raise ValueError(
-            "Unsupported backend"
-            "Insufficient parameters to infer correct storage backend."
+        raise InferBfsPathError(
+            "Unsupported backend. "
         )
