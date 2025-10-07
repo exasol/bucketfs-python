@@ -178,6 +178,14 @@ class Bucket:
         return self._name
 
     @property
+    def service(self) -> str:
+        return self._service
+
+    @property
+    def service_name(self) -> str:
+        return self._service_name
+
+    @property
     def udf_path(self) -> str:
         if self._service_name is None:
             raise BucketFsError(
@@ -270,6 +278,22 @@ class SaaSBucket:
         self._account_id = account_id
         self._database_id = database_id
         self._pat = pat
+
+    @property
+    def url(self) -> str:
+        return self._url
+
+    @property
+    def account_id(self) -> str:
+        return self._account_id
+
+    @property
+    def database_id(self) -> str:
+        return self._database_id
+
+    @property
+    def pat(self) -> str:
+        return self._pat
 
     @property
     def name(self) -> str:

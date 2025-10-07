@@ -1,4 +1,7 @@
-from enum import Enum, auto
+from enum import (
+    Enum,
+    auto,
+)
 from unittest.mock import (
     patch,
 )
@@ -6,12 +9,10 @@ from unittest.mock import (
 import pytest
 
 from exasol.bucketfs._path import (
+    StorageBackend,
     infer_backend,
     infer_path,
-    StorageBackend,
 )
-
-
 
 # Dummy PathLike
 PathLike = str

@@ -29,7 +29,10 @@ from exasol.bucketfs._buckets import (
     MountedBucket,
     SaaSBucket,
 )
-from exasol.bucketfs._error import BucketFsError, InferBfsPathError
+from exasol.bucketfs._error import (
+    BucketFsError,
+    InferBfsPathError,
+)
 from exasol.bucketfs._service import Service
 
 ARCHIVE_SUFFIXES = [".tar", ".gz", ".tgz", ".zip", ".tar"]
@@ -269,6 +272,14 @@ class BucketPath:
         """
         self._path = PurePath(path)
         self._bucket_api = bucket_api
+
+    @property
+    def bucket_api(self):
+        return self._bucket_api
+
+    @property
+    def path(self):
+        return self._path
 
     def _get_relative_posix(self) -> str:
         """
@@ -668,7 +679,7 @@ def infer_path(
         saas_database_id,
         saas_database_name,
         saas_token,
-        base_path
+        base_path,
     )
     if backend == StorageBackend.onprem:
         bfs_url = f"{'https' if bucketfs_use_https else 'http'}://{bucketfs_host}:{bucketfs_port}"
@@ -706,11 +717,9 @@ def infer_path(
         )
     elif backend == StorageBackend.mounted:
         return build_path(
-            service_name= bucketfs_name,
-            bucket_name= bucket,
-            base_path= path_in_bucket,
+            service_name=bucketfs_name,
+            bucket_name=bucket,
+            base_path=path_in_bucket,
         )
     else:
-        raise InferBfsPathError(
-            "Unsupported backend. "
-        )
+        raise InferBfsPathError("Unsupported backend. ")
