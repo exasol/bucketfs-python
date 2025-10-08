@@ -166,22 +166,31 @@ def test_infer_path_saas(require_saas_params):
     assert "saastest" in str(url.path)
 
 
-
-def test_infer_path_mounted(backend, backend_aware_bucketfs_params):
+def test_infer_path_mounted(tmp_path):
     """
     Integration test: infers the mounted BucketFS path and validates the BucketPath object.
     """
-    params = backend_aware_bucketfs_params
+    default_dir = tmp_path.joinpath("default")
+    default_dir.mkdir()
     url = infer_path(
-        bucketfs_name=params["service_name"],
-        bucket=params["bucket_name"],
-        path_in_bucket="mountedtest/",
-        base_path=params.get("base_path"),
+        bucketfs_name=str(tmp_path),
+        bucket="default",
     )
     assert isinstance(url, bfs.path.BucketPath)
-    assert params["service_name"] == url.bucket_api.service_name
-    assert params["bucket_name"] == url.bucket_api.name
-    assert "mountedtest" in str(url.path)
+    assert str(default_dir) == str(url.bucket_api.udf_path)
+
+
+def test_infer_path_mounted_base_path(tmp_path):
+    """
+    Integration test: infers the mounted BucketFS base_path and validates the BucketPath object.
+    """
+    default_dir = tmp_path.joinpath("default")
+    default_dir.mkdir()
+    url = infer_path(
+        base_path=str(default_dir),
+    )
+    assert isinstance(url, bfs.path.BucketPath)
+    assert str(default_dir) == str(url.bucket_api.udf_path)
 
 
 def test_infer_path_and_write(

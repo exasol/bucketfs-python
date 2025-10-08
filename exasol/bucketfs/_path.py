@@ -717,9 +717,10 @@ def infer_path(
         )
     elif backend == StorageBackend.mounted:
         return build_path(
+            backend=StorageBackend.mounted,
             service_name=bucketfs_name,
             bucket_name=bucket,
-            base_path=path_in_bucket,
+            base_path=base_path,
         )
     else:
         raise InferBfsPathError("Unsupported backend. ")

@@ -8,14 +8,12 @@ from unittest.mock import (
 
 import pytest
 
+from exasol.bucketfs._error import InferBfsPathError
 from exasol.bucketfs._path import (
     StorageBackend,
     infer_backend,
     infer_path,
 )
-
-# Dummy PathLike
-PathLike = str
 
 
 # Dummy build_path
@@ -33,7 +31,6 @@ def test_infer_backend_onprem():
         bucketfs_user="user",
         bucketfs_password="pw",
     )
-    print(result)
     assert result == StorageBackend.onprem
 
 
@@ -58,12 +55,12 @@ def test_infer_backend_saas_with_name():
 
 
 def test_infer_backend_missing_fields():
-    with pytest.raises(ValueError, match="Insufficient parameters"):
+    with pytest.raises(InferBfsPathError, match="Insufficient parameters"):
         infer_backend(bucketfs_host="host")  # incomplete
 
 
 def test_infer_backend_no_fields():
-    with pytest.raises(ValueError):
+    with pytest.raises(InferBfsPathError):
         infer_backend()
 
 
