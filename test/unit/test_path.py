@@ -1,3 +1,4 @@
+import json
 from enum import (
     Enum,
     auto,
@@ -20,6 +21,8 @@ from exasol.bucketfs._path import (
 def build_path(*args, **kwargs):
     return f"mocked_path_{args}_{kwargs}"
 
+def get_database_id_by_name(*args, **kwargs):
+    return f"dbid"
 
 # Let's start with infer_backend
 def test_infer_backend_onprem():
@@ -79,3 +82,34 @@ def test_infer_path_onprem_with_ssl_ca(mock_build):
     )
     called_args = mock_build.call_args[1]
     assert called_args["verify"] == "ca_cert"
+
+@patch("exasol.bucketfs._path.build_path", side_effect=build_path)
+def test_infer_path_saas(mock_build):
+    result = infer_path(
+        saas_url="https://api",
+        saas_account_id="acct",
+        saas_database_id="dbid",
+        saas_token="token",
+    )
+    called_args = mock_build.call_args[1]
+    assert called_args["pat"] == "token"
+    assert called_args["url"] == "https://api"
+    assert called_args["account_id"] == "acct"
+    assert called_args["database_id"] == "dbid"
+    assert called_args["backend"] == StorageBackend.saas
+
+@patch("exasol.bucketfs._path.build_path", side_effect=build_path)
+@patch("exasol.bucketfs._path.get_database_id_by_name", side_effect=get_database_id_by_name)
+def test_infer_path_saas_without_id(mock_build,mock_id):
+    result = infer_path(
+        saas_url="https://api",
+        saas_account_id="acct",
+        saas_database_name="dbname",
+        saas_token="token",
+    )
+    called_id = mock_id.call_args[1]
+    assert called_id["pat"] == "token"
+    assert called_id["url"] == "https://api"
+    assert called_id["account_id"] == "acct"
+    assert called_id["database_id"] == "dbid"
+    assert called_id["backend"] == StorageBackend.saas
