@@ -702,11 +702,6 @@ def infer_path(
                 pat=saas_token,
                 database_name=saas_database_name,
             )
-        elif not saas_database_id and not saas_database_name:
-            raise InferBfsPathError(
-                "Incomplete parameter list. "
-                "Please either provide saas_database_id or saas_database_name."
-            )
         return build_path(
             backend=StorageBackend.saas,
             url=saas_url,
@@ -723,4 +718,4 @@ def infer_path(
             base_path=base_path,
         )
     else:
-        raise InferBfsPathError("Unsupported backend. ")
+        raise InferBfsPathError("Unsupported backend.")
