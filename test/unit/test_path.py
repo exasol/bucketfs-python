@@ -12,8 +12,9 @@ import pytest
 from exasol.bucketfs._error import InferBfsPathError
 from exasol.bucketfs._path import (
     StorageBackend,
+    get_database_id_by_name,
     infer_backend,
-    infer_path, get_database_id_by_name,
+    infer_path,
 )
 
 
@@ -24,7 +25,6 @@ def build_path(*args, **kwargs):
 
 def get_db_id_by_name(*args, **kwargs):
     return f"dbid"
-
 
 
 # Let's start with infer_backend
@@ -104,9 +104,7 @@ def test_infer_path_saas(mock_build):
 
 
 @patch("exasol.bucketfs._path.build_path", side_effect=build_path)
-@patch(
-    "exasol.bucketfs._path.get_database_id_by_name", side_effect=get_db_id_by_name
-)
+@patch("exasol.bucketfs._path.get_database_id_by_name", side_effect=get_db_id_by_name)
 def test_infer_path_saas_without_id(mock_build, mock_id):
     infer_path(
         saas_url="https://api",
@@ -124,20 +122,15 @@ def test_infer_path_saas_without_id(mock_build, mock_id):
 
 @patch("exasol.bucketfs._path.build_path", side_effect=build_path)
 def test_infer_path_mounted(mock_build):
-    infer_path(
-        bucketfs_name="bfsdefault",
-        bucket="default"
-    )
+    infer_path(bucketfs_name="bfsdefault", bucket="default")
     called_args = mock_build.call_args[1]
     assert called_args["backend"] == StorageBackend.mounted
+
 
 @patch("exasol.bucketfs._path.build_path", side_effect=build_path)
 def test_infer_path_unspported_backend_exception(mock_build):
     with pytest.raises(InferBfsPathError, match="Insufficient parameters"):
-        infer_path(
-            saas_url="https://api",
-            saas_account_id="acct",
-            saas_token="token")
+        infer_path(saas_url="https://api", saas_account_id="acct", saas_token="token")
 
 
 @patch("exasol.bucketfs._path.get_database_id", side_effect=get_db_id_by_name)
@@ -149,4 +142,3 @@ def test_get_database_id_by_name(mock_build):
         pat="token",
     )
     assert result == "dbid"
-
