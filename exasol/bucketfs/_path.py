@@ -718,4 +718,4 @@ def infer_path(
             base_path=base_path,
         )
     else:
-        raise InferBfsPathError("Unsupported backend.")
+        raise InferBfsPathError(f"Unsupported backend: {backend}.")

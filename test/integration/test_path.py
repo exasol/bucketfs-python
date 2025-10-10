@@ -119,24 +119,24 @@ def test_infer_path_onprem(require_onprem_bucketfs_params):
     """
     Creates the PathLike and validates it.
     """
-    backend_aware_bucketfs_params = require_onprem_bucketfs_params
+    bfs_params = require_onprem_bucketfs_params
     host_port = re.search(
-        r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", backend_aware_bucketfs_params["url"]
+        r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", bfs_params["url"]
     )
     url = infer_path(
         bucketfs_host=host_port.group(1),
         bucketfs_port=int(host_port.group(2)),
-        bucketfs_name=backend_aware_bucketfs_params["service_name"],
-        bucket=backend_aware_bucketfs_params["bucket_name"],
-        bucketfs_user=backend_aware_bucketfs_params["username"],
-        bucketfs_password=backend_aware_bucketfs_params["password"],
+        bucketfs_name=bfs_params["service_name"],
+        bucket=bfs_params["bucket_name"],
+        bucketfs_user=bfs_params["username"],
+        bucketfs_password=bfs_params["password"],
         path_in_bucket="onpremtest/",
-        bucketfs_use_https=backend_aware_bucketfs_params.get("verify", False),
+        bucketfs_use_https=bfs_params.get("verify", False),
     )
     assert isinstance(url, bfs.path.BucketPath)
-    assert backend_aware_bucketfs_params["url"] == url.bucket_api.service
-    assert backend_aware_bucketfs_params["service_name"] == url.bucket_api.service_name
-    assert backend_aware_bucketfs_params["bucket_name"] == url.bucket_api.name
+    assert bfs_params["url"] == url.bucket_api.service
+    assert bfs_params["service_name"] == url.bucket_api.service_name
+    assert bfs_params["bucket_name"] == url.bucket_api.name
     assert "onpremtest" == str(url.path)
 
 
@@ -151,6 +151,7 @@ def test_infer_path_saas(require_saas_params):
     """
     Creates the SaasBucket with fixture details realted to Saas and validates it.
     """
+    bfs_params = require_saas_params
     url = infer_path(
         saas_url=require_saas_params["url"],
         saas_account_id=require_saas_params["account_id"],
