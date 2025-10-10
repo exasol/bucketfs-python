@@ -120,9 +120,7 @@ def test_infer_path_onprem(require_onprem_bucketfs_params):
     Creates the PathLike and validates it.
     """
     bfs_params = require_onprem_bucketfs_params
-    host_port = re.search(
-        r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", bfs_params["url"]
-    )
+    host_port = re.search(r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", bfs_params["url"])
     url = infer_path(
         bucketfs_host=host_port.group(1),
         bucketfs_port=int(host_port.group(2)),
@@ -151,19 +149,19 @@ def test_infer_path_saas(require_saas_bucketfs_params):
     """
     Creates the SaasBucket with fixture details realted to Saas and validates it.
     """
-    bfs_params  = require_saas_bucketfs_params
+    bfs_params = require_saas_bucketfs_params
     url = infer_path(
-        saas_url=bfs_params ["url"],
-        saas_account_id=bfs_params ["account_id"],
-        saas_database_id=bfs_params ["database_id"],
-        saas_token=bfs_params ["pat"],
+        saas_url=bfs_params["url"],
+        saas_account_id=bfs_params["account_id"],
+        saas_database_id=bfs_params["database_id"],
+        saas_token=bfs_params["pat"],
         path_in_bucket="saastest/",
     )
     assert isinstance(url, bfs.path.BucketPath)
-    assert bfs_params ["url"] == url.bucket_api.url
-    assert bfs_params ["account_id"] == url.bucket_api.account_id
-    assert bfs_params ["database_id"] == url.bucket_api.database_id
-    assert bfs_params ["pat"] == url.bucket_api.pat
+    assert bfs_params["url"] == url.bucket_api.url
+    assert bfs_params["account_id"] == url.bucket_api.account_id
+    assert bfs_params["database_id"] == url.bucket_api.database_id
+    assert bfs_params["pat"] == url.bucket_api.pat
     assert "saastest" in str(url.path)
 
 
@@ -231,14 +229,6 @@ def test_infer_path_and_write(
             path_in_bucket="test/",
             bucketfs_use_https=backend_aware_bucketfs_params["verify"],
         )
-    elif backend == "mounted":
-        path = infer_path(
-            bucketfs_name=backend_aware_bucketfs_params["service_name"],
-            bucket=backend_aware_bucketfs_params["bucket_name"],
-            base_path="test/",
-        )
-    else:
-        pytest.skip(f"Unknown backend: {backend}")
     # Actually try uploading
     write_path = path / "test_file.txt"
     write_path.write(children_poem)
