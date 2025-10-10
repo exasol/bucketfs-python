@@ -147,23 +147,23 @@ def require_saas_bucketfs_params(backend_aware_saas_bucketfs_params, use_saas):
     return backend_aware_saas_bucketfs_params
 
 
-def test_infer_path_saas(require_saas_params):
+def test_infer_path_saas(require_saas_bucketfs_params):
     """
     Creates the SaasBucket with fixture details realted to Saas and validates it.
     """
-    bfs_params = require_saas_params
+    bfs_params  = require_saas_bucketfs_params
     url = infer_path(
-        saas_url=require_saas_params["url"],
-        saas_account_id=require_saas_params["account_id"],
-        saas_database_id=require_saas_params["database_id"],
-        saas_token=require_saas_params["pat"],
+        saas_url=bfs_params ["url"],
+        saas_account_id=bfs_params ["account_id"],
+        saas_database_id=bfs_params ["database_id"],
+        saas_token=bfs_params ["pat"],
         path_in_bucket="saastest/",
     )
     assert isinstance(url, bfs.path.BucketPath)
-    assert require_saas_params["url"] == url.bucket_api.url
-    assert require_saas_params["account_id"] == url.bucket_api.account_id
-    assert require_saas_params["database_id"] == url.bucket_api.database_id
-    assert require_saas_params["pat"] == url.bucket_api.pat
+    assert bfs_params ["url"] == url.bucket_api.url
+    assert bfs_params ["account_id"] == url.bucket_api.account_id
+    assert bfs_params ["database_id"] == url.bucket_api.database_id
+    assert bfs_params ["pat"] == url.bucket_api.pat
     assert "saastest" in str(url.path)
 
 
@@ -208,14 +208,6 @@ def test_infer_path_and_write(
     and validates the path by uploading and reading data.
     """
     if backend == "saas":
-        if (
-            not saas_host
-            or not saas_pat
-            or not saas_account_id
-            or not backend_aware_saas_database_id
-        ):
-            pytest.skip("Skipping SaaS test due to missing parameters.")
-        # Infer SaaS path
         path = infer_path(
             saas_url=saas_host,
             saas_account_id=saas_account_id,
