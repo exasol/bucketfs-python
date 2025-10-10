@@ -611,7 +611,7 @@ def infer_backend(
     or raises an InferBfsPathError if the list of parameters is insufficient for either of the backends.
     """
     # On-prem required fields
-    onprem_fields = [
+    required_onprem_fields = [
         bucketfs_host,
         bucketfs_port,
         bucketfs_name,
@@ -620,10 +620,10 @@ def infer_backend(
         bucketfs_password,
     ]
     # SaaS required fields
-    saas_fields_minimal = [saas_url, saas_account_id, saas_token]
-    if all(onprem_fields):
+    required_saas_fields = [saas_url, saas_account_id, saas_token]
+    if all(required_onprem_fields):
         return StorageBackend.onprem
-    elif all(saas_fields_minimal) and (saas_database_id or saas_database_name):
+    elif all(required_saas_fields) and (saas_database_id or saas_database_name):
         return StorageBackend.saas
     elif (bucketfs_name and bucket) or base_path:
         return StorageBackend.mounted
