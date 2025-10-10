@@ -608,7 +608,7 @@ def infer_backend(
     base_path: str | None = None,
 ) -> StorageBackend:
     """Infer the backend from the provided parameters: returns 'onprem' or 'saas',
-    or raises a InferBfsPathError if the list of parameters is insufficient for either of the backends.
+    or raises an InferBfsPathError if the list of parameters is insufficient for either of the backends.
     """
     # On-prem required fields
     onprem_fields = [
