@@ -87,8 +87,16 @@ def test_infer_path_onprem_with_ssl_ca(mock_build):
     assert called_args["verify"] == "ca_cert"
 
 
-@patch("exasol.bucketfs._path.build_path", side_effect=build_path)
-def test_infer_path_saas(mock_build):
+from unittest.mock import Mock 
+
+@pytest.fixture
+def build_path_mock(monkeypath): 
+    mock = Mock(side_effect=build_path)
+    monkeypatch.setattr(exasol.bucketfs._path, "build_path", mock)
+    return mock
+
+def test_infer_path_saas(build_path_mock):
+    # test can use mock build_path_mock to check call args, etc.
     infer_path(
         saas_url="https://api",
         saas_account_id="acct",
