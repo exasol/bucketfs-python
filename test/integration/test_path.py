@@ -147,7 +147,7 @@ def require_saas_bucketfs_params(backend_aware_saas_bucketfs_params, use_saas):
 
 def test_infer_path_saas(require_saas_bucketfs_params):
     """
-    Creates the SaasBucket with fixture details realted to Saas and validates it.
+    Creates the SaasBucket with fixture details related to SaaS and validates it.
     """
     bfs_params = require_saas_bucketfs_params
     url = infer_path(
