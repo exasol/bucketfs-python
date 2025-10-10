@@ -181,7 +181,7 @@ def test_infer_path_mounted(tmp_path):
 
 def test_infer_path_mounted_base_path(tmp_path):
     """
-    Integration test: infers the mounted BucketFS base_path and validates the BucketPath object.
+    Infers the mounted BucketFS base_path and validates the BucketPath object.
     """
     default_dir = tmp_path.joinpath("default")
     default_dir.mkdir()
