@@ -141,7 +141,7 @@ def test_infer_path_onprem(require_onprem_bucketfs_params):
 
 
 @pytest.fixture
-def require_saas_params(backend_aware_saas_bucketfs_params, use_saas):
+def require_saas_bucketfs_params(backend_aware_saas_bucketfs_params, use_saas):
     if not use_saas:
         pytest.skip("Skipped as SaaS backend is not selected")
     return backend_aware_saas_bucketfs_params
