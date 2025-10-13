@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import io
+import re
 import tarfile
 from collections.abc import ByteString
 
 import pytest
 
 import exasol.bucketfs as bfs
+from exasol.bucketfs._path import (
+    StorageBackend,
+    infer_path,
+)
 
 
 @pytest.fixture
@@ -101,3 +106,133 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
     poem_path1.rm()
     expected_names = {"classic", "highlands.txt"}
     assert _collect_all_names(poems_root) == expected_names
+
+
+@pytest.fixture
+def require_onprem_bucketfs_params(backend_aware_onprem_bucketfs_params, use_onprem):
+    if not use_onprem:
+        pytest.skip("Skipped as on-premise backend is not selected")
+    return backend_aware_onprem_bucketfs_params
+
+
+def test_infer_path_onprem(require_onprem_bucketfs_params):
+    """
+    Creates the PathLike and validates it.
+    """
+    bfs_params = require_onprem_bucketfs_params
+    host_port = re.search(r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)", bfs_params["url"])
+    url = infer_path(
+        bucketfs_host=host_port.group(1),
+        bucketfs_port=int(host_port.group(2)),
+        bucketfs_name=bfs_params["service_name"],
+        bucket=bfs_params["bucket_name"],
+        bucketfs_user=bfs_params["username"],
+        bucketfs_password=bfs_params["password"],
+        path_in_bucket="onpremtest/",
+        bucketfs_use_https=bfs_params.get("verify", False),
+    )
+    assert isinstance(url, bfs.path.BucketPath)
+    assert bfs_params["url"] == url.bucket_api.service
+    assert bfs_params["service_name"] == url.bucket_api.service_name
+    assert bfs_params["bucket_name"] == url.bucket_api.name
+    assert "onpremtest" == str(url.path)
+
+
+@pytest.fixture
+def require_saas_bucketfs_params(backend_aware_saas_bucketfs_params, use_saas):
+    if not use_saas:
+        pytest.skip("Skipped as SaaS backend is not selected")
+    return backend_aware_saas_bucketfs_params
+
+
+def test_infer_path_saas(require_saas_bucketfs_params):
+    """
+    Creates the SaasBucket with fixture details related to SaaS and validates it.
+    """
+    bfs_params = require_saas_bucketfs_params
+    url = infer_path(
+        saas_url=bfs_params["url"],
+        saas_account_id=bfs_params["account_id"],
+        saas_database_id=bfs_params["database_id"],
+        saas_token=bfs_params["pat"],
+        path_in_bucket="saastest/",
+    )
+    assert isinstance(url, bfs.path.BucketPath)
+    assert bfs_params["url"] == url.bucket_api.url
+    assert bfs_params["account_id"] == url.bucket_api.account_id
+    assert bfs_params["database_id"] == url.bucket_api.database_id
+    assert bfs_params["pat"] == url.bucket_api.pat
+    assert "saastest" in str(url.path)
+
+
+def test_infer_path_mounted(tmp_path):
+    """
+    Infers the mounted BucketFS path and validates the BucketPath object.
+    """
+    default_dir = tmp_path.joinpath("default")
+    default_dir.mkdir()
+    url = infer_path(
+        bucketfs_name=str(tmp_path),
+        bucket="default",
+    )
+    assert isinstance(url, bfs.path.BucketPath)
+    assert str(default_dir) == str(url.bucket_api.udf_path)
+
+
+def test_infer_path_mounted_base_path(tmp_path):
+    """
+    Infers the mounted BucketFS base_path and validates the BucketPath object.
+    """
+    default_dir = tmp_path.joinpath("default")
+    default_dir.mkdir()
+    url = infer_path(
+        base_path=str(default_dir),
+    )
+    assert isinstance(url, bfs.path.BucketPath)
+    assert str(default_dir) == str(url.bucket_api.udf_path)
+
+
+def test_infer_path_and_write(
+    backend,
+    backend_aware_bucketfs_params,
+    children_poem,
+    saas_host,
+    saas_pat,
+    saas_account_id,
+    backend_aware_saas_database_id,
+):
+    """
+    Combines the onprem and saas path inference tests
+    and validates the path by uploading and reading data.
+    """
+    if backend == "saas":
+        path = infer_path(
+            saas_url=saas_host,
+            saas_account_id=saas_account_id,
+            saas_database_id=backend_aware_saas_database_id,
+            saas_token=saas_pat,
+            path_in_bucket="test/",
+        )
+    elif backend == "onprem":
+        # On-prem inference, extract host/port as needed
+        host_port = re.search(
+            r"http://(\d{1,3}(?:\.\d{1,3}){3}):(\d+)",
+            backend_aware_bucketfs_params["url"],
+        )
+        path = infer_path(
+            bucketfs_host=host_port.group(1),
+            bucketfs_port=int(host_port.group(2)),
+            bucketfs_name=backend_aware_bucketfs_params["service_name"],
+            bucket=backend_aware_bucketfs_params["bucket_name"],
+            bucketfs_user=backend_aware_bucketfs_params["username"],
+            bucketfs_password=backend_aware_bucketfs_params["password"],
+            path_in_bucket="test/",
+            bucketfs_use_https=backend_aware_bucketfs_params["verify"],
+        )
+    # Actually try uploading
+    write_path = path / "test_file.txt"
+    write_path.write(children_poem)
+
+    # Read it back for verification
+    read_back = b"".join(write_path.read(20))
+    assert read_back == children_poem

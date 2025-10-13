@@ -22,12 +22,17 @@ from typing import (
     Protocol,
 )
 
+from exasol.saas.client.api_access import get_database_id
+
 from exasol.bucketfs._buckets import (
     BucketLike,
     MountedBucket,
     SaaSBucket,
 )
-from exasol.bucketfs._error import BucketFsError
+from exasol.bucketfs._error import (
+    BucketFsError,
+    InferBfsPathError,
+)
 from exasol.bucketfs._service import Service
 
 ARCHIVE_SUFFIXES = [".tar", ".gz", ".tgz", ".zip", ".tar"]
@@ -267,6 +272,14 @@ class BucketPath:
         """
         self._path = PurePath(path)
         self._bucket_api = bucket_api
+
+    @property
+    def bucket_api(self):
+        return self._bucket_api
+
+    @property
+    def path(self):
+        return self._path
 
     def _get_relative_posix(self) -> str:
         """
@@ -566,7 +579,6 @@ def build_path(**kwargs) -> PathLike:
             Explicitly specified root path in a file system. This is an alternative to
             providing the service_name and the bucket_name.
     """
-
     backend = kwargs.pop("backend", StorageBackend.onprem)
     path = kwargs.pop("path") if "path" in kwargs else ""
 
@@ -578,5 +590,132 @@ def build_path(**kwargs) -> PathLike:
         bucket = _create_saas_bucket(**kwargs)
     else:
         bucket = _create_mounted_bucket(**kwargs)
-
     return BucketPath(path, bucket)
+
+
+def infer_backend(
+    bucketfs_host: str | None = None,
+    bucketfs_port: int | None = None,
+    bucketfs_name: str | None = None,
+    bucket: str | None = None,
+    bucketfs_user: str | None = None,
+    bucketfs_password: str | None = None,
+    saas_url: str | None = None,
+    saas_account_id: str | None = None,
+    saas_database_id: str | None = None,
+    saas_database_name: str | None = None,
+    saas_token: str | None = None,
+    base_path: str | None = None,
+) -> StorageBackend:
+    """Infer the backend from the provided parameters: returns 'onprem' or 'saas',
+    or raises an InferBfsPathError if the list of parameters is insufficient for either of the backends.
+    """
+    # On-prem required fields
+    required_onprem_fields = [
+        bucketfs_host,
+        bucketfs_port,
+        bucketfs_name,
+        bucket,
+        bucketfs_user,
+        bucketfs_password,
+    ]
+    # SaaS required fields
+    required_saas_fields = [saas_url, saas_account_id, saas_token]
+    if all(required_onprem_fields):
+        return StorageBackend.onprem
+    elif all(required_saas_fields) and (saas_database_id or saas_database_name):
+        return StorageBackend.saas
+    elif (bucketfs_name and bucket) or base_path:
+        return StorageBackend.mounted
+    else:
+        raise InferBfsPathError("Insufficient parameters to infer backend")
+
+
+def get_database_id_by_name(
+    host: str, account_id: str, pat: str, database_name: str
+) -> str:
+    database_id = get_database_id(
+        host=host, account_id=account_id, pat=pat, database_name=database_name
+    )
+    if not database_id:
+        raise InferBfsPathError(f"Could not find database_id for name {database_name}")
+    return database_id
+
+
+def infer_path(
+    bucketfs_host: str | None = None,
+    bucketfs_port: int | None = None,
+    bucketfs_name: str | None = None,
+    bucket: str | None = None,
+    bucketfs_user: str | None = None,
+    bucketfs_password: str | None = None,
+    bucketfs_use_https: bool = True,
+    saas_url: str | None = None,
+    saas_account_id: str | None = None,
+    saas_database_id: str | None = None,
+    saas_database_name: str | None = None,
+    saas_token: str | None = None,
+    path_in_bucket: str = "",
+    use_ssl_cert_validation: bool = True,
+    ssl_trusted_ca: str | None = None,
+    base_path: str | None = None,
+) -> PathLike:
+    """
+    Infers the correct storage backend (on-premises BucketFS or SaaS) from the provided parameters
+    and returns a PathLike object for accessing the specified resource.
+
+    Raises:
+        InferBfsPathError: If the parameters are insufficient or inconsistent and the backend cannot be determined.
+    """
+    backend = infer_backend(
+        bucketfs_host,
+        bucketfs_port,
+        bucketfs_name,
+        bucket,
+        bucketfs_user,
+        bucketfs_password,
+        saas_url,
+        saas_account_id,
+        saas_database_id,
+        saas_database_name,
+        saas_token,
+        base_path,
+    )
+    if backend == StorageBackend.onprem:
+        bfs_url = f"{'https' if bucketfs_use_https else 'http'}://{bucketfs_host}:{bucketfs_port}"
+        verify = ssl_trusted_ca or use_ssl_cert_validation
+        return build_path(
+            backend=StorageBackend.onprem,
+            url=bfs_url,
+            username=bucketfs_user,
+            password=bucketfs_password,
+            service_name=bucketfs_name,
+            bucket_name=bucket,
+            verify=verify,
+            path=path_in_bucket,
+        )
+    elif backend == StorageBackend.saas:
+        if not saas_database_id and saas_database_name:
+            saas_database_id = get_database_id_by_name(
+                host=saas_url,
+                account_id=saas_account_id,
+                pat=saas_token,
+                database_name=saas_database_name,
+            )
+        return build_path(
+            backend=StorageBackend.saas,
+            url=saas_url,
+            account_id=saas_account_id,
+            database_id=saas_database_id,
+            pat=saas_token,
+            path=path_in_bucket,
+        )
+    elif backend == StorageBackend.mounted:
+        return build_path(
+            backend=StorageBackend.mounted,
+            service_name=bucketfs_name,
+            bucket_name=bucket,
+            base_path=base_path,
+        )
+    else:
+        raise InferBfsPathError(f"Unsupported backend: {backend}.")

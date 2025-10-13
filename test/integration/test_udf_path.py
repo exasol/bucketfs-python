@@ -169,7 +169,6 @@ def test_upload_and_udf_path(uploaded_file, setup_schema_and_udfs, exa_bucket):
     content_from_udf_path = conn.execute(
         f"SELECT READ_FILE_CONTENT_UDF('{bucket_udf_path}/{file_name}')"
     ).fetchone()[0]
-    print(content_from_udf_path)
     assert content_from_udf_path == content
 
 
@@ -193,5 +192,4 @@ def test_upload_and_udf_pathlike(uploaded_file, setup_schema_and_udfs, exa_pathl
     content_of_file_udf_path = conn.execute(
         f"SELECT READ_FILE_CONTENT_UDF('{file_udf_path}')"
     ).fetchone()[0]
-    print(content_of_file_udf_path)
     assert content_of_file_udf_path == content
