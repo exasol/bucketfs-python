@@ -1,0 +1,7 @@
+# 2.1.0 - 2025-10-29
+
+## Refactorings
+
+* #186: Integration test for correctness of UDF path generation, using as_udf_path and pathlike
+* #245: Add backend inference for the Path-API
+* #252: Updated dependency declaration to `pyexasol`
