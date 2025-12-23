@@ -4,16 +4,24 @@ on:
   workflow_call:
 
 jobs:
-
-  slow-checks:
-    name: Slow
-    runs-on: ubuntu-24.04
-    environment: slow-tests
+  build-matrix:
+    name: Generate Build Matrix
+    uses: ./.github/workflows/matrix-all.yml
     permissions:
       contents: read
+
+  tests:
+    name: Integration-Tests (Python-${{ matrix.python-version }}, Exasol-${{ matrix.exasol-version}})
+    needs: [ build-matrix ]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
-      matrix:
-        python-version: ["3.10"]
+      fail-fast: false
+      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+
     steps:
       - name: SCM Checkout
         uses: actions/checkout@v5
@@ -23,12 +31,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Tests
-        run: poetry run -- nox -s test:integration -- -s --coverage --db-version 7.1.30 --backend=onprem
+      - name: Run Tests and Collect Coverage
+        run: poetry run -- nox -s test:integration -- -s --coverage --db-version ${{ matrix.exasol-version }} --backend=onprem
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: coverage-python${{ matrix.python-version }}-slow
+          name: coverage-python${{ matrix.python-version }}-exasol${{ matrix.exasol-version }}-slow
           path: .coverage
           include-hidden-files: true
