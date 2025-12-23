@@ -18,7 +18,6 @@ from pathlib import (
 )
 from typing import (
     BinaryIO,
-    Optional,
     Protocol,
 )
 

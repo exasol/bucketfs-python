@@ -9,7 +9,6 @@ import pytest
 
 import exasol.bucketfs as bfs
 from exasol.bucketfs._path import (
-    StorageBackend,
     infer_path,
 )
 
