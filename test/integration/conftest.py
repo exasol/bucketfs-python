@@ -6,8 +6,6 @@ from collections.abc import (
 from dataclasses import dataclass
 from typing import (
     BinaryIO,
-    Tuple,
-    Union,
 )
 
 import pytest
@@ -23,7 +21,7 @@ def upload_file(
     username: str,
     password: str,
     filename: str,
-    content: Union[ByteString, BinaryIO, Iterable[ByteString]],
+    content: ByteString | BinaryIO | Iterable[ByteString],
 ) -> tuple[str, str]:
     auth = HTTPBasicAuth(username, password)
     url = f"{service.rstrip('/')}/{bucket}/{filename}"
@@ -58,7 +56,7 @@ def temporary_bucket_files(request) -> tuple[str, Iterable[File]]:
         This fixture expects the using test to be parameterized using `pytest.mark.parameterize`
         together with the `indirect` parameter, for further details see `Indirect parameterization  <https://docs.pytest.org/en/7.2.x/example/parametrize.html#indirect-parametrization>`_.
     """
-    params: tuple[str, Union[File, Iterable[File]]] = request.param
+    params: tuple[str, File | Iterable[File]] = request.param
     options = request.config.option
     bucket, files = params
     # support for a single file argument
