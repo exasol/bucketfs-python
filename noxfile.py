@@ -6,7 +6,7 @@ from exasol.toolbox.nox.tasks import *
 from noxconfig import PROJECT_CONFIG
 
 # default actions to be run if nothing is explicitly specified with the -s option
-nox.options.sessions = ["project:fix"]
+nox.options.sessions = ["format:fix"]
 
 
 def _coverage(session, config, context) -> None:

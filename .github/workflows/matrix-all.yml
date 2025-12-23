@@ -1,14 +1,14 @@
-name: Build Matrix (Python)
+name: Build Matrix (All Versions)
 
 on:
   workflow_call:
     outputs:
       matrix:
-        description: "Generates the python version build matrix"
-        value: ${{ jobs.python_versions.outputs.matrix }}
+        description: "Generates the all versions build matrix"
+        value: ${{ jobs.all_versions.outputs.matrix }}
 
 jobs:
-  python_versions:
+  all_versions:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -20,11 +20,11 @@ jobs:
         uses: exasol/python-toolbox/.github/actions/python-environment@v4
 
       - name: Generate matrix
-        run: poetry run -- nox -s matrix:python
+        run: poetry run -- nox -s matrix:all
 
       - id: set-matrix
         run: |
-          echo "matrix=$(poetry run -- nox -s matrix:python)" >> $GITHUB_OUTPUT
+          echo "matrix=$(poetry run -- nox -s matrix:all)" >> $GITHUB_OUTPUT
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}

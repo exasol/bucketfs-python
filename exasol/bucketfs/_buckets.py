@@ -12,7 +12,6 @@ from io import IOBase
 from pathlib import Path
 from typing import (
     BinaryIO,
-    Optional,
     Protocol,
 )
 from urllib.parse import quote_plus

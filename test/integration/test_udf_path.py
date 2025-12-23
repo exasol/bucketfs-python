@@ -1,28 +1,7 @@
-import logging
-import random
-import string
-from collections.abc import (
-    ByteString,
-    Iterable,
-)
-from contextlib import (
-    closing,
-    contextmanager,
-)
-from inspect import cleandoc
-from test.integration.conftest import (
-    File,
-    delete_file,
-)
 from textwrap import dedent
-from typing import (
-    Tuple,
-    Union,
-)
 
 import pyexasol
 import pytest
-import requests
 from exasol.pytest_backend import (
     BACKEND_ONPREM,
     BACKEND_SAAS,
@@ -31,9 +10,6 @@ from exasol.pytest_backend import (
 import exasol.bucketfs as bfs
 from exasol.bucketfs import (
     Bucket,
-    Service,
-    as_bytes,
-    as_string,
 )
 
 

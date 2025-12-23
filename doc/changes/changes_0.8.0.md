@@ -10,7 +10,7 @@ Dependency updates
 
   Security vulnerabilities have been addressed, hence we advise users of
   our library to update and check the security of their own dependency tree.
-  E.g. by using a vulnerability scanner like [trivy](https://trivy.dev/v0.17.2/).
+  E.g. by using a vulnerability scanner like [trivy](https://trivy.dev/docs/latest/scanner/vulnerability/).
 
 * Updated dependencies to address security issue (internal: poetry.lock)
   * CVE-2023-0286

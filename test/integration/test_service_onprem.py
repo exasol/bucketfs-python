@@ -6,7 +6,6 @@ from collections.abc import (
     Iterable,
 )
 from contextlib import (
-    closing,
     contextmanager,
 )
 from inspect import cleandoc
@@ -14,21 +13,10 @@ from test.integration.conftest import (
     File,
     delete_file,
 )
-from textwrap import dedent
-from typing import (
-    Tuple,
-    Union,
-)
 
-import pyexasol
 import pytest
 import requests
-from exasol.pytest_backend import (
-    BACKEND_ONPREM,
-    BACKEND_SAAS,
-)
 
-import exasol.bucketfs as bfs
 from exasol.bucketfs import (
     Bucket,
     Service,
@@ -81,7 +69,7 @@ def test_list_buckets(bucketfs_config, expected):
 def test_upload_to_bucket(
     bucketfs_config,
     name: str,
-    data: Union[ByteString, Iterable[ByteString], Iterable[int]],
+    data: ByteString | Iterable[ByteString] | Iterable[int],
 ):
     file_name = "Uploaded-File-{random_string}.bin".format(
         random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
@@ -121,7 +109,7 @@ def test_upload_to_bucket(
     indirect=True,
 )
 def test_download_file_from_bucket(
-    temporary_bucket_files: tuple[str, Union[File, Iterable[File]]],
+    temporary_bucket_files: tuple[str, File | Iterable[File]],
     bucketfs_config,
 ):
     name, files = temporary_bucket_files
@@ -149,7 +137,7 @@ def test_download_file_from_bucket(
     indirect=True,
 )
 def test_list_files_in_bucket(
-    temporary_bucket_files: tuple[str, Union[File, Iterable[File]]],
+    temporary_bucket_files: tuple[str, File | Iterable[File]],
     bucketfs_config,
 ):
     name, files = temporary_bucket_files
