@@ -1127,14 +1127,14 @@ simplejson = ">=3.16.0"
 
 [[package]]
 name = "exasol-saas-api"
-version = "2.3.0"
+version = "2.6.0"
 description = "API enabling Python applications connecting to Exasol database SaaS instances and using their SaaS services"
 optional = false
 python-versions = "<4.0,>=3.10.0"
 groups = ["main", "dev"]
 files = [
-    {file = "exasol_saas_api-2.3.0-py3-none-any.whl", hash = "sha256:ec3bbcc097ab1dd33712122616d54edb5a13687334873ae2b2c3ab0d083b0207"},
-    {file = "exasol_saas_api-2.3.0.tar.gz", hash = "sha256:c1c74eaffa82de0f3fb971fc0702ff870a6b6263a44bcd6c513a76d3892735b1"},
+    {file = "exasol_saas_api-2.6.0-py3-none-any.whl", hash = "sha256:6518cf571fed74044cd67972cf24c36cf108170315f731950e59db0e2d4f3307"},
+    {file = "exasol_saas_api-2.6.0.tar.gz", hash = "sha256:43ae4eb076f4f402610daee024473bfcb631fc5f31a233b6f54173b750fb2ee1"},
 ]
 
 [package.dependencies]
@@ -3375,18 +3375,37 @@ dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "requests
 
 [[package]]
 name = "pytest-exasol-backend"
-version = "1.2.1"
+version = "1.2.2"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["dev"]
+markers = "python_version >= \"3.14\" or python_version >= \"3.12\" and platform_python_implementation == \"PyPy\""
 files = [
-    {file = "pytest_exasol_backend-1.2.1-py3-none-any.whl", hash = "sha256:23ba61684bd08d9e6ece69614cfcbe09428c141688d1b0c5c0c737f6eb9d98b1"},
-    {file = "pytest_exasol_backend-1.2.1.tar.gz", hash = "sha256:71b4d7381f4b16577fe8816fc319d5332eb9c3fd4900d957d2a8116eb98c8f7e"},
+    {file = "pytest_exasol_backend-1.2.2-py3-none-any.whl", hash = "sha256:5dc3e75422dbb0e4f7b38998a9604e80f06b4b853c266ab65e6e22452f77bd6c"},
+    {file = "pytest_exasol_backend-1.2.2.tar.gz", hash = "sha256:1b9154059bb985339a5cae2d7292f0adc979a0d9ef6bed37040a9c4aebca220a"},
 ]
 
 [package.dependencies]
 exasol-integration-test-docker-environment = ">=4.3,<5"
+exasol-saas-api = ">=2.3,<3"
+pytest = ">=7,<9"
+
+[[package]]
+name = "pytest-exasol-backend"
+version = "1.2.4"
+description = ""
+optional = false
+python-versions = "<3.14,>=3.10"
+groups = ["dev"]
+markers = "platform_python_implementation != \"PyPy\" and python_version < \"3.14\" or python_version < \"3.12\""
+files = [
+    {file = "pytest_exasol_backend-1.2.4-py3-none-any.whl", hash = "sha256:f7fde35be9cea11369a2c249a431f697ecae64276e3ad4764f4140fe5bb2e6e4"},
+    {file = "pytest_exasol_backend-1.2.4.tar.gz", hash = "sha256:ea8680a0fe7cc45626159a451da386ef7c6b90b19ad8c707e86cb7102b08de23"},
+]
+
+[package.dependencies]
+exasol-integration-test-docker-environment = ">=4.3,<6"
 exasol-saas-api = ">=2.3,<3"
 pytest = ">=7,<9"
 
