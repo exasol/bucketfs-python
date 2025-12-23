@@ -30,6 +30,9 @@ jobs:
         uses: exasol/python-toolbox/.github/actions/python-environment@v4
         with:
           python-version: ${{ matrix.python-version }}
+          
+      - name: Allow unprivileged user namespaces
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Run Tests and Collect Coverage
         run: poetry run -- nox -s test:integration -- -s --coverage --db-version ${{ matrix.exasol-version }} --backend=onprem
