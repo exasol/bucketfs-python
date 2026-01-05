@@ -354,7 +354,7 @@ class BucketPath:
         return self._bucket_api.download(str(self._path), chunk_size)
 
     def write(self, data: ByteString | BinaryIO | Sequence[ByteString]) -> None:
-        if isinstance(data, Sequence):
+        if (not isinstance(data, ByteString)) and isinstance(data, Sequence):
             if not all(isinstance(chunk, ByteString) for chunk in data):
                 raise ValueError("The file chunks must be byte strings")
             data = b"".join(data)
