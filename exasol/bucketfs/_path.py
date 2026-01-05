@@ -6,12 +6,12 @@ from collections.abc import (
     ByteString,
     Generator,
     Iterable,
+    Sequence,
 )
 from enum import (
     Enum,
     auto,
 )
-from io import IOBase
 from pathlib import (
     PurePath,
     PureWindowsPath,
@@ -115,7 +115,7 @@ class PathLike(Protocol):
             IsADirectoryError: if the pathlike object points to a directory.
         """
 
-    def write(self, data: ByteString | BinaryIO | Iterable[ByteString]) -> None:
+    def write(self, data: ByteString | BinaryIO | Sequence[ByteString]) -> None:
         """
         Writes data to this path.
 
@@ -353,12 +353,10 @@ class BucketPath:
     def read(self, chunk_size: int = 8192) -> Iterable[ByteString]:
         return self._bucket_api.download(str(self._path), chunk_size)
 
-    def write(self, data: ByteString | BinaryIO | Iterable[ByteString]) -> None:
-        if (
-            not isinstance(data, IOBase)
-            and isinstance(data, Iterable)
-            and all(isinstance(chunk, ByteString) for chunk in data)
-        ):
+    def write(self, data: ByteString | BinaryIO | Sequence[ByteString]) -> None:
+        if (not isinstance(data, ByteString)) and isinstance(data, Sequence):
+            if not all(isinstance(chunk, ByteString) for chunk in data):
+                raise ValueError("The file chunks must be byte strings")
             data = b"".join(data)
         self._bucket_api.upload(str(self._path), data)
 
