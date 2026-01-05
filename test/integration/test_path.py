@@ -54,7 +54,9 @@ def test_write_read_back(backend_aware_bucketfs_params, children_poem):
     assert data_back == children_poem
 
 
-def test_write_chunks_read_back(backend_aware_bucketfs_params, children_poem, classic_poem):
+def test_write_chunks_read_back(
+    backend_aware_bucketfs_params, children_poem, classic_poem
+):
 
     base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
     file_name = "test_bucket_path/test_write_read_back/two_poems.txt"
@@ -71,7 +73,7 @@ def test_write_chunks_error(backend_aware_bucketfs_params):
     file_name = "test_bucket_path/test_write_read_back/data_error.txt"
     file_path = base_path / file_name
 
-    with pytest.raises(ValueError, match='byte strings'):
+    with pytest.raises(ValueError, match="byte strings"):
         file_path.write([b"part1", "part2"])
 
 

@@ -12,7 +12,6 @@ from enum import (
     Enum,
     auto,
 )
-from io import IOBase
 from pathlib import (
     PurePath,
     PureWindowsPath,
