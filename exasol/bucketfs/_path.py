@@ -340,14 +340,14 @@ class BucketPath:
     def relative_to(self, other_pathlike: PathLike) -> PurePath:
         if not isinstance(other_pathlike, BucketPath):
             raise BucketFsError(
-                'BucketPath.relative_to() called with other'
-                f' being an instance of {type(other_pathlike)}.'
+                "BucketPath.relative_to() called with other"
+                f" being an instance of {type(other_pathlike)}."
             )
         other = cast(BucketPath, other_pathlike)
         if self._bucket_api != other.bucket_api:
             raise BucketFsError(
-                'BucketPath.relative_to() called with other'
-                f' from a foreign bucket {other._bucket_api}.'
+                "BucketPath.relative_to() called with other"
+                f" from a foreign bucket {other._bucket_api}."
             )
         try:
             return self._path.relative_to(other._path)

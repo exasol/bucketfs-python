@@ -3,6 +3,7 @@ from pathlib import (
     Path,
     PurePath,
 )
+
 import pytest
 
 import exasol.bucketfs as bfs
@@ -253,8 +254,7 @@ def test_relative_outside(bucket_fake):
     a = bfs.path.BucketPath("a", bucket_api=bucket_fake)
     b = bfs.path.BucketPath("b", bucket_api=bucket_fake)
     with pytest.raises(
-        bfs.path.BucketFsError,
-        match="'b' is not in the subpath of 'a'"
+        bfs.path.BucketFsError, match="'b' is not in the subpath of 'a'"
     ):
         b.relative_to(a)
 
@@ -267,10 +267,13 @@ def test_foreign_bucket(tmp_path, bucket_fake):
         testee.relative_to(foreign)
 
 
-@pytest.mark.parametrize("path, expected_relative", [
-    ("a", "a"),
-    ("a/b", "a/b"),
-])
+@pytest.mark.parametrize(
+    "path, expected_relative",
+    [
+        ("a", "a"),
+        ("a/b", "a/b"),
+    ],
+)
 def test_relative_to(path, expected_relative, bucket_fake):
     root = bfs.path.BucketPath("root", bucket_api=bucket_fake)
     testee = root / path
