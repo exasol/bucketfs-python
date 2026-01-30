@@ -268,8 +268,8 @@ def test_foreign_bucket(tmp_path, bucket_fake):
 
 
 @pytest.mark.parametrize("path, expected_relative", [
-    ("b", "b"),
-    ("b/c", "b/c"),
+    ("a", "a"),
+    ("a/b", "a/b"),
 ])
 def test_relative_to(path, expected_relative, bucket_fake):
     root = bfs.path.BucketPath("root", bucket_api=bucket_fake)
