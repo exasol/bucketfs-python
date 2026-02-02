@@ -75,7 +75,16 @@ class PathLike(Protocol):
 
     def relative_to(self, other: PathLike) -> PurePath:
         """
-        This path relative to the other.
+        Return an instance of PurePath interpreting this part relative to
+        the specified ``other``.
+
+        Note: ``other`` should be an instance of the same class implementing
+        the PathLike interface as the current one, e.g. BucketPath.
+
+        Example:
+        a = build_path(..., path="parent")
+        b = build_path(..., path="parent/child")
+        assert b.relative(a) == PurePath("child")
         """
 
     def as_uri(self) -> str:
@@ -337,20 +346,20 @@ class BucketPath:
     def parent(self) -> PathLike:
         return BucketPath(self._path.parent, self._bucket_api)
 
-    def relative_to(self, other_pathlike: PathLike) -> PurePath:
-        if not isinstance(other_pathlike, BucketPath):
+    def relative_to(self, other: PathLike) -> PurePath:
+        if not isinstance(other, BucketPath):
             raise BucketFsError(
                 "BucketPath.relative_to() called with other"
-                f" being an instance of {type(other_pathlike)}."
+                f" being an instance of {type(other)}."
             )
-        other = cast(BucketPath, other_pathlike)
-        if self._bucket_api != other.bucket_api:
+        other_bucket_path = cast(BucketPath, other)
+        if self._bucket_api != other_bucket_path.bucket_api:
             raise BucketFsError(
                 "BucketPath.relative_to() called with other"
-                f" from a foreign bucket {other._bucket_api}."
+                f" from a foreign bucket {other_bucket_path._bucket_api}."
             )
         try:
-            return self._path.relative_to(other._path)
+            return self._path.relative_to(other_bucket_path._path)
         except ValueError as ex:
             raise BucketFsError(repr(ex)) from ex
 
