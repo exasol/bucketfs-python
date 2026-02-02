@@ -244,9 +244,12 @@ class NotBucketPath(bfs.path.PathLike):
 
 
 def test_relative_not_bucket_path(bucket_fake):
-    root = bfs.path.BucketPath("root", bucket_api=NotBucketPath())
+    root = NotBucketPath()
     testee = bfs.path.BucketPath("testee", bucket_api=bucket_fake)
-    with pytest.raises(bfs.path.BucketFsError):
+    with pytest.raises(
+        bfs.path.BucketFsError,
+        match="called with other being an instance of .*NotBucketPath",
+    ):
         testee.relative_to(root)
 
 
