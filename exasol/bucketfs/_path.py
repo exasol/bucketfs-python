@@ -19,6 +19,7 @@ from pathlib import (
 from typing import (
     BinaryIO,
     Protocol,
+    cast,
 )
 
 from exasol.saas.client.api_access import get_database_id
@@ -70,6 +71,20 @@ class PathLike(Protocol):
     def parent(self) -> PathLike:
         """
         The logical parent of this path.
+        """
+
+    def relative_to(self, other: PathLike) -> PurePath:
+        """
+        Return an instance of PurePath interpreting this part relative to
+        the specified ``other``.
+
+        Note: ``other`` should be an instance of the same class implementing
+        the PathLike interface as the current one, e.g. BucketPath.
+
+        Example:
+        a = build_path(..., path="parent")
+        b = build_path(..., path="parent/child")
+        assert b.relative(a) == PurePath("child")
         """
 
     def as_uri(self) -> str:
@@ -330,6 +345,23 @@ class BucketPath:
     @property
     def parent(self) -> PathLike:
         return BucketPath(self._path.parent, self._bucket_api)
+
+    def relative_to(self, other: PathLike) -> PurePath:
+        if not isinstance(other, BucketPath):
+            raise BucketFsError(
+                "BucketPath.relative_to() called with other"
+                f" being an instance of {type(other)}."
+            )
+        other_bucket_path = cast(BucketPath, other)
+        if self._bucket_api != other_bucket_path.bucket_api:
+            raise BucketFsError(
+                "BucketPath.relative_to() called with other"
+                f" from a foreign bucket {other_bucket_path._bucket_api}."
+            )
+        try:
+            return self._path.relative_to(other_bucket_path._path)
+        except ValueError as ex:
+            raise BucketFsError(repr(ex)) from ex
 
     def as_uri(self) -> str:
         return self._path.as_uri()
