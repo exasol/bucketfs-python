@@ -1,9 +1,13 @@
 # Unreleased
 
+## Summary
+
+This release adds method `relative_to` to interface `PathLike` and enables calling `build_path()` without verifying the list of available buckets.
+
 ## Features
 
 * #271: Added method `relative_to` to interface `PathLike`
-* #270: Enabled to call `build_path()` without verifying the list of available buckets
+* #270: Enabled calling `build_path()` without verifying the list of available buckets
 
 ## Bug Fixing
 
