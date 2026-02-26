@@ -592,7 +592,7 @@ def build_path(**kwargs) -> PathLike:
 
         service_name: Optional name of the BucketFS service.
 
-        verify_bucket: Optional flag to skip verifying the bucket to exist.
+        verify_bucket: Optional flag to skip verifying if the bucket exists.
             This is acceptable in case of planning only access via
             `as_udf_path()`.
 
