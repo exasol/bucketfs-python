@@ -3,6 +3,7 @@
 ## Features
 
 * #271: Added method `relative_to` to interface `PathLike`
+* #270: Enabled to call `build_path()` without verifying the list of available buckets
 
 ## Bug Fixing
 
@@ -11,6 +12,4 @@
 ## Refactoring
 
 * #260: Re-locked transitive dependencies urllib3, filelock, and Werkzeug and update to exasol-toolbox 4.0.0
-* #274: Re-locked transitive dependencies filelock, pip, pyasn1, PyNaCl, urllib3, virtualenv, Werkzeug
-and added the poetry export plugin, so that the nox session dependency:audit works independent of
-the local setup
+* #274: Re-locked transitive dependencies filelock, pip, pyasn1, PyNaCl, urllib3, virtualenv, Werkzeug and added the poetry export plugin, so that the nox session dependency:audit works independent of the local setup
