@@ -156,6 +156,7 @@ def test_get_database_id_by_name(monkeypatch):
     assert result == "dbid"
 
 
+BUCKET_NAME = "some-bucket"
 OTHER_ARGS = {
     "url": "http://host:123",
     "username": "user",
@@ -164,37 +165,28 @@ OTHER_ARGS = {
 
 
 @pytest.fixture
-def mock_bfs_service(monkeypatch: MonkeyPatch) -> Callable[[dict[str, Any]], None]:
-    def mock(buckets: dict[str, Any]):
-        buckets_property = PropertyMock(return_value=buckets)
-        monkeypatch.setattr(api.Service, "buckets", buckets_property)
-        return buckets_property
-
-    return mock
-
-
-def test_verify_bucket_success(mock_bfs_service):
-    bucket_like = Mock()
-    mock_bfs_service({"my-bucket": bucket_like})
-    actual = api.build_path(bucket_name="my-bucket", **OTHER_ARGS)
-    assert actual.bucket_api == bucket_like
+def mock_buckets(monkeypatch: MonkeyPatch) -> PropertyMock:
+    """Mock property `Service.buckets` and return the mock."""
+    bucket_like = Mock(exasol.bucketfs.Bucket)
+    buckets_property = PropertyMock(return_value={BUCKET_NAME: bucket_like})
+    monkeypatch.setattr(api.Service, "buckets", buckets_property)
+    return buckets_property
 
 
-def test_verify_bucket_failure(mock_bfs_service):
-    bucket_like = Mock()
-    mock_bfs_service(buckets={"name": bucket_like})
+def test_verify_bucket_success(mock_buckets):
+    actual = api.build_path(bucket_name=BUCKET_NAME, **OTHER_ARGS)
+    assert mock_buckets.called
+    assert isinstance(actual.bucket_api, exasol.bucketfs.Bucket)
+
+
+def test_verify_bucket_failure(mock_buckets):
     with pytest.raises(api.BucketFsError, match="Bucket non-existing does not exist."):
         api.build_path(bucket_name="non-existing", **OTHER_ARGS)
 
 
-def test_no_verify(mock_bfs_service) -> None:
-    buckets_property = mock_bfs_service({})
-    actual = api.build_path(
-        bucket_name="any-name",
-        verify_bucket=False,
-        **OTHER_ARGS,
-    )
+def test_no_verify(mock_buckets) -> None:
+    actual = api.build_path(bucket_name="any-name", verify_bucket=False, **OTHER_ARGS)
     bucket = actual.bucket_api
-    assert not buckets_property.called
-    assert bucket.name == "any-name"
+    assert not mock_buckets.called
     assert isinstance(bucket, exasol.bucketfs.Bucket)
+    assert bucket.name == "any-name"
