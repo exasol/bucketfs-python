@@ -21,13 +21,13 @@ jobs:
       matrix: # ${{ fromJson(needs.build-matrix.outputs.matrix) }}
         include:
           - backend: saas
-            version: provided
+            exasol-version: provided
           - backend: onprem
-            version: "7.1.30"
+            exasol-version: "7.1.30"
           - backend: onprem
-            version: "8.29.13"
+            exasol-version: "8.29.13"
           - backend: onprem
-            version: "2025.1.8"
+            exasol-version: "2025.1.8"
 
     steps:
       - name: SCM Checkout
@@ -47,12 +47,12 @@ jobs:
         run: >
           echo poetry run -- nox -s test:integration -- -s --coverage
           --backend=${{ matrix.backend }}
-          --db-version ${{ matrix.version }};
+          --db-version ${{ matrix.exasol-version }};
           poetry run -- nox -s test:unit -- -s --coverage
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: coverage-slow-${{ matrix.backend }}-${{ matrix.version }}
+          name: coverage-slow-${{ matrix.backend }}-${{ matrix.exasol-version }}
           path: .coverage
           include-hidden-files: true
