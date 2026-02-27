@@ -23,26 +23,31 @@ jobs:
             exasol-version: "2025.1.8"
 
     steps:
-      - name: SCM Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Python & Poetry Environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@v4
-        with:
-          python-version: "3.10"
-          
       # Required for test/integration/test_udf_path.py
       - name: Allow unprivileged user namespaces
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
-      - name: Run Tests and Collect Coverage
+      - name: Check out Repository
+        id: check-out-repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python & Poetry Environment
+        id: set-up-python-and-poetry-environment
+        uses: exasol/python-toolbox/.github/actions/python-environment@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          poetry-version: "2.3.0"
+
+      - name: Run Integration Tests
+        id: run-integration-tests
         run: >
           poetry run -- nox -s test:integration -- -s --coverage
           --backend=${{ matrix.backend }}
           --db-version ${{ matrix.exasol-version }}
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v5
+        id: upload-artifacts
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-slow-${{ matrix.backend }}-${{ matrix.exasol-version }}
           path: .coverage
