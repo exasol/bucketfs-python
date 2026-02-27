@@ -4,23 +4,30 @@ on:
   workflow_call:
 
 jobs:
-  build-matrix:
-    name: Generate Build Matrix
-    uses: ./.github/workflows/matrix-all.yml
-    permissions:
-      contents: read
+  # build-matrix:
+  #   name: Generate Build Matrix
+  #   uses: ./.github/workflows/matrix-all.yml
+  #   permissions:
+  #     contents: read
 
   tests:
-    name: Integration-Tests (Python-${{ matrix.python-version }}, Exasol-${{ matrix.exasol-version}})
-    needs: [ build-matrix ]
-    runs-on: ubuntu-24.04
+    name: Integration-Tests (${{ matrix.backend }}, ${{ matrix.exasol-version}})
+    # needs: [ build-matrix ]
+    runs-on: "ubuntu-24.04"
     permissions:
       contents: read
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+      matrix: # ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+        include:
+          - backend: saas
+            version: provided
+          - backend: onprem
+            version: "7.1.30"
+          - backend: onprem
+            version: "8.29.13"
+          - backend: onprem
+            version: "2025.1.8"
 
     steps:
       - name: SCM Checkout
@@ -29,17 +36,23 @@ jobs:
       - name: Setup Python & Poetry Environment
         uses: exasol/python-toolbox/.github/actions/python-environment@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          # python-version: ${{ matrix.python-version }}
+          python-version: "3.10"
           
+      # Required for test/integration/test_udf_path.py
       - name: Allow unprivileged user namespaces
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Run Tests and Collect Coverage
-        run: poetry run -- nox -s test:integration -- -s --coverage --db-version ${{ matrix.exasol-version }} --backend=onprem
+        run: >
+          echo poetry run -- nox -s test:integration -- -s --coverage
+          --backend=${{ matrix.backend }}
+          --db-version ${{ matrix.version }};
+          poetry run -- nox -s test:unit -- -s --coverage
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: coverage-python${{ matrix.python-version }}-exasol${{ matrix.exasol-version }}-slow
+          name: coverage-slow-${{ matrix.backend }}-${{ matrix.version }}
           path: .coverage
           include-hidden-files: true
