@@ -573,8 +573,9 @@ def build_path(**kwargs) -> PathLike:
             Optional parameter that selects a path within the bucket. If not provided
             the returned PathLike objects corresponds to the root of the bucket. Hence,
             an alternative way of creating a PathLike pointing to a particular file or
-            directory is as in the code below.  path = build_path(...) /
-            "the_desired_path"
+            directory is as in the code below.
+
+            path = build_path(...) / "the_desired_path"
 
     The rest of the arguments are backend specific.
 
@@ -610,17 +611,15 @@ def build_path(**kwargs) -> PathLike:
             Url of the Exasol SaaS. Defaults to 'https://cloud.exasol.com'.
 
         account_id:
-            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5' (given example is not a
-            valid ID of an existing account).
+            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5' (fictional ID).
 
         database_id:
-            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy' (given example is not a valid ID
-            of an existing database).
+            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy' (fictional ID).
 
         pat:
             Personal Access Token,
-            e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A' (given example
-            is not a valid PAT).
+            e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A' (fictional
+            PAT).
 
     Additional Mounted BucketFS directory arguments:
 
