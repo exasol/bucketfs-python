@@ -1166,9 +1166,32 @@ description = "API enabling Python applications connecting to Exasol database Sa
 optional = false
 python-versions = "<4.0,>=3.10.0"
 groups = ["main", "dev"]
+markers = "python_version >= \"3.12\""
 files = [
     {file = "exasol_saas_api-2.6.0-py3-none-any.whl", hash = "sha256:6518cf571fed74044cd67972cf24c36cf108170315f731950e59db0e2d4f3307"},
     {file = "exasol_saas_api-2.6.0.tar.gz", hash = "sha256:43ae4eb076f4f402610daee024473bfcb631fc5f31a233b6f54173b750fb2ee1"},
+]
+
+[package.dependencies]
+attrs = ">=22.2.0"
+httpx = ">=0.23.0"
+ifaddr = ">=0.2.0,<0.3.0"
+python-dateutil = ">=2.8.0,<3.0.0"
+requests = ">=2.32.4,<3.0.0"
+tenacity = ">=8.2.3,<9.0.0"
+types-requests = ">=2.31.0.6,<3.0.0.0"
+
+[[package]]
+name = "exasol-saas-api"
+version = "2.8.0"
+description = "API enabling Python applications connecting to Exasol database SaaS instances and using their SaaS services"
+optional = false
+python-versions = "<4.0,>=3.10.0"
+groups = ["main", "dev"]
+markers = "python_version < \"3.12\""
+files = [
+    {file = "exasol_saas_api-2.8.0-py3-none-any.whl", hash = "sha256:fa2628e7d058f0a378d880c55ec36155507c326daa013ee33ec2d75773290998"},
+    {file = "exasol_saas_api-2.8.0.tar.gz", hash = "sha256:7cc31f01737749f464b9032d14631a5e4189f006021197a201b1786740ead238"},
 ]
 
 [package.dependencies]
@@ -3538,20 +3561,20 @@ pytest = ">=7,<9"
 
 [[package]]
 name = "pytest-exasol-backend"
-version = "1.2.4"
+version = "1.3.0"
 description = ""
 optional = false
 python-versions = "<3.14,>=3.10"
 groups = ["dev"]
 markers = "python_version < \"3.12\""
 files = [
-    {file = "pytest_exasol_backend-1.2.4-py3-none-any.whl", hash = "sha256:f7fde35be9cea11369a2c249a431f697ecae64276e3ad4764f4140fe5bb2e6e4"},
-    {file = "pytest_exasol_backend-1.2.4.tar.gz", hash = "sha256:ea8680a0fe7cc45626159a451da386ef7c6b90b19ad8c707e86cb7102b08de23"},
+    {file = "pytest_exasol_backend-1.3.0-py3-none-any.whl", hash = "sha256:cd38f3061cb101d22376c64ba712058b0171d954999bc546a59767c38be760d0"},
+    {file = "pytest_exasol_backend-1.3.0.tar.gz", hash = "sha256:d24544c6a9e25c2e3e4ca45bba412654a0a012e43bf6f4e93edd96d05b493e91"},
 ]
 
 [package.dependencies]
-exasol-integration-test-docker-environment = ">=4.3,<6"
-exasol-saas-api = ">=2.3,<3"
+exasol-integration-test-docker-environment = ">=4.3,<7"
+exasol-saas-api = ">=2.8,<3"
 pytest = ">=7,<9"
 
 [[package]]
