@@ -6,14 +6,14 @@ Bucketfs
 Depending on the database configuration, the bucketfs setup can range from straight forward to fairly complex.
 This is due to the fact that:
 
-* Each database can have one or more BucketFS services (in the On-Prem database)
-* Each BucketFS service is available on all worker cluster of a database
+* Each database can have one or more BucketFS services (applies to On-Prem database instances)
+* Each BucketFS service is available on all worker clusters of a database
 * Each BucketFS service runs on all data nodes of a database
-* Each BucketFS service can have one or more Buckets (in the On-Prem database)
+* Each BucketFS service can have one or more Buckets (applies to On-Prem database instances)
 * Each Bucket can hold one or more files
 
-The overview bellow tries to illustrate this in a more tangible manner.
-For more details on bucketfs, please also have a look in the `bucketfs section`_ of the `database documentation`_.
+The following overview illustrate this.  For more details on bucketfs, please
+also have a look in the `bucketfs section`_ of the `database documentation`_.
 
 .. image:: ../_static/bucketfs.png
   :alt: BucketFS Overview
