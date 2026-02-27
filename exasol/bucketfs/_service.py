@@ -57,16 +57,6 @@ class Service:
         self._verify = verify
         self._service_name = service_name
 
-    def unverified_bucket(self, name: str) -> Bucket:
-        return Bucket(
-            name=name,
-            service=self._url,
-            username=self._authenticator[name]["username"],
-            password=self._authenticator[name]["password"],
-            service_name=self._service_name,
-            verify=self._verify,
-        )
-
     @property
     def buckets(self) -> MutableMapping[str, Bucket]:
         """List all available buckets."""

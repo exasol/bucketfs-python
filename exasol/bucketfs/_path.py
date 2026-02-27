@@ -25,6 +25,7 @@ from typing import (
 from exasol.saas.client.api_access import get_database_id
 
 from exasol.bucketfs._buckets import (
+    Bucket,
     BucketLike,
     MountedBucket,
     SaaSBucket,
@@ -507,22 +508,29 @@ def _create_onprem_bucket(
     username: str,
     password: str,
     bucket_name: str = "default",
-    verify: bool | str = True,
+    verify: bool | str = True,  # verify SSL certificates
     service_name: str | None = None,
     verify_bucket: bool = True,
 ) -> BucketLike:
     """
     Creates an on-prem bucket.
     """
+    if not verify_bucket:
+        return Bucket(
+            name=bucket_name,
+            service=url,
+            username=username,
+            password=password,
+            service_name=service_name,
+            verify=verify,
+        )
+
     credentials = {bucket_name: {"username": username, "password": password}}
     service = Service(url, credentials, verify, service_name)
-    if verify_bucket:
-        buckets = service.buckets
-        if bucket_name not in buckets:
-            raise BucketFsError(f"Bucket {bucket_name} does not exist.")
-        return buckets[bucket_name]
-
-    return service.unverified_bucket(bucket_name)
+    buckets = service.buckets
+    if bucket_name not in buckets:
+        raise BucketFsError(f"Bucket {bucket_name} does not exist.")
+    return buckets[bucket_name]
 
 
 def _create_saas_bucket(
