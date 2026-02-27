@@ -552,8 +552,10 @@ def _create_mounted_bucket(
 
 def build_path(**kwargs) -> PathLike:
     """
-    Creates a PathLike object based on a bucket in one of the BucketFS storage backends.
-    It provides the same interface for the following BucketFS implementations:
+    Creates a PathLike object based on a bucket in one of the BucketFS storage
+    backends.  It provides the same interface for the following BucketFS
+    implementations:
+
     - On-Premises
     - SaaS
     - BucketFS files mounted as read-only directory in a UDF.
@@ -561,18 +563,18 @@ def build_path(**kwargs) -> PathLike:
     General Arguments:
 
         backend:
-            This is a mandatory parameter that indicates the BucketFS storage
-            backend.  The available backends are defined in the StorageBackend
-            enumeration, Currently, these are "onprem", "saas" and
-            "mounted". The parameter value can be provided either as a string,
-            e.g. "onprem", or as an enum, e.g.  StorageBackend.onprem.
+            This is a mandatory parameter that indicates the BucketFS storage backend.
+            The available backends are defined in the StorageBackend enumeration,
+            Currently, these are "onprem", "saas" and "mounted". The parameter value can
+            be provided either as a string, e.g. "onprem", or as an enum, e.g.
+            StorageBackend.onprem.
 
         path:
-            Optional parameter that selects a path within the bucket. If not
-            provided the returned PathLike objects corresponds to the root of
-            the bucket. Hence, an alternative way of creating a PathLike
-            pointing to a particular file or directory is as in the code
-            below.  path = build_path(...) / "the_desired_path"
+            Optional parameter that selects a path within the bucket. If not provided
+            the returned PathLike objects corresponds to the root of the bucket. Hence,
+            an alternative way of creating a PathLike pointing to a particular file or
+            directory is as in the code below.  path = build_path(...) /
+            "the_desired_path"
 
     The rest of the arguments are backend specific.
 
@@ -591,16 +593,16 @@ def build_path(**kwargs) -> PathLike:
             Name of the bucket. Currently, a PathLike cannot span multiple buckets.
 
         verify:
-            Either a boolean, in which case it controls whether we verify
-            the server's TLS certificate, or a string, in which case it must
-            be a path to a CA bundle to use. Defaults to ``True``.
+            Either a boolean, in which case it controls whether we verify the server's
+            TLS certificate, or a string, in which case it must be a path to a CA bundle
+            to use. Defaults to ``True``.
 
         service_name:
             Optional name of the BucketFS service.
 
         verify_bucket:
-            Optional flag to skip verifying if the bucket exists. This is
-            acceptable in case of planning only access via `as_udf_path()`.
+            Optional flag to skip verifying if the bucket exists. This is acceptable in
+            case of planning only access via `as_udf_path()`.
 
     Additional SaaS arguments:
 
@@ -608,27 +610,25 @@ def build_path(**kwargs) -> PathLike:
             Url of the Exasol SaaS. Defaults to 'https://cloud.exasol.com'.
 
         account_id:
-            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5' (given
-            example is not a valid ID of an existing account).
+            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5' (given example is not a
+            valid ID of an existing account).
 
         database_id:
-            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy' (given example
-            is not a valid ID of an existing database).
+            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy' (given example is not a valid ID
+            of an existing database).
 
         pat:
             Personal Access Token,
-            e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A'
-            (given example is not a valid PAT).
+            e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A' (given example
+            is not a valid PAT).
 
     Additional Mounted BucketFS directory arguments:
 
         service_name:
-            Name of the BucketFS service (not a service url). Defaults to
-            'bfsdefault'.
+            Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
 
         bucket_name:
-            Name of the bucket. Currently, a PathLike cannot span multiple
-            buckets.
+            Name of the bucket. Currently, a PathLike cannot span multiple buckets.
 
         base_path:
             Explicitly specified root path in a file system. This is an alternative to
