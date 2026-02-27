@@ -27,7 +27,7 @@ jobs:
 
   slow-checks:
     name: Slow
-    # needs: [ run-slow-tests ]
+    needs: [ run-slow-tests ]
     uses: ./.github/workflows/slow-checks.yml
     secrets: inherit
     permissions:

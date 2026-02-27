@@ -4,21 +4,14 @@ on:
   workflow_call:
 
 jobs:
-  # build-matrix:
-  #   name: Generate Build Matrix
-  #   uses: ./.github/workflows/matrix-all.yml
-  #   permissions:
-  #     contents: read
-
   tests:
     name: Integration-Tests (${{ matrix.backend }}, ${{ matrix.exasol-version}})
-    # needs: [ build-matrix ]
     runs-on: "ubuntu-24.04"
     permissions:
       contents: read
     strategy:
       fail-fast: false
-      matrix: # ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+      matrix:
         include:
           - backend: saas
             exasol-version: provided
@@ -36,7 +29,6 @@ jobs:
       - name: Setup Python & Poetry Environment
         uses: exasol/python-toolbox/.github/actions/python-environment@v4
         with:
-          # python-version: ${{ matrix.python-version }}
           python-version: "3.10"
           
       # Required for test/integration/test_udf_path.py
@@ -45,10 +37,9 @@ jobs:
 
       - name: Run Tests and Collect Coverage
         run: >
-          echo poetry run -- nox -s test:integration -- -s --coverage
+          poetry run -- nox -s test:integration -- -s --coverage
           --backend=${{ matrix.backend }}
-          --db-version ${{ matrix.exasol-version }};
-          poetry run -- nox -s test:unit -- -s --coverage
+          --db-version ${{ matrix.exasol-version }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v5
