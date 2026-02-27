@@ -12,7 +12,7 @@ jobs:
       contents: read
 
   run-slow-tests:
-    name: Run Slow Tests
+    name: Run Slow Tests?
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -27,7 +27,7 @@ jobs:
 
   slow-checks:
     name: Slow
-    needs: [ run-slow-tests ]
+    # needs: [ run-slow-tests ]
     uses: ./.github/workflows/slow-checks.yml
     secrets: inherit
     permissions:
