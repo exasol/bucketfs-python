@@ -1,12 +1,10 @@
+import contextlib
 import logging
 import random
 import string
 from collections.abc import (
     ByteString,
     Iterable,
-)
-from contextlib import (
-    contextmanager,
 )
 from inspect import cleandoc
 from test.integration.conftest import (
@@ -25,7 +23,7 @@ from exasol.bucketfs import (
 )
 
 
-@contextmanager
+@contextlib.contextmanager
 def does_not_raise(exception_type: Exception = Exception):
     try:
         yield
@@ -49,6 +47,21 @@ def test_list_buckets(bucketfs_config, expected):
     assert expected.issubset(actual)
 
 
+@pytest.fixture(scope="session")
+def onprem_bfs(use_onprem: bool, backend_aware_onprem_bucketfs_params):
+    """ """
+    if not use_onprem:
+        pytest.skip(
+            """The tests annotated with this fixture can only be
+        executed for onprem database instances."""
+        )
+    return backend_aware_onprem_bucketfs_params
+
+
+def _bucket(name: str, config: dict[str, str]) -> Bucket:
+    return Bucket(name, config["url"], config["username"], config["password"])
+
+
 @pytest.mark.parametrize(
     "name,data",
     [
@@ -67,32 +80,24 @@ def test_list_buckets(bucketfs_config, expected):
     ],
 )
 def test_upload_to_bucket(
-    use_onprem: bool,
-    bucketfs_config,
+    onprem_bfs: bool,
     name: str,
     data: ByteString | Iterable[ByteString] | Iterable[int],
 ):
-    if not use_onprem:
-        pytest.skip("The test runs only with onprem database instances")
     file_name = "Uploaded-File-{random_string}.bin".format(
         random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
-    bucket = Bucket(
-        name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
-    )
+    bucket = _bucket(name, onprem_bfs)
 
-    # run test scenario
     try:
         bucket.upload(file_name, data)
-        # assert expectations
         assert file_name in bucket.files
     finally:
-        # cleanup
         _, _ = delete_file(
-            bucketfs_config.url,
+            onprem_bfs["url"],
             bucket.name,
-            bucketfs_config.username,
-            bucketfs_config.password,
+            onprem_bfs["username"],
+            onprem_bfs["password"],
             file_name,
         )
 
@@ -112,17 +117,11 @@ def test_upload_to_bucket(
     indirect=True,
 )
 def test_download_file_from_bucket(
-    use_onprem: bool,
+    onprem_bfs,
     temporary_bucket_files: tuple[str, File | Iterable[File]],
-    bucketfs_config,
 ):
-    if not use_onprem:
-        pytest.skip("The test runs only with onprem database instances")
     name, files = temporary_bucket_files
-    bucket = Bucket(
-        name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
-    )
-
+    bucket = _bucket(name, onprem_bfs)
     for file in files:
         expected = file.content
         actual = as_bytes(bucket.download(file.name))
@@ -143,16 +142,11 @@ def test_download_file_from_bucket(
     indirect=True,
 )
 def test_list_files_in_bucket(
-    use_onprem: bool,
+    onprem_bfs,
     temporary_bucket_files: tuple[str, File | Iterable[File]],
-    bucketfs_config,
 ):
-    if not use_onprem:
-        pytest.skip("The test runs only with onprem database instances")
     name, files = temporary_bucket_files
-    bucket = Bucket(
-        name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
-    )
+    bucket = _bucket(name, onprem_bfs)
     expected = {file.name for file in files}
     actual = {file for file in bucket}
     assert expected.issubset(actual)
