@@ -10,6 +10,7 @@ from exasol.pytest_backend import (
 import exasol.bucketfs as bfs
 from exasol.bucketfs import (
     Bucket,
+    SaaSBucket,
 )
 
 
@@ -97,8 +98,8 @@ def setup_schema_and_udfs(backend_aware_database_params):
     create_check_udf_sql = dedent(
         """
         --/
-        CREATE OR REPLACE PYTHON3 SCALAR 
-        SCRIPT CHECK_FILE_EXISTS_UDF(file_path VARCHAR(200000)) 
+        CREATE OR REPLACE PYTHON3 SCALAR
+        SCRIPT CHECK_FILE_EXISTS_UDF(file_path VARCHAR(200000))
         RETURNS BOOLEAN AS
         import os
         def run(ctx):
@@ -111,8 +112,8 @@ def setup_schema_and_udfs(backend_aware_database_params):
     create_read_udf_sql = dedent(
         """
         --/
-        CREATE OR REPLACE PYTHON3 SCALAR 
-        SCRIPT READ_FILE_CONTENT_UDF(file_path VARCHAR(200000)) 
+        CREATE OR REPLACE PYTHON3 SCALAR
+        SCRIPT READ_FILE_CONTENT_UDF(file_path VARCHAR(200000))
         RETURNS VARCHAR(200000) AS
         def run(ctx):
             with open(ctx.file_path, 'rb') as f:
