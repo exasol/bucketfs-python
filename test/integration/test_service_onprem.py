@@ -42,7 +42,7 @@ def does_not_raise(exception_type: Exception = Exception):
     ],
 )
 def test_list_buckets(onprem_bfs, expected):
-    service = Service(onprem_bfs.url)
+    service = Service(onprem_bfs["url"])
     actual = {bucket for bucket in service}
     assert expected.issubset(actual)
 
