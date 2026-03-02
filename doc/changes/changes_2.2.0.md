@@ -1,4 +1,4 @@
-# 2.2.0 - 2026-02-27
+# 2.2.0 - 2026-03-02
 
 ## Summary
 
@@ -28,4 +28,18 @@ This release adds method `relative_to` to interface `PathLike` and enables calli
 
 * Updated dependency `exasol-toolbox:1.10.0` to `6.0.0`
 * Updated dependency `pyexasol:1.2.0` to `1.3.0`
+* Updated dependency `pytest-exasol-backend:1.2.1` to `1.3.0`
+
+## Dependency Updates
+
+### `main`
+
+* Removed dependency `attrs:25.4.0`
+* Updated dependency `exasol-saas-api:2.3.0` to `2.8.0`
+* Removed dependency `httpx:0.28.1`
+
+### `dev`
+
+* Updated dependency `exasol-toolbox:1.10.0` to `6.0.0`
+* Updated dependency `pyexasol:1.2.0` to `2.0.0`
 * Updated dependency `pytest-exasol-backend:1.2.1` to `1.3.0`
