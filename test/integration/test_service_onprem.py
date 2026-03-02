@@ -67,10 +67,13 @@ def test_list_buckets(bucketfs_config, expected):
     ],
 )
 def test_upload_to_bucket(
+    use_onprem: bool,
     bucketfs_config,
     name: str,
     data: ByteString | Iterable[ByteString] | Iterable[int],
 ):
+    if not use_onprem:
+        pytest.skip("The test runs only with onprem database instances")
     file_name = "Uploaded-File-{random_string}.bin".format(
         random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
@@ -109,9 +112,12 @@ def test_upload_to_bucket(
     indirect=True,
 )
 def test_download_file_from_bucket(
+    use_onprem: bool,
     temporary_bucket_files: tuple[str, File | Iterable[File]],
     bucketfs_config,
 ):
+    if not use_onprem:
+        pytest.skip("The test runs only with onprem database instances")
     name, files = temporary_bucket_files
     bucket = Bucket(
         name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
@@ -137,9 +143,12 @@ def test_download_file_from_bucket(
     indirect=True,
 )
 def test_list_files_in_bucket(
+    use_onprem: bool,
     temporary_bucket_files: tuple[str, File | Iterable[File]],
     bucketfs_config,
 ):
+    if not use_onprem:
+        pytest.skip("The test runs only with onprem database instances")
     name, files = temporary_bucket_files
     bucket = Bucket(
         name, bucketfs_config.url, bucketfs_config.username, bucketfs_config.password
