@@ -211,7 +211,7 @@ jobs:
         run: poetry run -- nox -s package:check
 
   run-unit-tests:
-    name: Run Unit Tests (Python-${{ matrix.python-versions }})
+    name: Unit Tests (Python-${{ matrix.python-versions }})
     runs-on: "ubuntu-24.04"
     permissions:
       contents: read
@@ -232,7 +232,7 @@ jobs:
           python-version: ${{ matrix.python-versions }}
           poetry-version: "2.3.0"
 
-      - name: Run Unit Tests
+      - name: Unit Tests
         id: run-unit-tests
         run: poetry run -- nox -s test:unit -- --coverage
 

@@ -1,11 +1,11 @@
-name: Slow-Checks
+name: Slow Checks
 
 on:
   workflow_call:
 
 jobs:
   tests:
-    name: Integration-Tests (${{ matrix.backend }}, ${{ matrix.exasol-version}})
+    name: Integration Tests (${{ matrix.backend }}, ${{ matrix.exasol-version}})
     runs-on: "ubuntu-24.04"
     permissions:
       contents: read
@@ -38,7 +38,7 @@ jobs:
           python-version: "3.10"
           poetry-version: "2.3.0"
 
-      - name: Run Integration Tests
+      - name: Integration Tests
         id: run-integration-tests
         run: >
           poetry run -- nox -s test:integration -- -s --coverage

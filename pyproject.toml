@@ -97,3 +97,4 @@ unfixable = []
 projectKey = "com.exasol:bucketfs-python"
 host.url = "https://sonarcloud.io"
 organization = "exasol"
+exclusions = "exasol/bucketfs/version.py"
