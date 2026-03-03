@@ -25,6 +25,7 @@ from typing import (
 from exasol.saas.client.api_access import get_database_id
 
 from exasol.bucketfs._buckets import (
+    Bucket,
     BucketLike,
     MountedBucket,
     SaaSBucket,
@@ -507,12 +508,23 @@ def _create_onprem_bucket(
     username: str,
     password: str,
     bucket_name: str = "default",
-    verify: bool | str = True,
+    verify: bool | str = True,  # verify SSL certificates
     service_name: str | None = None,
+    verify_bucket: bool = True,
 ) -> BucketLike:
     """
     Creates an on-prem bucket.
     """
+    if not verify_bucket:
+        return Bucket(
+            name=bucket_name,
+            service=url,
+            username=username,
+            password=password,
+            service_name=service_name,
+            verify=verify,
+        )
+
     credentials = {bucket_name: {"username": username, "password": password}}
     service = Service(url, credentials, verify, service_name)
     buckets = service.buckets
@@ -548,62 +560,83 @@ def _create_mounted_bucket(
 
 def build_path(**kwargs) -> PathLike:
     """
-    Creates a PathLike object based on a bucket in one of the BucketFS storage backends.
-    It provides the same interface for the following BucketFS implementations:
+    Creates a PathLike object based on a bucket in one of the BucketFS storage
+    backends.  It provides the same interface for the following BucketFS
+    implementations:
+
     - On-Premises
     - SaaS
     - BucketFS files mounted as read-only directory in a UDF.
 
-    Arguments:
+    General Arguments:
+
         backend:
             This is a mandatory parameter that indicates the BucketFS storage backend.
             The available backends are defined in the StorageBackend enumeration,
-            Currently, these are "onprem", "saas" and "mounted". The parameter value
-            can be provided either as a string, e.g. "onprem", or as an enum, e.g.
+            Currently, these are "onprem", "saas" and "mounted". The parameter value can
+            be provided either as a string, e.g. "onprem", or as an enum, e.g.
             StorageBackend.onprem.
+
         path:
             Optional parameter that selects a path within the bucket. If not provided
             the returned PathLike objects corresponds to the root of the bucket. Hence,
             an alternative way of creating a PathLike pointing to a particular file or
             directory is as in the code below.
+
             path = build_path(...) / "the_desired_path"
 
-            The rest of the arguments are backend specific.
+    The rest of the arguments are backend specific.
 
-            On-prem arguments:
+    Additional On-prem arguments:
+
         url:
             Url of the BucketFS service, e.g. `http(s)://127.0.0.1:2580`.
+
         username:
             BucketFS username (generally, different from the DB username).
+
         password:
             BucketFS user password.
+
         bucket_name:
             Name of the bucket. Currently, a PathLike cannot span multiple buckets.
+
         verify:
             Either a boolean, in which case it controls whether we verify the server's
             TLS certificate, or a string, in which case it must be a path to a CA bundle
             to use. Defaults to ``True``.
+
         service_name:
             Optional name of the BucketFS service.
 
-            SaaS arguments:
+        verify_bucket:
+            Optional flag to skip verifying if the bucket exists. This is acceptable in
+            case of planning only access via `as_udf_path()`.
+
+    Additional SaaS arguments:
+
         url:
             Url of the Exasol SaaS. Defaults to 'https://cloud.exasol.com'.
-        account_id:
-            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5'
-            (given example is not a valid ID of an existing account).
-        database_id:
-            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy'
-            (given example is not a valid ID of an existing database).
-        pat:
-            Personal Access Token, e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A'
-            (given example is not a valid PAT).
 
-            Mounted BucketFS directory arguments:
+        account_id:
+            SaaS user account ID, e.g. 'org_LVeOj4pwXhPatNz5' (fictional ID).
+
+        database_id:
+            Database ID, e.g. 'msduZKlMR8QCP_MsLsVRwy' (fictional ID).
+
+        pat:
+            Personal Access Token,
+            e.g. 'exa_pat_aj39AsM3bYR9bQ4qk2wiG8SWHXbRUGNCThnep5YV73az6A' (fictional
+            PAT).
+
+    Additional Mounted BucketFS directory arguments:
+
         service_name:
             Name of the BucketFS service (not a service url). Defaults to 'bfsdefault'.
+
         bucket_name:
             Name of the bucket. Currently, a PathLike cannot span multiple buckets.
+
         base_path:
             Explicitly specified root path in a file system. This is an alternative to
             providing the service_name and the bucket_name.

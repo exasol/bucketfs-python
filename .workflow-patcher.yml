@@ -1,0 +1,40 @@
+# Please note: This file is work-in-progress.
+
+# Currently project BFSPY needs to manually maintain workflow slow-checks.yaml
+# as some crucial changes cannot be automated, yet.
+
+workflows:
+  - name: slow-checks
+    step_customizations:
+      - action: REPLACE
+        job: run-integration-tests
+        step_id: run-integration-tests
+        content:
+          - name: Run Integration Tests
+            id: run-integration-tests
+            run: >
+              poetry run -- nox -s test:integration -- -s --coverage
+              --backend=${{ matrix.backend }}
+              --db-version ${{ matrix.exasol-version }}
+            env:
+              SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
+              SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
+              SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
+      - action: REPLACE
+        job: run-integration-tests
+        step_id: upload-artifacts
+        content:
+          - name: Upload Artifacts
+            id: upload-artifacts
+            uses: actions/upload-artifact@v6
+            with:
+              name: coverage-python3.10-${{ matrix.backend }}-${{ matrix.exasol-version }}
+              path: .coverage
+              include-hidden-files: true
+      - action: INSERT_AFTER
+        job: run-integration-tests
+        step_id: check-out-repository
+        content:
+          - name: Allow unprivileged user namespaces
+            id: allow-unprivileged-user-namespaces
+            run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0

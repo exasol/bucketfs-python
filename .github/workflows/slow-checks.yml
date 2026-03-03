@@ -1,45 +1,58 @@
-name: Slow-Checks
+name: Slow Checks
 
 on:
   workflow_call:
 
 jobs:
-  build-matrix:
-    name: Generate Build Matrix
-    uses: ./.github/workflows/matrix-all.yml
-    permissions:
-      contents: read
-
   tests:
-    name: Integration-Tests (Python-${{ matrix.python-version }}, Exasol-${{ matrix.exasol-version}})
-    needs: [ build-matrix ]
-    runs-on: ubuntu-24.04
+    name: Integration Tests (${{ matrix.backend }}, ${{ matrix.exasol-version}})
+    runs-on: "ubuntu-24.04"
     permissions:
       contents: read
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+      matrix:
+        include:
+          - backend: saas
+            exasol-version: provided
+          - backend: onprem
+            exasol-version: "7.1.30"
+          - backend: onprem
+            exasol-version: "8.29.13"
+          - backend: onprem
+            exasol-version: "2025.1.8"
 
     steps:
-      - name: SCM Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Python & Poetry Environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          
+      # Required for test/integration/test_udf_path.py
       - name: Allow unprivileged user namespaces
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
-      - name: Run Tests and Collect Coverage
-        run: poetry run -- nox -s test:integration -- -s --coverage --db-version ${{ matrix.exasol-version }} --backend=onprem
+      - name: Check out Repository
+        id: check-out-repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python & Poetry Environment
+        id: set-up-python-and-poetry-environment
+        uses: exasol/python-toolbox/.github/actions/python-environment@v6
+        with:
+          python-version: "3.10"
+          poetry-version: "2.3.0"
+
+      - name: Integration Tests
+        id: run-integration-tests
+        run: >
+          poetry run -- nox -s test:integration -- -s --coverage
+          --backend=${{ matrix.backend }}
+          --db-version ${{ matrix.exasol-version }}
+        env:
+          SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
+          SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
+          SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v5
+        id: upload-artifacts
+        uses: actions/upload-artifact@v6
         with:
-          name: coverage-python${{ matrix.python-version }}-exasol${{ matrix.exasol-version }}-slow
+          name: coverage-python3.10-${{ matrix.backend }}-${{ matrix.exasol-version }}
           path: .coverage
           include-hidden-files: true
