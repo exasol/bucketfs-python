@@ -95,8 +95,7 @@ def setup_schema_and_udfs(backend_aware_database_params):
     conn.execute("CREATE SCHEMA IF NOT EXISTS transact;")
     conn.execute("OPEN SCHEMA transact;")
     # Check file exists UDF
-    create_check_udf_sql = dedent(
-        """
+    create_check_udf_sql = dedent("""
         --/
         CREATE OR REPLACE PYTHON3 SCALAR
         SCRIPT CHECK_FILE_EXISTS_UDF(file_path VARCHAR(200000))
@@ -105,12 +104,10 @@ def setup_schema_and_udfs(backend_aware_database_params):
         def run(ctx):
             return os.path.exists(ctx.file_path)
         /
-    """
-    )
+    """)
     conn.execute(create_check_udf_sql)
     # Read file content UDF
-    create_read_udf_sql = dedent(
-        """
+    create_read_udf_sql = dedent("""
         --/
         CREATE OR REPLACE PYTHON3 SCALAR
         SCRIPT READ_FILE_CONTENT_UDF(file_path VARCHAR(200000))
@@ -119,8 +116,7 @@ def setup_schema_and_udfs(backend_aware_database_params):
             with open(ctx.file_path, 'rb') as f:
                 return f.read().decode('utf-8', errors='replace')
         /
-    """
-    )
+    """)
     conn.execute(create_read_udf_sql)
     return conn
 

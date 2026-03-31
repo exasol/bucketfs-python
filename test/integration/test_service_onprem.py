@@ -51,10 +51,8 @@ def test_list_buckets(onprem_bfs, expected):
 def onprem_bfs(use_onprem: bool, backend_aware_onprem_bucketfs_params):
     """ """
     if not use_onprem:
-        pytest.skip(
-            """The tests annotated with this fixture can only be
-        executed for onprem database instances."""
-        )
+        pytest.skip("""The tests annotated with this fixture can only be
+        executed for onprem database instances.""")
     return backend_aware_onprem_bucketfs_params
 
 
@@ -164,13 +162,11 @@ def test_ssl_verification_for_bucketfs_service_fails(httpsserver):
 
 
 def test_ssl_verification_for_bucketfs_service_can_be_bypassed(httpsserver):
-    bucketfs_service_response = cleandoc(
-        """
+    bucketfs_service_response = cleandoc("""
         default
         demo_foo
         demo_bar
-        """
-    )
+        """)
     httpsserver.serve_content(bucketfs_service_response, 200)
 
     CREDENTAILS = {"default": {"username": "w", "password": "write"}}
