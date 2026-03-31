@@ -16,6 +16,7 @@ jobs:
       contents: read
 
   report:
+    name: Report
     needs:
       - merge-gate
     uses: ./.github/workflows/report.yml

@@ -14,3 +14,4 @@ setup.py                                  linguist-generated=true
 /.github/workflows/merge-gate.yml         linguist-generated=True
 /.github/workflows/pr-merge.yml           linguist-generated=True
 /.github/workflows/report.yml             linguist-generated=True
+/.github/workflows/slow-checks.yml        linguist-generated=True
