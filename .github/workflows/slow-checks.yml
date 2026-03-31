@@ -1,44 +1,43 @@
-name: Slow Checks
+name: Slow-Checks
 
 on:
   workflow_call:
 
 jobs:
-  tests:
-    name: Integration Tests (${{ matrix.backend }}, ${{ matrix.exasol-version}})
+  build-matrix:
+    name: Build Matrix
+    uses: ./.github/workflows/matrix-all.yml
+    permissions:
+      contents: read
+
+  run-integration-tests:
+    name: Run Integration Tests (Python-${{ matrix.python-version }}, Exasol-${{ matrix.exasol-version}})
+    needs:
+      - build-matrix
     runs-on: "ubuntu-24.04"
     permissions:
       contents: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - backend: saas
-            exasol-version: provided
-          - backend: onprem
-            exasol-version: "7.1.30"
-          - backend: onprem
-            exasol-version: "8.29.13"
-          - backend: onprem
-            exasol-version: "2025.1.8"
-
+      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
-      # Required for test/integration/test_udf_path.py
-      - name: Allow unprivileged user namespaces
-        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-
       - name: Check out Repository
         id: check-out-repository
         uses: actions/checkout@v6
 
+      - name: Allow unprivileged user namespaces
+        id: allow-unprivileged-user-namespaces
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Set up Python & Poetry Environment
         id: set-up-python-and-poetry-environment
         uses: exasol/python-toolbox/.github/actions/python-environment@v6
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python-version }}
           poetry-version: "2.3.0"
 
-      - name: Integration Tests
+      - name: Run Integration Tests
         id: run-integration-tests
         run: >
           poetry run -- nox -s test:integration -- -s --coverage
@@ -48,7 +47,6 @@ jobs:
           SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
           SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
           SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
-
       - name: Upload Artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@v6
