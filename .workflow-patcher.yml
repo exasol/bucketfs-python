@@ -14,7 +14,7 @@ workflows:
             id: run-integration-tests
             run: >
               poetry run -- nox -s test:integration -- -s --coverage
-              --backend=${{ matrix.backend }}
+              --backend=all
               --db-version ${{ matrix.exasol-version }}
             env:
               SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}

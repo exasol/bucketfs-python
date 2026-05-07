@@ -32,7 +32,7 @@ jobs:
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Set up Python & Poetry Environment
         id: set-up-python-and-poetry-environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@v6
+        uses: exasol/python-toolbox/.github/actions/python-environment@v7
         with:
           python-version: ${{ matrix.python-version }}
           poetry-version: "2.3.0"
@@ -41,7 +41,7 @@ jobs:
         id: run-integration-tests
         run: >
           poetry run -- nox -s test:integration -- -s --coverage
-          --backend=${{ matrix.backend }}
+          --backend=all
           --db-version ${{ matrix.exasol-version }}
         env:
           SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}

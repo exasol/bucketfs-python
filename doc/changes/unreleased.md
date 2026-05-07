@@ -15,6 +15,10 @@ This release fixes vulnerabilities by updating transitive dependencies in the `p
 
 To ensure usage of secure packages, it is up to the user to similarly relock their dependencies.
 
+## Refactoring
+
+* #288: Updated to latest PTB 7.0.0, regenerated workflows and updated .workflow-patcher.yml
+
 ## Security Issues
 
 * #284: Fixed vulnerabilities by re-locking transitive dependencies & updated:
