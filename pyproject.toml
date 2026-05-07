@@ -11,7 +11,10 @@ authors = [
 readme = 'README.rst'
 license = "MIT"
 keywords = ['exasol', 'bucketfs']
-dynamic = ["dependencies"]
+dependencies = [
+    "requests>=2.33.1",
+    "exasol-saas-api>=2.10.0,<3.0",
+]
 
 [project.urls]
 repository = "https://github.com/exasol/bucketfs-python"
@@ -19,29 +22,27 @@ homepage = "https://github.com/exasol/bucketfs-python"
 
 [build-system]
 requires = [
-    "poetry>=2.0.0",
+    "poetry-core>=2.0.0",
 ]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-requires-poetry = ">=2.1.0"
+requires-poetry = ">=2.3.0"
 packages  = [
     {include = "exasol"},
 ]
 
-[tool.poetry.dependencies]
-requests = ">=2.32.4"
-exasol-saas-api=">=2.10.0,<3.0"
-
-[tool.poetry.group.dev.dependencies]
-pyexasol = ">=1.0, <3.0"
-dill = "^0.3.4"
-exasol-udf-mock-python = ">=0.2.0"
-toml = ">=0.10.2"
-sphinx-copybutton = "^0.5.0"
-exasol-toolbox = ">=6.2.0, <7"
-pytest-localserver = "^0.8.1"
-pytest-exasol-backend = ">=1.0.0, <2"
+[dependency-groups]
+dev = [
+    "pyexasol>=1.0, <3.0",
+    "dill>=0.4.1",
+    "exasol-udf-mock-python>=0.2.0",
+    "toml>=0.10.2",
+    "sphinx-copybutton>=0.5.0",
+    "exasol-toolbox>=7.0.0, <8",
+    "pytest-localserver>=0.10.0",
+    "pytest-exasol-backend>=1.0.0, <2",
+]
 
 [tool.coverage.run]
 source = [
@@ -97,4 +98,3 @@ unfixable = []
 projectKey = "com.exasol:bucketfs-python"
 host.url = "https://sonarcloud.io"
 organization = "exasol"
-exclusions = "exasol/bucketfs/version.py"

@@ -17,7 +17,7 @@ To ensure usage of secure packages, it is up to the user to similarly relock the
 
 ## Refactoring
 
-* #288: Updated to latest PTB 6.2.0, regenerated workflows and updated .workflow-patcher.yml
+* #288: Updated to latest PTB 7.0.0, regenerated workflows and updated .workflow-patcher.yml
 
 ## Security Issues
 

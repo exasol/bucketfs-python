@@ -46,6 +46,8 @@ This module contains a python api to programmatically access exasol bucketfs ser
 
 from __future__ import annotations
 
+from importlib.metadata import version
+
 from exasol.bucketfs import _path as path
 from exasol.bucketfs._buckets import (
     Bucket,
@@ -77,3 +79,5 @@ __all__ = [
     "as_file",
     "as_hash",
 ]
+
+__version__ = version("exasol-bucketfs")

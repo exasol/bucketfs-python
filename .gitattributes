@@ -1,7 +1,8 @@
-/doc/changes/changelog.md                 linguist-generated=true
+# Core Data and Locks
 poetry.lock                               linguist-generated=true
-setup.py                                  linguist-generated=true
-/exasol/bucketfs/version.py               linguist-generated=True
+/doc/changes/changelog.md                 linguist-generated=true
+
+# PTB GitHub Workflows (CI/CD & Publishing)
 /.github/workflows/build-and-publish.yml  linguist-generated=True
 /.github/workflows/cd.yml                 linguist-generated=True
 /.github/workflows/check-release-tag.yml  linguist-generated=True
