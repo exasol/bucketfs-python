@@ -30,9 +30,10 @@ jobs:
       - name: Allow unprivileged user namespaces
         id: allow-unprivileged-user-namespaces
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: Set up Python & Poetry Environment
         id: set-up-python-and-poetry-environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@v7
+        uses: exasol/python-toolbox/.github/actions/python-environment@v8
         with:
           python-version: ${{ matrix.python-version }}
           poetry-version: "2.3.0"
@@ -47,6 +48,7 @@ jobs:
           SAAS_HOST: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_HOST }}
           SAAS_ACCOUNT_ID: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID }}
           SAAS_PAT: ${{ secrets.INTEGRATION_TEAM_SAAS_STAGING_PAT }}
+
       - name: Upload Artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@v7
