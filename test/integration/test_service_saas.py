@@ -19,7 +19,7 @@ def test_write_bytes_to_saas_bucket(
         pat=saas_pat,
     )
 
-    file_name = "bucketfs_test/test_write_bytes_to_saas_bucket/the_file.dat"
+    file_name = "bucketfs_test/test_write_bytes_to_saas_bucket/the_file.csv"
     bucket.upload(path=file_name, data=b"abcd12345")
     assert file_name in bucket.files
 
@@ -45,9 +45,9 @@ def test_write_file_to_saas_bucket(
         pat=saas_pat,
     )
 
-    tmp_file = tmpdir / "the_file.dat"
+    tmp_file = tmpdir / "the_file.csv"
     tmp_file.write_binary(b"abcd12345")
-    file_name = "bucketfs_test/test_write_file_to_saas_bucket/the_file.dat"
+    file_name = "bucketfs_test/test_write_file_to_saas_bucket/the_file.csv"
     with open(tmp_file, "rb") as f:
         bucket.upload(path=file_name, data=f)
     assert file_name in bucket.files
@@ -69,7 +69,7 @@ def test_read_bytes_from_saas_bucket(
         pat=saas_pat,
     )
 
-    file_name = "bucketfs_test/test_read_bytes_from_saas_bucket/the_file.dat"
+    file_name = "bucketfs_test/test_read_bytes_from_saas_bucket/the_file.csv"
     content = b"A string long enough to be downloaded in chunks."
     bucket.upload(path=file_name, data=content)
     received_content = b"".join(bucket.download(file_name, chunk_size=20))
@@ -98,9 +98,9 @@ def test_read_file_from_saas_bucket(
     )
 
     content = b"A string long enough to be downloaded in chunks."
-    tmp_file = tmpdir / "the_file.dat"
+    tmp_file = tmpdir / "the_file.csv"
     tmp_file.write_binary(content)
-    file_name = "bucketfs_test/test_read_file_from_saas_bucket/the_file.dat"
+    file_name = "bucketfs_test/test_read_file_from_saas_bucket/the_file.csv"
     with open(tmp_file, "rb") as f:
         bucket.upload(path=file_name, data=f)
     received_content = b"".join(bucket.download(file_name, chunk_size=20))
@@ -123,7 +123,7 @@ def test_delete_file_from_saas_bucket(
         pat=saas_pat,
     )
 
-    file_name = "bucketfs_test/test_delete_file_from_saas_bucket/the_file.dat"
+    file_name = "bucketfs_test/test_delete_file_from_saas_bucket/the_file.csv"
     bucket.upload(path=file_name, data=b"abcd12345")
     bucket.delete(file_name)
     assert file_name not in bucket.files

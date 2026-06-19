@@ -82,7 +82,7 @@ def test_upload_to_bucket(
     name: str,
     data: ByteString | Iterable[ByteString] | Iterable[int],
 ):
-    file_name = "Uploaded-File-{random_string}.bin".format(
+    file_name = "Uploaded-File-{random_string}.csv".format(
         random_string="".join(random.choice(string.hexdigits) for _ in range(0, 10))
     )
     bucket = _bucket(name, onprem_bfs)
@@ -105,11 +105,11 @@ def test_upload_to_bucket(
     [
         (
             "default",
-            File(name="hello.txt", content=b"foobar"),
+            File(name="hello.csv", content=b"foobar"),
         ),
         (
             "default",
-            File(name="foo/bar/hello.bin", content=b"foobar"),
+            File(name="foo/bar/hello.csv", content=b"foobar"),
         ),
     ],
     indirect=True,
@@ -132,8 +132,8 @@ def test_download_file_from_bucket(
         (
             "default",
             [
-                File(name="abc.txt", content=b"abcdefg"),
-                File(name="numbers.txt", content=b"12345"),
+                File(name="abc.csv", content=b"abcdefg"),
+                File(name="numbers.csv", content=b"12345"),
             ],
         ),
     ],
@@ -219,7 +219,7 @@ def test_ssl_verification_for_bucket_upload_fails(httpsserver):
 
     with pytest.raises(requests.exceptions.SSLError) as execinfo:
         data = bytes([65, 65, 65, 65])
-        bucket.upload("some/other/path/file2.bin", data)
+        bucket.upload("some/other/path/file2.csv", data)
     assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
 
 
@@ -236,7 +236,7 @@ def test_ssl_verification_for_bucket_upload_can_be_bypassed(httpsserver):
 
     with does_not_raise(requests.exceptions.SSLError):
         data = bytes([65, 65, 65, 65])
-        bucket.upload("some/other/path/file2.bin", data)
+        bucket.upload("some/other/path/file2.csv", data)
 
 
 def test_ssl_verification_for_bucket_delete_fails(httpsserver):
@@ -250,7 +250,7 @@ def test_ssl_verification_for_bucket_delete_fails(httpsserver):
     )
 
     with pytest.raises(requests.exceptions.SSLError) as execinfo:
-        bucket.delete("some/other/path/file2.bin")
+        bucket.delete("some/other/path/file2.csv")
     assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
 
 
@@ -266,7 +266,7 @@ def test_ssl_verification_for_bucket_delete_can_be_bypassed(httpsserver):
     )
 
     with does_not_raise(requests.exceptions.SSLError):
-        bucket.delete("some/other/path/file2.bin")
+        bucket.delete("some/other/path/file2.csv")
 
 
 def test_ssl_verification_for_bucket_download_fails(httpsserver):
@@ -280,7 +280,7 @@ def test_ssl_verification_for_bucket_download_fails(httpsserver):
     )
 
     with pytest.raises(requests.exceptions.SSLError) as execinfo:
-        _ = as_string(bucket.download("some/other/path/file2.bin"))
+        _ = as_string(bucket.download("some/other/path/file2.csv"))
     assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
 
 
@@ -296,7 +296,7 @@ def test_ssl_verification_for_bucket_download_can_be_bypassed(httpsserver):
     )
 
     with does_not_raise(requests.exceptions.SSLError):
-        _ = as_string(bucket.download("some/other/path/file2.bin"))
+        _ = as_string(bucket.download("some/other/path/file2.csv"))
 
 
 def test_any_log_message_get_emitted(httpserver, caplog):

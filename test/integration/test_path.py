@@ -46,7 +46,7 @@ def _collect_all_names(path: bfs.path.PathLike) -> set[str]:
 def test_write_read_back(backend_aware_bucketfs_params, children_poem):
 
     base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
-    file_name = "test_bucket_path/test_write_read_back_saas/little_star.txt"
+    file_name = "test_bucket_path/test_write_read_back_saas/little_star.csv"
     poem_path = base_path / file_name
 
     poem_path.write(children_poem)
@@ -59,7 +59,7 @@ def test_write_chunks_read_back(
 ):
 
     base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
-    file_name = "test_bucket_path/test_write_read_back/two_poems.txt"
+    file_name = "test_bucket_path/test_write_read_back/two_poems.csv"
     poem_path = base_path / file_name
 
     poem_path.write([children_poem, classic_poem])
@@ -70,7 +70,7 @@ def test_write_chunks_read_back(
 def test_write_chunks_error(backend_aware_bucketfs_params):
 
     base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
-    file_name = "test_bucket_path/test_write_read_back/data_error.txt"
+    file_name = "test_bucket_path/test_write_read_back/data_error.csv"
     file_path = base_path / file_name
 
     with pytest.raises(ValueError, match="byte strings"):
@@ -107,12 +107,12 @@ def test_write_list_files(backend_aware_bucketfs_params, children_poem, classic_
         **backend_aware_bucketfs_params,
         path="test_bucket_path/test_write_list_files_saas",
     )
-    poem_path1 = base_path / "children/little_star.txt"
-    poem_path2 = base_path / "classic/highlands.txt"
+    poem_path1 = base_path / "children/little_star.csv"
+    poem_path2 = base_path / "classic/highlands.csv"
 
     poem_path1.write(children_poem)
     poem_path2.write(classic_poem)
-    expected_names = {"children", "classic", "little_star.txt", "highlands.txt"}
+    expected_names = {"children", "classic", "little_star.csv", "highlands.csv"}
     assert _collect_all_names(base_path) == expected_names
 
 
@@ -120,13 +120,13 @@ def test_write_delete(backend_aware_bucketfs_params, children_poem, classic_poem
 
     base_path = bfs.path.build_path(**backend_aware_bucketfs_params)
     poems_root = base_path / "test_bucket_path/test_write_delete_saas"
-    poem_path1 = poems_root / "children/little_star.txt"
-    poem_path2 = poems_root / "classic/highlands.txt"
+    poem_path1 = poems_root / "children/little_star.csv"
+    poem_path2 = poems_root / "classic/highlands.csv"
 
     poem_path1.write(children_poem)
     poem_path2.write(classic_poem)
     poem_path1.rm()
-    expected_names = {"classic", "highlands.txt"}
+    expected_names = {"classic", "highlands.csv"}
     assert _collect_all_names(poems_root) == expected_names
 
 
@@ -252,7 +252,7 @@ def test_infer_path_and_write(
             bucketfs_use_https=backend_aware_bucketfs_params["verify"],
         )
     # Actually try uploading
-    write_path = path / "test_file.txt"
+    write_path = path / "test_file.csv"
     write_path.write(children_poem)
 
     # Read it back for verification
