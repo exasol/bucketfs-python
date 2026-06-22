@@ -43,7 +43,7 @@ def exa_bucket(backend_aware_bucketfs_params, backend):
 def exa_pathlike(backend_aware_bucketfs_params, backend):
     # build the pathlike
     params = backend_aware_bucketfs_params
-    file_name = "Uploaded-File-From-Integration-test.bin"
+    file_name = "Uploaded-File-From-Integration-test.csv"
     if backend == BACKEND_ONPREM:
         return bfs.path.build_path(
             backend=bfs.path.StorageBackend.onprem,
@@ -70,7 +70,7 @@ def exa_pathlike(backend_aware_bucketfs_params, backend):
 
 @pytest.fixture(scope="module")
 def uploaded_file(exa_bucket, request):
-    file_name = "Uploaded-File-From-Integration-test.bin"
+    file_name = "Uploaded-File-From-Integration-test.csv"
     content = "1" * 10
 
     exa_bucket.upload(file_name, content)
