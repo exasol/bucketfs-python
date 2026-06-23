@@ -1,3 +1,5 @@
+# Generated and maintained by the exasol-toolbox.
+# Last generated with exasol-toolbox version 10.0.0.
 name: CD
 
 on:
@@ -22,6 +24,7 @@ jobs:
       contents: write
     secrets:
       PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+
 
   publish-docs:
     needs:
