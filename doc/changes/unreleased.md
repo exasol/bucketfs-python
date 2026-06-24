@@ -17,9 +17,10 @@ To ensure usage of secure packages, it is up to the user to similarly relock the
 
 ## Refactoring
 
-* #288: Updated to latest PTB 7.0.0, regenerated workflows and updated .workflow-patcher.yml
+* #288: Updated to `exasol-toolbox` 7.0.0, regenerated workflows and updated `.workflow-patcher.yml`
 * #304: Split on-prem and SaaS integration tests into separate workflows.
 * #305: Fixed the extensions of uploaded files in integration tests to comply with SaaS rules.
+* #298: Updated `exasol-toolbox` to 10.0.0
 
 ## Security Issues
 

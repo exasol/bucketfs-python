@@ -2,6 +2,13 @@ name: Slow-Checks-SaaS
 
 on:
   workflow_call:
+    secrets:
+      INTEGRATION_TEAM_SAAS_STAGING_HOST:
+        required: true
+      INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID:
+        required: true
+      INTEGRATION_TEAM_SAAS_STAGING_PAT:
+        required: true
 
 jobs:
   run-integration-tests:
@@ -9,7 +16,6 @@ jobs:
     runs-on: "ubuntu-24.04"
     permissions:
       contents: read
-
     steps:
       - name: Allow unprivileged user namespaces
         id: allow-unprivileged-user-namespaces
@@ -18,10 +24,12 @@ jobs:
       - name: Check out Repository
         id: check-out-repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Python & Poetry Environment
         id: set-up-python-and-poetry-environment
-        uses: exasol/python-toolbox/.github/actions/python-environment@v8
+        uses: exasol/python-toolbox/.github/actions/python-environment@v10
         with:
           python-version: "3.12"
           poetry-version: "2.3.0"
