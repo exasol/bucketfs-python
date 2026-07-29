@@ -1,19 +1,25 @@
 name: Slow-Checks-SaaS
 
 on:
-  workflow_call:
-    secrets:
-      INTEGRATION_TEAM_SAAS_STAGING_HOST:
-        required: true
-      INTEGRATION_TEAM_SAAS_STAGING_ACCOUNT_ID:
-        required: true
-      INTEGRATION_TEAM_SAAS_STAGING_PAT:
-        required: true
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
+  approve-run-slow-tests-saas:
+    name: Approve Running Slow Tests for SaaS?
+    runs-on: "ubuntu-24.04"
+    permissions:
+      contents: read
+    environment: manual-approval
+    steps:
+      - name: Tests
+        run: echo "Slow tests for SaaS approved"
+
   run-integration-tests:
     name: Run Integration Tests with SaaS (Python-3.12)
     runs-on: "ubuntu-24.04"
+    needs:
+      - approve-run-slow-tests-saas
     permissions:
       contents: read
     steps:
