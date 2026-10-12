@@ -14,7 +14,7 @@ from enum import (
 )
 from pathlib import (
     PurePath,
-    PureWindowsPath,
+    PurePosixPath,
 )
 from typing import (
     BinaryIO,
@@ -285,7 +285,9 @@ class BucketPath:
 
         :param bucket_api:  An object supporting the Bucket API protocol.
         """
-        self._path = PurePath(path)
+        self._path = PurePosixPath(
+            path.as_posix() if isinstance(path, PurePath) else path
+        )
         self._bucket_api = bucket_api
 
     @property
@@ -302,8 +304,6 @@ class BucketPath:
         file: 'dir/subdir/.../filename'.
         """
         path_str = str(self._path)[len(self._path.anchor) :]
-        if isinstance(self._path, PureWindowsPath):
-            path_str = path_str.replace("\\", "/")
         if path_str == ".":
             path_str = ""
         return path_str
@@ -369,7 +369,8 @@ class BucketPath:
 
     def as_udf_path(self) -> str:
         return str(
-            PurePath(self._bucket_api.udf_path) / _remove_archive_suffix(self._path)
+            PurePosixPath(self._bucket_api.udf_path)
+            / _remove_archive_suffix(self._path)
         )
 
     def exists(self) -> bool:

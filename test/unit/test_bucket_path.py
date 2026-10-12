@@ -1,7 +1,7 @@
 from itertools import chain
 from pathlib import (
     Path,
-    PurePath,
+    PurePosixPath,
 )
 
 import pytest
@@ -280,4 +280,4 @@ def test_foreign_bucket(tmp_path, bucket_fake):
 def test_relative_to(path, expected_relative, bucket_fake):
     root = bfs.path.BucketPath("root", bucket_api=bucket_fake)
     testee = root / path
-    assert testee.relative_to(root) == PurePath(expected_relative)
+    assert testee.relative_to(root) == PurePosixPath(expected_relative)
