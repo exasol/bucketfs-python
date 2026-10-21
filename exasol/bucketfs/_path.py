@@ -15,6 +15,7 @@ from enum import (
 from pathlib import (
     PurePath,
     PurePosixPath,
+    PureWindowsPath,
 )
 from typing import (
     BinaryIO,
@@ -215,6 +216,20 @@ class PathLike(Protocol):
         """
 
 
+def _to_posix_path(path: str | PurePath) -> PurePosixPath:
+    """
+    Convert a path to the POSIX form used inside a bucket. A Windows drive or UNC share
+    has no meaning in a bucket and is dropped; the separators become '/' and a leading
+    root is kept, like it is for a POSIX path.
+    """
+    if not isinstance(path, PurePath):
+        path = PurePath(path)
+    if isinstance(path, PureWindowsPath):
+        parts = path.parts[1:] if path.anchor else path.parts
+        return PurePosixPath("/" if path.root else "", *parts)
+    return PurePosixPath(path)
+
+
 def _remove_archive_suffix(path: PurePath) -> PurePath:
     while path.suffix in ARCHIVE_SUFFIXES:
         path = path.with_suffix("")
@@ -277,17 +292,17 @@ class BucketPath:
         """
         :param path:        A pure path of a file or directory. The path is assumed to
                             be relative to the bucket. It is also permissible to have
-                            this path in an absolute form, e.g. '/dir1/...'
-                            or '\\\\abc\\...\\'.
+                            this path in an absolute form, e.g. '/dir1/...'.
+                            A Windows path object, or a string on Windows, is converted
+                            to a POSIX path: a drive or UNC share is dropped and the
+                            separators become '/'.
 
                             All Pure Path methods of the PathLike protocol will be
                             delegated to this object.
 
         :param bucket_api:  An object supporting the Bucket API protocol.
         """
-        self._path = PurePosixPath(
-            path.as_posix() if isinstance(path, PurePath) else path
-        )
+        self._path = _to_posix_path(path)
         self._bucket_api = bucket_api
 
     @property
@@ -434,7 +449,8 @@ class BucketPath:
         # The path segments can be of either this type or an os.PathLike.
         cls = type(self)
         seg_paths = [
-            seg._path if isinstance(seg, cls) else seg for seg in path_segments
+            seg._path if isinstance(seg, cls) else _to_posix_path(seg)
+            for seg in path_segments
         ]
         new_path = self._path.joinpath(*seg_paths)
         return cls(new_path, self._bucket_api)
@@ -492,7 +508,9 @@ class BucketPath:
     def __truediv__(self, other):
         # The other object can be of either this type or an os.PathLike.
         cls = type(self)
-        new_path = self._path / (other._path if isinstance(other, cls) else other)
+        new_path = self._path / (
+            other._path if isinstance(other, cls) else _to_posix_path(other)
+        )
         return cls(new_path, self._bucket_api)
 
     def __eq__(self, other) -> bool:
