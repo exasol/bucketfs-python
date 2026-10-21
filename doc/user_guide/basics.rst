@@ -89,6 +89,15 @@ PathLike interface
 ------------------
 A PathLike is an interface similar to the pathlib.Path and should feel familiar to most users.
 
+.. note::
+
+   BucketFS paths are always POSIX paths, regardless of the client OS.
+   A path given as a string must use ``/`` as separator. A backslash is treated
+   as a regular character of a file name, e.g. ``my_model\v1.pkl`` is a single
+   file. On Windows, either pass a ``PurePath`` or ``PureWindowsPath`` object,
+   which is converted to a POSIX path, or convert a string first, e.g.
+   ``PureWindowsPath(s).as_posix()``.
+
 Using the PathLike interface
 ++++++++++++++++++++++++++++
 

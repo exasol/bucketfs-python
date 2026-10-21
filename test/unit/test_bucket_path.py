@@ -2,6 +2,8 @@ from itertools import chain
 from pathlib import (
     Path,
     PurePath,
+    PurePosixPath,
+    PureWindowsPath,
 )
 
 import pytest
@@ -281,3 +283,142 @@ def test_relative_to(path, expected_relative, bucket_fake):
     root = bfs.path.BucketPath("root", bucket_api=bucket_fake)
     testee = root / path
     assert testee.relative_to(root) == PurePath(expected_relative)
+
+
+def test_relative_to_is_native(monkeypatch):
+    """
+    relative_to returns a path in the native format of the client OS, as before.
+    Windows is emulated by patching PurePath.
+    """
+    monkeypatch.setattr(bfs._path, "PurePath", PureWindowsPath)
+    api = _RecordingBucket(files=[])
+    root = bfs.path.BucketPath("root", bucket_api=api)
+    assert (root / "a/b").relative_to(root) == PureWindowsPath("a\\b")
+
+
+class _RecordingBucket:
+    """A bucket API fake recording the paths passed to it."""
+
+    udf_path = "/buckets/bfsdefault/default"
+
+    def __init__(self, files):
+        self.files = files
+        self.calls = []
+
+    def upload(self, path, data):
+        self.calls.append(("upload", path))
+
+    def download(self, path, chunk_size=8192):
+        self.calls.append(("download", path))
+        return []
+
+    def delete(self, path):
+        self.calls.append(("delete", path))
+
+
+@pytest.mark.parametrize(
+    "segment",
+    [
+        "dir/sub/a.txt",
+        PurePosixPath("dir/sub/a.txt"),
+        PureWindowsPath("dir\\sub\\a.txt"),
+    ],
+)
+def test_paths_are_posix(segment, monkeypatch):
+    """
+    Paths sent to BucketFS must use POSIX separators, even if the path is
+    passed as a PureWindowsPath, see issue #322. Windows is emulated by
+    patching PurePath, which BucketPath uses only where the native path format
+    of the client OS is expected.
+    """
+    monkeypatch.setattr(bfs._path, "PurePath", PureWindowsPath)
+    api = _RecordingBucket(files=["dir/sub/a.txt"])
+    root = bfs.path.BucketPath("", bucket_api=api)
+    for path in [root.joinpath(segment), root / segment]:
+        api.calls.clear()
+        path.write(b"x")
+        list(path.read())
+        path.rm()
+        assert api.calls == [
+            ("upload", "dir/sub/a.txt"),
+            ("download", "dir/sub/a.txt"),
+            ("delete", "dir/sub/a.txt"),
+        ]
+        assert str(path) == "dir/sub/a.txt"
+        assert path.as_udf_path() == "/buckets/bfsdefault/default/dir/sub/a.txt"
+    children = [str(p) for p in root.joinpath(PureWindowsPath("dir")).iterdir()]
+    assert children == ["dir/sub"]
+
+
+def test_backslash_is_part_of_file_name():
+    """
+    A string path is a POSIX path, a backslash is a regular character.
+    """
+    api = _RecordingBucket(files=[])
+    path = bfs.path.BucketPath("dir", bucket_api=api) / "my_model\\v1.pkl"
+    path.write(b"x")
+    assert path.name == "my_model\\v1.pkl"
+    assert api.calls == [("upload", "dir/my_model\\v1.pkl")]
+
+
+def test_as_udf_path_with_windows_udf_root(monkeypatch):
+    """
+    On Windows, the udf_path of a MountedBucket is a native path. The UDF path
+    stays in the native format, as before. Windows is emulated by patching PurePath.
+    """
+    monkeypatch.setattr(bfs._path, "PurePath", PureWindowsPath)
+    api = _RecordingBucket(files=[])
+    api.udf_path = "C:\\tmp\\bucket"
+    path = bfs.path.BucketPath("dir/a.txt", bucket_api=api)
+    assert path.as_udf_path() == "C:\\tmp\\bucket\\dir\\a.txt"
+
+
+def test_mounted_bucket_files_are_posix(bucket_fake):
+    assert "dir1/dir11/file110.dat" in bucket_fake.files
+
+
+def test_absolute_windows_path_is_posix():
+    """
+    An absolute PureWindowsPath is converted the same way in all Python versions.
+    """
+    api = _RecordingBucket(files=[])
+    win_path = PureWindowsPath("\\dir\\a.txt")
+    root = bfs.path.BucketPath("root", bucket_api=api)
+    assert str(bfs.path.BucketPath(win_path, bucket_api=api)) == "/dir/a.txt"
+    assert str(root / win_path) == "/dir/a.txt"
+    assert str(root.joinpath(win_path)) == "/dir/a.txt"
+
+
+@pytest.mark.parametrize(
+    "win_path, expected, expected_joined",
+    [
+        ("C:\\models\\m.pkl", "C:/models/m.pkl", "root/C:/models/m.pkl"),
+        ("C:models\\m.pkl", "C:models/m.pkl", "root/C:models/m.pkl"),
+        (
+            "\\\\server\\share\\models\\m.pkl",
+            "//server/share/models/m.pkl",
+            "//server/share/models/m.pkl",
+        ),
+    ],
+)
+def test_windows_path_with_drive(win_path, expected, expected_joined):
+    """
+    The drive is kept, the result is the same as in Python >= 3.12 without
+    the conversion, see _to_posix().
+    """
+    api = _RecordingBucket(files=[])
+    root = bfs.path.BucketPath("root", bucket_api=api)
+    win_path = PureWindowsPath(win_path)
+    assert str(bfs.path.BucketPath(win_path, bucket_api=api)) == expected
+    assert str(root.joinpath(win_path)) == expected_joined
+    assert str(root / win_path) == expected_joined
+
+
+def test_string_with_drive_is_kept():
+    """
+    A string is taken as a POSIX path as it is, even if it looks like a Windows path.
+    """
+    api = _RecordingBucket(files=[])
+    path = bfs.path.BucketPath("C:\\models\\m.pkl", bucket_api=api)
+    path.write(b"x")
+    assert api.calls == [("upload", "C:\\models\\m.pkl")]
