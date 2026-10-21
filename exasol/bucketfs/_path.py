@@ -14,6 +14,7 @@ from enum import (
 )
 from pathlib import (
     PurePath,
+    PurePosixPath,
     PureWindowsPath,
 )
 from typing import (
@@ -85,7 +86,7 @@ class PathLike(Protocol):
         Example:
         a = build_path(..., path="parent")
         b = build_path(..., path="parent/child")
-        assert b.relative(a) == PurePath("child")
+        assert b.relative_to(a) == PurePath("child")
         """
 
     def as_uri(self) -> str:
@@ -215,6 +216,18 @@ class PathLike(Protocol):
         """
 
 
+def _to_posix(path):
+    """
+    Converts a PureWindowsPath to a POSIX path string, e.g.
+    'C:\\dir\\a.txt' -> 'C:/dir/a.txt'. Leaves other paths as they are,
+    including strings. Constructing a PurePosixPath directly from an absolute
+    PureWindowsPath gives this result only in Python >= 3.12.
+    """
+    if isinstance(path, PureWindowsPath):
+        return path.as_posix()
+    return path
+
+
 def _remove_archive_suffix(path: PurePath) -> PurePath:
     while path.suffix in ARCHIVE_SUFFIXES:
         path = path.with_suffix("")
@@ -277,15 +290,21 @@ class BucketPath:
         """
         :param path:        A pure path of a file or directory. The path is assumed to
                             be relative to the bucket. It is also permissible to have
-                            this path in an absolute form, e.g. '/dir1/...'
-                            or '\\\\abc\\...\\'.
+                            this path in an absolute form, e.g. '/dir1/...'.
+
+                            BucketFS paths are always POSIX paths, regardless
+                            of the client OS. A string is interpreted as a POSIX
+                            path, i.e. only '/' separates the path segments and
+                            a backslash is a regular character of a file name,
+                            e.g. 'my_model\\v1.pkl'. A PureWindowsPath is
+                            converted to a POSIX path.
 
                             All Pure Path methods of the PathLike protocol will be
                             delegated to this object.
 
         :param bucket_api:  An object supporting the Bucket API protocol.
         """
-        self._path = PurePath(path)
+        self._path = PurePosixPath(_to_posix(path))
         self._bucket_api = bucket_api
 
     @property
@@ -302,8 +321,6 @@ class BucketPath:
         file: 'dir/subdir/.../filename'.
         """
         path_str = str(self._path)[len(self._path.anchor) :]
-        if isinstance(self._path, PureWindowsPath):
-            path_str = path_str.replace("\\", "/")
         if path_str == ".":
             path_str = ""
         return path_str
@@ -360,7 +377,8 @@ class BucketPath:
                 f" from a foreign bucket {other_bucket_path._bucket_api}."
             )
         try:
-            return self._path.relative_to(other_bucket_path._path)
+            # Returns a path in the native format of the client OS, as before.
+            return PurePath(self._path.relative_to(other_bucket_path._path))
         except ValueError as ex:
             raise BucketFsError(repr(ex)) from ex
 
@@ -368,9 +386,13 @@ class BucketPath:
         return self._path.as_uri()
 
     def as_udf_path(self) -> str:
-        return str(
-            PurePath(self._bucket_api.udf_path) / _remove_archive_suffix(self._path)
-        )
+        udf_root = self._bucket_api.udf_path
+        relative_path = _remove_archive_suffix(self._path)
+        if udf_root.startswith("/"):
+            return str(PurePosixPath(udf_root) / relative_path)
+        # The udf_path of a MountedBucket on Windows is a local path in the native
+        # format, e.g. 'C:\\tmp\\bucket'.
+        return str(PurePath(udf_root) / relative_path)
 
     def exists(self) -> bool:
         return self._navigate() is not None
@@ -433,7 +455,8 @@ class BucketPath:
         # The path segments can be of either this type or an os.PathLike.
         cls = type(self)
         seg_paths = [
-            seg._path if isinstance(seg, cls) else seg for seg in path_segments
+            seg._path if isinstance(seg, cls) else _to_posix(seg)
+            for seg in path_segments
         ]
         new_path = self._path.joinpath(*seg_paths)
         return cls(new_path, self._bucket_api)
@@ -490,9 +513,7 @@ class BucketPath:
 
     def __truediv__(self, other):
         # The other object can be of either this type or an os.PathLike.
-        cls = type(self)
-        new_path = self._path / (other._path if isinstance(other, cls) else other)
-        return cls(new_path, self._bucket_api)
+        return self.joinpath(other)
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, BucketPath):
@@ -584,6 +605,12 @@ def build_path(**kwargs) -> PathLike:
             directory is as in the code below.
 
             path = build_path(...) / "the_desired_path"
+
+            BucketFS paths are always POSIX paths, regardless of the client OS.
+            A string path must use '/' as separator; a backslash is treated as a
+            regular character of a file name. On Windows, either pass a
+            PurePath / PureWindowsPath object, which gets converted, or convert
+            a string to POSIX format first, e.g. PureWindowsPath(s).as_posix().
 
     The rest of the arguments are backend specific.
 

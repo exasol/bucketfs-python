@@ -438,7 +438,7 @@ class MountedBucket:
 
     @property
     def files(self) -> list[str]:
-        return [str(pth.relative_to(self.root)) for pth in self.root.rglob("*.*")]
+        return [pth.relative_to(self.root).as_posix() for pth in self.root.rglob("*.*")]
 
     def delete(self, path: str) -> None:
         try:
