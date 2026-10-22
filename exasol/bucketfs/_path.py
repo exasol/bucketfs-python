@@ -234,6 +234,18 @@ def _remove_archive_suffix(path: PurePath) -> PurePath:
     return path
 
 
+def _to_bucket_key(path: PurePosixPath) -> str:
+    """
+    Returns the path as a string in the format of a bucket file:
+    'dir/subdir/.../filename'. The path is relative to the bucket root, even if
+    the given path is absolute. The bucket root itself is an empty string.
+    """
+    path_str = str(path)[len(path.anchor) :]
+    if path_str == ".":
+        path_str = ""
+    return path_str
+
+
 class _BucketFile:
     """
     A node in a perceived file structure of a bucket.
@@ -320,10 +332,7 @@ class BucketPath:
         Returns the pure path of this object as a string, in the format of a bucket
         file: 'dir/subdir/.../filename'.
         """
-        path_str = str(self._path)[len(self._path.anchor) :]
-        if path_str == ".":
-            path_str = ""
-        return path_str
+        return _to_bucket_key(self._path)
 
     def _navigate(self) -> _BucketFile | None:
         """
@@ -340,7 +349,9 @@ class BucketPath:
                 or file_name == path_str
                 or (not path_str)
             ):
-                path_root = path_root or _BucketFile(self._path.name, str(self.parent))
+                path_root = path_root or _BucketFile(
+                    self._path.name, _to_bucket_key(self._path.parent)
+                )
                 node = path_root
                 for part in file_name[path_len:].split("/"):
                     if part:
@@ -387,7 +398,9 @@ class BucketPath:
 
     def as_udf_path(self) -> str:
         udf_root = self._bucket_api.udf_path
-        relative_path = _remove_archive_suffix(self._path)
+        relative_path = _remove_archive_suffix(
+            PurePosixPath(self._get_relative_posix())
+        )
         if udf_root.startswith("/"):
             return str(PurePosixPath(udf_root) / relative_path)
         # The udf_path of a MountedBucket on Windows is a local path in the native
@@ -406,14 +419,14 @@ class BucketPath:
         return (current_node is not None) and current_node.is_file
 
     def read(self, chunk_size: int = 8192) -> Iterable[ByteString]:
-        return self._bucket_api.download(str(self._path), chunk_size)
+        return self._bucket_api.download(self._get_relative_posix(), chunk_size)
 
     def write(self, data: ByteString | BinaryIO | Sequence[ByteString]) -> None:
         if (not isinstance(data, ByteString)) and isinstance(data, Sequence):
             if not all(isinstance(chunk, ByteString) for chunk in data):
                 raise ValueError("The file chunks must be byte strings")
             data = b"".join(data)
-        self._bucket_api.upload(str(self._path), data)
+        self._bucket_api.upload(self._get_relative_posix(), data)
 
     def rm(self) -> None:
         current_node = self._navigate()
@@ -425,7 +438,7 @@ class BucketPath:
             raise IsADirectoryError(
                 errno.EISDIR, os.strerror(errno.EISDIR), str(self._path)
             )
-        self._bucket_api.delete(str(self._path))
+        self._bucket_api.delete(self._get_relative_posix())
 
     def rmdir(self, recursive: bool = False) -> None:
         current_node = self._navigate()
@@ -471,13 +484,14 @@ class BucketPath:
             )
 
         if current_node.is_dir:
-            yield from self._walk_recursive(current_node, top_down)
+            yield from self._walk_recursive(current_node, top_down, self._path)
 
     def _walk_recursive(
-        self, node: _BucketFile, top_down: bool
+        self, node: _BucketFile, top_down: bool, path: PurePosixPath
     ) -> Generator[tuple[PathLike, list[str], list[str]]]:
-
-        bucket_path = BucketPath(node.path, self._bucket_api)
+        # The node path is relative to the bucket root. The yielded path keeps
+        # the form of this path, i.e. it is absolute if this path is absolute.
+        bucket_path = BucketPath(path, self._bucket_api)
         dir_list: list[str] = []
         file_list: list[str] = []
         for child in node:
@@ -493,7 +507,7 @@ class BucketPath:
             yield bucket_path, dir_list, file_list
         for child in node:
             if child.is_dir:
-                yield from self._walk_recursive(child, top_down)
+                yield from self._walk_recursive(child, top_down, path / child.name)
         if not top_down:
             yield bucket_path, dir_list, file_list
 
