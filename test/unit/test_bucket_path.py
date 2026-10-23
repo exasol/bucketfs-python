@@ -422,3 +422,89 @@ def test_string_with_drive_is_kept():
     path = bfs.path.BucketPath("C:\\models\\m.pkl", bucket_api=api)
     path.write(b"x")
     assert api.calls == [("upload", "C:\\models\\m.pkl")]
+
+
+def test_absolute_path_is_kept():
+    api = _RecordingBucket(files=[])
+    path = bfs.path.BucketPath("/dir/a.txt", bucket_api=api)
+    assert str(path) == "/dir/a.txt"
+    assert path.root == "/"
+    assert path.as_uri() == "file:///dir/a.txt"
+
+
+def test_absolute_path_is_relative_to_bucket():
+    """
+    The leading '/' of an absolute path is not passed to the bucket API.
+    """
+    api = _RecordingBucket(files=["dir/a.txt"])
+    path = bfs.path.BucketPath("/dir/a.txt", bucket_api=api)
+    path.write(b"x")
+    list(path.read())
+    path.rm()
+    assert api.calls == [
+        ("upload", "dir/a.txt"),
+        ("download", "dir/a.txt"),
+        ("delete", "dir/a.txt"),
+    ]
+
+
+@pytest.mark.parametrize(
+    "path, expected",
+    [
+        ("/dir/a.txt", "/buckets/bfsdefault/default/dir/a.txt"),
+        (
+            "/container/my_container.tar.gz",
+            "/buckets/bfsdefault/default/container/my_container",
+        ),
+        ("/", "/buckets/bfsdefault/default"),
+        ("", "/buckets/bfsdefault/default"),
+    ],
+)
+def test_absolute_as_udf_path(path, expected):
+    api = _RecordingBucket(files=[])
+    assert bfs.path.BucketPath(path, bucket_api=api).as_udf_path() == expected
+
+
+def test_absolute_path_mounted_bucket(bucket_fake):
+    path = bfs.path.BucketPath("/dir2/file_abs.dat", bucket_api=bucket_fake)
+    path.write(b"abcd")
+    assert (bucket_fake.root / "dir2/file_abs.dat").read_bytes() == b"abcd"
+    assert path.exists()
+    assert next(iter(path.read(100))) == b"abcd"
+    path.rm()
+    assert not (bucket_fake.root / "dir2/file_abs.dat").exists()
+
+
+@pytest.mark.parametrize("path", ["dir", "/dir"])
+def test_rmdir_recursive_paths(path):
+    """
+    The paths passed to the bucket API have neither a leading '/' nor './'.
+    """
+    api = _RecordingBucket(files=["dir/a.txt", "dir/sub/b.txt", "c.txt"])
+    bfs.path.BucketPath(path, bucket_api=api).rmdir(recursive=True)
+    assert sorted(api.calls) == [
+        ("delete", "dir/a.txt"),
+        ("delete", "dir/sub/b.txt"),
+    ]
+
+
+@pytest.mark.parametrize("path", ["", "/"])
+def test_rmdir_recursive_bucket_root_paths(path):
+    api = _RecordingBucket(files=["dir/a.txt", "c.txt"])
+    bfs.path.BucketPath(path, bucket_api=api).rmdir(recursive=True)
+    assert sorted(api.calls) == [("delete", "c.txt"), ("delete", "dir/a.txt")]
+
+
+@pytest.mark.parametrize(
+    "path, expected",
+    [
+        ("dir", ["dir", "dir/sub"]),
+        ("/dir", ["/dir", "/dir/sub"]),
+        ("", [".", "dir", "dir/sub"]),
+        ("/", ["/", "/dir", "/dir/sub"]),
+    ],
+)
+def test_walk_keeps_path_form(path, expected):
+    api = _RecordingBucket(files=["dir/a.txt", "dir/sub/b.txt", "c.txt"])
+    walked = [str(p) for p, _, _ in bfs.path.BucketPath(path, bucket_api=api).walk()]
+    assert walked == expected
