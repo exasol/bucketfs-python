@@ -19,7 +19,7 @@ buckets = [*bucketfs]
 default_bucket = bucketfs["default"]
 
 # 2. List files in bucket
-files = [*default_bucket]
+files = list(default_bucket)
 
 # 3. Upload a file to the bucket
 default_bucket.upload("MyFile.txt", b"File content")

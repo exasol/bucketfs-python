@@ -9,7 +9,7 @@ CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 bucketfs = Service(URL, CREDENTIALS)
 
 default_bucket = bucketfs["default"]
-files = [*default_bucket]
+files = list(default_bucket)
 
 # Expert/Mapped bucket API
 from exasol.bucketfs import (
@@ -22,4 +22,4 @@ CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 bucketfs = Service(URL, CREDENTIALS)
 
 default_bucket = MappedBucket(bucketfs["default"])
-files = [*default_bucket]
+files = list(default_bucket)
