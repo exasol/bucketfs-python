@@ -208,7 +208,7 @@ class Bucket:
             raise BucketFsError(
                 f"Couldn't retrieve file list form bucket: {self.name}"
             ) from ex
-        return {line for line in _lines(response)}
+        return {*_lines(response)}
 
     def __iter__(self) -> Iterator[str]:
         yield from self.files

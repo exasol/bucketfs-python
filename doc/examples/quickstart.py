@@ -13,13 +13,13 @@ CREDENTIALS = {"default": {"username": "w", "password": "write"}}
 bucketfs = Service(URL, CREDENTIALS)
 
 # 0. List buckets
-buckets = [bucket for bucket in bucketfs]
+buckets = [*bucketfs]
 
 # 1. Get a bucket
 default_bucket = bucketfs["default"]
 
 # 2. List files in bucket
-files = [file for file in default_bucket]
+files = [*default_bucket]
 
 # 3. Upload a file to the bucket
 default_bucket.upload("MyFile.txt", b"File content")
