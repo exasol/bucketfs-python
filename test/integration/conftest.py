@@ -73,7 +73,7 @@ def temporary_bucket_files(request) -> tuple[str, Iterable[File]]:
             file.content,
         )
 
-    yield bucket, {file for file in files}
+    yield bucket, {*files}
 
     for file in files:
         delete_file(

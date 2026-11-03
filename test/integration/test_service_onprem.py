@@ -7,10 +7,6 @@ from collections.abc import (
     Iterable,
 )
 from inspect import cleandoc
-from test.integration.conftest import (
-    File,
-    delete_file,
-)
 
 import pytest
 import requests
@@ -20,6 +16,10 @@ from exasol.bucketfs import (
     Service,
     as_bytes,
     as_string,
+)
+from test.integration.conftest import (
+    File,
+    delete_file,
 )
 
 
@@ -43,7 +43,7 @@ def does_not_raise(exception_type: Exception = Exception):
 )
 def test_list_buckets(onprem_bfs, expected):
     service = Service(onprem_bfs["url"])
-    actual = {bucket for bucket in service}
+    actual = {*service}
     assert expected.issubset(actual)
 
 
@@ -146,7 +146,7 @@ def test_list_files_in_bucket(
     name, files = temporary_bucket_files
     bucket = _bucket(name, onprem_bfs)
     expected = {file.name for file in files}
-    actual = {file for file in bucket}
+    actual = {*bucket}
     assert expected.issubset(actual)
 
 
@@ -157,7 +157,7 @@ def test_ssl_verification_for_bucketfs_service_fails(httpsserver):
     service = Service(httpsserver.url, CREDENTIALS)
 
     with pytest.raises(requests.exceptions.SSLError) as execinfo:
-        _ = [bucket for bucket in service]
+        _ = [*service]
     assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
 
 
@@ -173,7 +173,7 @@ def test_ssl_verification_for_bucketfs_service_can_be_bypassed(httpsserver):
     bucketfs = Service(httpsserver.url, CREDENTAILS, verify=False)
 
     expected = ["default", "demo_foo", "demo_bar"]
-    actual = [bucket for bucket in bucketfs]
+    actual = [*bucketfs]
     assert expected == actual
 
 
@@ -188,7 +188,7 @@ def test_ssl_verification_for_bucket_files_fails(httpsserver):
     )
 
     with pytest.raises(requests.exceptions.SSLError) as execinfo:
-        _ = {file for file in bucket}
+        _ = {*bucket}
     assert "CERTIFICATE_VERIFY_FAILED" in str(execinfo)
 
 
@@ -204,7 +204,7 @@ def test_ssl_verification_for_bucket_files_can_be_bypassed(httpsserver):
     )
 
     with does_not_raise(requests.exceptions.SSLError):
-        _ = {file for file in bucket}
+        _ = {*bucket}
 
 
 def test_ssl_verification_for_bucket_upload_fails(httpsserver):

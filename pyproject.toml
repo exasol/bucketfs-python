@@ -1,7 +1,7 @@
 [project]
 name = "exasol-bucketfs"
 version = "2.3.1"
-requires-python = ">=3.10,<3.15"
+requires-python = ">=3.11,<3.15"
 description = "BucketFS utilities for the Python programming language"
 authors = [
     {name="Torsten Kilias", email="torsten.kilias@exasol.com"},
@@ -39,7 +39,7 @@ dev = [
     "exasol-udf-mock-python>=0.2.0",
     "toml>=0.10.2",
     "sphinx-copybutton>=0.5.0",
-    "exasol-toolbox>=10.4.0, <11",
+    "exasol-toolbox>=12.0.0, <13",
     "pytest-localserver>=0.10.0",
     "pytest-exasol-backend>=1.0.0, <2",
 ]

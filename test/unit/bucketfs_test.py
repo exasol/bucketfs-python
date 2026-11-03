@@ -37,7 +37,7 @@ def test_list_buckets(url, expected):
         instance.text = "\n".join(expected)
 
         service = Service(url)
-        actual = {bucket for bucket in service}
+        actual = {*service}
         assert actual == expected
 
 
@@ -92,7 +92,7 @@ def test_list_files_in_bucket(test_data, expected):
             username=test_data.username,
             password=test_data.password,
         )
-        actual = {file for file in bucket}
+        actual = {*bucket}
         assert actual == expected
 
 
@@ -101,7 +101,7 @@ def test_mapped_bucket_supports_iteration():
     bucket_mock = Mock(Bucket)
     type(bucket_mock).files = PropertyMock(return_value=expected)
     bucket = MappedBucket(bucket_mock)
-    actual = [f for f in bucket]
+    actual = [*bucket]
     assert set(actual) == set(expected)
 
 
@@ -140,7 +140,7 @@ def test_mapped_bucket_supports_item_deletion_based_delete():
         ((b"12" for _ in range(0, 4)), b"12121212"),
         ([b"12" for _ in range(0, 4)], b"12121212"),
         ((b for b in b"123457689"), b"123457689"),
-        ([b for b in b"123457689"], b"123457689"),
+        ([*b"123457689"], b"123457689"),
     ],
 )
 def test_as_bytes_converter(chunks, expected):
@@ -153,7 +153,7 @@ def test_as_bytes_converter(chunks, expected):
         ((b"12" for _ in range(0, 4)), "12121212"),
         ([b"12" for _ in range(0, 4)], "12121212"),
         ((b for b in b"123457689"), "123457689"),
-        ([b for b in b"123457689"], "123457689"),
+        ([*b"123457689"], "123457689"),
     ],
 )
 def test_as_string_converter(chunks, expected):
@@ -178,11 +178,11 @@ def test_as_string_converter(chunks, expected):
         ((b for b in b"123456789"), "sha1", "f7c3bc1d808e04732adf679965ccc34ca7ae3441"),
         ((b for b in b"123456789"), "md5", "25f9e794323b453885f5181f1b624d0b"),
         (
-            sorted([b for b in b"123457689"]),
+            sorted([*b"123457689"]),
             "sha1",
             "f7c3bc1d808e04732adf679965ccc34ca7ae3441",
         ),
-        (sorted([b for b in b"123457689"]), "md5", "25f9e794323b453885f5181f1b624d0b"),
+        (sorted([*b"123457689"]), "md5", "25f9e794323b453885f5181f1b624d0b"),
     ],
 )
 def test_as_hash_converter(chunks, algorithm, expected):
@@ -195,7 +195,7 @@ def test_as_hash_converter(chunks, algorithm, expected):
         ((b"12" for _ in range(0, 4)), "file.txt", b"12121212"),
         ([b"12" for _ in range(0, 4)], "file.txt", b"12121212"),
         ((b for b in b"123456789"), Path("file.txt"), b"123456789"),
-        ([b for b in b"123456789"], Path("file.txt"), b"123456789"),
+        ([*b"123456789"], Path("file.txt"), b"123456789"),
     ],
 )
 def test_as_file_converter(temporary_directory, chunks, filename, expected_content):
