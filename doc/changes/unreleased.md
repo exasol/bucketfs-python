@@ -2,7 +2,11 @@
 
 ## Summary
 
-This release drops support for Python 3.10.
+This release drops support for Python 3.10 and fixes a bug in the Path interface.
+
+## Bugfixes
+
+* #251: Fixed `BucketPath.iterdir()` and `BucketPath.walk()` raising `FileNotFoundError` on the root of an empty bucket
 
 ## Refactorings
 

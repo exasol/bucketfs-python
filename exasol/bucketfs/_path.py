@@ -270,7 +270,22 @@ class _BucketFile:
     def is_dir(self):
         # The node can be a directory as well as a file,
         # hence is the is_dir property, independent of is_file.
+        # A node with an empty, but initialised, list of children is an empty
+        # directory. Directories are derived from file paths, so this is only
+        # expected for the root of an empty bucket (see ensure_dir).
+        return self._children is not None
+
+    @property
+    def has_children(self) -> bool:
         return bool(self._children)
+
+    def ensure_dir(self) -> None:
+        """
+        Makes sure this node is a directory, even if it has no children.
+        Does nothing if it already is one.
+        """
+        if self._children is None:
+            self._children = {}
 
     def __iter__(self):
         if self._children is None:
@@ -282,11 +297,9 @@ class _BucketFile:
         Returns a child object with the specified name.
         Creates one if it hasn't been created yet.
         """
-        if self._children is None:
-            self._children = {}
-            child: _BucketFile | None = None
-        else:
-            child = self._children.get(child_name)
+        self.ensure_dir()
+        # ensure_dir() has initialised self._children, but mypy can't see that.
+        child = self._children.get(child_name)  # type: ignore[union-attr]
         if child is None:
             child = _BucketFile(child_name, self._path)
             self._children[child_name] = child
@@ -339,19 +352,26 @@ class BucketPath:
         Reads the bucket file structure and navigates to the node corresponding to the
         pure path of this object. Returns None if such node doesn't exist, otherwise
         returns this node.
+
+        The root of the bucket always exists and is a directory, even if the bucket
+        is empty.
         """
         path_str = self._get_relative_posix()
         path_len = len(path_str)
         path_root: _BucketFile | None = None
+        if not path_str:
+            path_root = _BucketFile(self._path.name, _to_bucket_key(self._path.parent))
+            path_root.ensure_dir()
         for file_name in self._bucket_api.files:
             if (
                 file_name.startswith(f"{path_str}/")
                 or file_name == path_str
                 or (not path_str)
             ):
-                path_root = path_root or _BucketFile(
-                    self._path.name, _to_bucket_key(self._path.parent)
-                )
+                if path_root is None:
+                    path_root = _BucketFile(
+                        self._path.name, _to_bucket_key(self._path.parent)
+                    )
                 node = path_root
                 for part in file_name[path_len:].split("/"):
                     if part:
@@ -453,7 +473,7 @@ class BucketPath:
             )
         if recursive:
             self._rmdir_recursive(current_node)
-        else:
+        elif current_node.has_children:
             raise OSError(
                 errno.ENOTEMPTY, os.strerror(errno.ENOTEMPTY), str(self._path)
             )
