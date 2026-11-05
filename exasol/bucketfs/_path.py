@@ -358,9 +358,10 @@ class BucketPath:
         """
         path_str = self._get_relative_posix()
         path_len = len(path_str)
-        path_root: _BucketFile | None = None
+        path_root = _BucketFile(self._path.name, _to_bucket_key(self._path.parent))
         if not path_str:
-            path_root = _BucketFile(self._path.name, _to_bucket_key(self._path.parent))
+            # Other directories exist because they contain files. The bucket root
+            # exists and is a directory even if the bucket is empty.
             path_root.ensure_dir()
         for file_name in self._bucket_api.files:
             if (
@@ -368,16 +369,14 @@ class BucketPath:
                 or file_name == path_str
                 or (not path_str)
             ):
-                if path_root is None:
-                    path_root = _BucketFile(
-                        self._path.name, _to_bucket_key(self._path.parent)
-                    )
                 node = path_root
                 for part in file_name[path_len:].split("/"):
                     if part:
                         node = node.get_child(part)
                 node.is_file = True
-        return path_root
+        if path_root.is_file or path_root.is_dir:
+            return path_root
+        return None
 
     @property
     def name(self) -> str:
