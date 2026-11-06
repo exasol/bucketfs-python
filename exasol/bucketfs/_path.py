@@ -360,9 +360,9 @@ class BucketPath:
         path_len = len(path_str)
         path_root = _BucketFile(self._path.name, _to_bucket_key(self._path.parent))
         if not path_str:
-            # An empty path_str indicates the bucket root which always exists 
+            # An empty path_str indicates the bucket root which always exists
             # and should be rated as directory even if the bucket is empty.
-            # Other directories exist because they contain files. 
+            # Other directories exist because they contain files.
             path_root.ensure_dir()
         for file_name in self._bucket_api.files:
             if (

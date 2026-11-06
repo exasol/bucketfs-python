@@ -7,6 +7,10 @@ from collections.abc import (
     Iterable,
 )
 from inspect import cleandoc
+from test.integration.conftest import (
+    File,
+    delete_file,
+)
 
 import pytest
 import requests
@@ -16,10 +20,6 @@ from exasol.bucketfs import (
     Service,
     as_bytes,
     as_string,
-)
-from test.integration.conftest import (
-    File,
-    delete_file,
 )
 
 
