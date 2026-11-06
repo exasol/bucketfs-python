@@ -508,3 +508,61 @@ def test_walk_keeps_path_form(path, expected):
     api = _RecordingBucket(files=["dir/a.txt", "dir/sub/b.txt", "c.txt"])
     walked = [str(p) for p, _, _ in bfs.path.BucketPath(path, bucket_api=api).walk()]
     assert walked == expected
+
+
+@pytest.fixture
+def empty_bucket_fake(tmpdir) -> bfs.MountedBucket:
+    return bfs.MountedBucket(base_path=tmpdir)
+
+
+@pytest.mark.parametrize("root", ["", "/"])
+def test_empty_bucket_root_exists(empty_bucket_fake, root):
+    path = bfs.path.BucketPath(root, bucket_api=empty_bucket_fake)
+    assert path.exists()
+    assert path.is_dir()
+    assert not path.is_file()
+
+
+@pytest.mark.parametrize("root", ["", "/"])
+def test_empty_bucket_root_iterdir(empty_bucket_fake, root):
+    path = bfs.path.BucketPath(root, bucket_api=empty_bucket_fake)
+    assert list(path.iterdir()) == []
+
+
+@pytest.mark.parametrize("root", ["", "/"])
+@pytest.mark.parametrize("top_down", [True, False])
+def test_empty_bucket_root_walk(empty_bucket_fake, root, top_down):
+    path = bfs.path.BucketPath(root, bucket_api=empty_bucket_fake)
+    assert list(path.walk(top_down=top_down)) == [(path, [], [])]
+
+
+@pytest.mark.parametrize("recursive", [True, False])
+def test_empty_bucket_root_rmdir(empty_bucket_fake, recursive, monkeypatch):
+    def fail_delete(path):
+        raise AssertionError(f"Unexpected delete of {path!r}")
+
+    monkeypatch.setattr(empty_bucket_fake, "delete", fail_delete)
+    path = bfs.path.BucketPath("", bucket_api=empty_bucket_fake)
+    path.rmdir(recursive=recursive)
+    assert list(path.iterdir()) == []
+
+
+def test_empty_bucket_root_rm(empty_bucket_fake):
+    path = bfs.path.BucketPath("", bucket_api=empty_bucket_fake)
+    with pytest.raises(IsADirectoryError):
+        path.rm()
+
+
+def test_empty_bucket_missing_path(empty_bucket_fake):
+    path = bfs.path.BucketPath("dir1", bucket_api=empty_bucket_fake)
+    assert not path.exists()
+    assert not path.is_dir()
+    with pytest.raises(FileNotFoundError):
+        list(path.iterdir())
+    with pytest.raises(FileNotFoundError):
+        list(path.walk())
+
+
+def test_root_is_dir(bucket_fake):
+    path = bfs.path.BucketPath("", bucket_api=bucket_fake)
+    assert path.is_dir()
